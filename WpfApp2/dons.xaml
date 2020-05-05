@@ -7,12 +7,12 @@
              xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="1000">
-    <Grid Height="650" Width="1000" Background="#F2FFFFFF">
+    <Grid Height="650" Width="1000" Background="White">
         <Grid x:Name="data_grid" >
             <materialdesign:PackIcon  Margin="915,5,0,545" Kind="Cached" Width="40" Height="30" Foreground="Black"  VerticalAlignment="Center"></materialdesign:PackIcon>
             <Button x:Name="actualiser_datagrid" VerticalAlignment="Top" HorizontalAlignment="Left" Width="auto" Background="Transparent" Foreground="Transparent" Margin="918,35,0,0" BorderBrush="{x:Null}" Click="actualiser_datagrid_Click"></Button>
-            <DataGrid   SelectionMode="Extended" SelectionUnit="FullRow" SelectedCellsChanged="Donnée_dons_SelectedCellsChanged" CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_dons" AlternatingRowBackground="LightGray" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="430"  VerticalAlignment="Center" Margin="45,80,45,140" AutoGenerateColumns="False">
-                <DataGrid.Style>
+            <DataGrid Style="{StaticResource MaterialDesignDataGrid}" Background="White"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedCellsChanged="Donnée_dons_SelectedCellsChanged" CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_dons" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="430"  VerticalAlignment="Center" Margin="45,80,45,140" AutoGenerateColumns="False">
+                <!--DataGrid.Style>
                     <Style TargetType="DataGrid">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
@@ -33,25 +33,34 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DataGrid.Style>
+                </DataGrid.Style-->
                 <DataGrid.Resources>
-
                     <Style TargetType="{x:Type DataGridColumnHeader}">
-                        <Setter Property="FontFamily" Value="Cambria"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
+                        <Setter Property="FontFamily" Value="Verdana"/>
+                        <Setter Property="Height" Value="50"></Setter>
+                        <Setter Property="BorderBrush" Value="AliceBlue"/>
                         <Setter Property="BorderThickness" Value="0,0,2,1"/>
+                        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"></Setter>
                         <Setter Property="FontSize" Value="15"></Setter>
+                        <Setter Property="Background" Value="AliceBlue"></Setter>
                     </Style>
                     <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="FontSize" Value="15"/>
                         <Setter Property="FontFamily" Value="Verdana"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0,0,2,1"/>
+                        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="FontSize" Value="15"></Setter>
                         <Style.Triggers>
                             <Trigger Property="DataGridCell.IsSelected" Value="True">
-                                <Setter Property="Background" Value="#CCDAFF" />
+                                <Setter Property="Background" Value="MediumAquamarine" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="MediumAquamarine" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -61,13 +70,13 @@
                     <DataGridTextColumn IsReadOnly="True" Header="      Nom     " Width="auto" Binding="{Binding Path=Nom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="   N­° Pv   " Width="auto" Binding="{Binding Path=N_Pv}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="  Date De Demande  " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt    " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt En Lettre    " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="       Motif       " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
+                    <!--DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></-->
+                    <DataGridTextColumn IsReadOnly="True" Header="    Date De Demande    " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="    Montant Prêt     " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
+                    <!--DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt En Lettre    " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></-->
+                    <DataGridTextColumn IsReadOnly="True" Header="          Motif          " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
 
-                    <DataGridTemplateColumn IsReadOnly="True" Header="" Width="auto">
+                    <DataGridTemplateColumn IsReadOnly="True" Header="       " Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <materialdesign:PopupBox Foreground="Black">

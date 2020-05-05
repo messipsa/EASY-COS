@@ -219,7 +219,7 @@
         Title="MainWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" Margin="0" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" >
 
     <Grid MouseDown="Grid_MouseDown" x:Name="grid_gnrl" >
-
+        
         <Canvas x:Name="Menu" >
             <Grid Height="50" VerticalAlignment="Top" Background="#FF64D4A4" Margin="0,0,0,0" >
                 <Border Height="40" Width="300" Margin="451,5,529,5" CornerRadius="20" Background="White">
@@ -241,7 +241,7 @@
                     </StackPanel>
                 </materialdesign:PopupBox>
 
-                
+
                 <!--<Button x:Name="export" Background="{x:Null}" Width="30" Height="30" Margin="863,10,387,10" Padding="0" BorderBrush="{x:Null}" MouseEnter="export_MouseEnter" MouseLeave="export_MouseLeave" Click="export_click"/>-->
                 <Button x:Name="profil_user" MouseLeave="profil_user_MouseLeave" MouseEnter="profil_user_MouseEnter" Background="{x:Null}" Width="30" Height="30"  Margin="959,10,211,10" Padding="0" BorderBrush="{x:Null}" Foreground="White" FontWeight="Bold">
                     <materialdesign:PackIcon Kind="Account"></materialdesign:PackIcon>
@@ -257,7 +257,7 @@
                 </Button>
 
             </Grid>
-            
+
 
 
             <Grid  Width="180"  HorizontalAlignment="Left" Background="#FF272A33" Height="700">
@@ -323,14 +323,10 @@
                 <TextBlock Text="Easy Cos " HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="22" Foreground="#FF3250A0" FontWeight="Bold" FontFamily="Rockwell Extra Bold" Margin="60,10,0,14"></TextBlock>
                 <Image Margin="-10,-10,105,-25" Source="240_F_291879016_v9wrX0UHGEhZipuTQzdgfhfghcnBltzBFb3Bdp (1).png" Stretch="Fill"></Image>
             </Grid>
-            <Grid x:Name="Principale" Width="1020"  Height="650" Canvas.Left="180" Canvas.Top="50">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
+            <Grid x:Name="Grid_Principale" Width="1020"  Height="650" Canvas.Left="180" Canvas.Top="50">
 
-                <Grid x:Name="Grid_Principale" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2" Margin="0,325" />
+
+                <!--Grid x:Name="" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="2" Margin="0,325" /-->
             </Grid>
 
             <Grid x:Name="prelevement" Width="1020" Height="650" Canvas.Left="180" Canvas.Top="50" Visibility="Hidden">

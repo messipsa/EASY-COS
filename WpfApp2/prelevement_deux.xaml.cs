@@ -215,18 +215,9 @@ namespace WpfApp2
                         responsable.Envoi_mail(pret, montant_prelevé);
                     else
                     {
-                        WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample("Veuillez entrer le mail de l'employé :", "mail@esi.dz");
+                        WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample(pret, montant_prelevé, "Veuillez entrer le mail de l'employé :", "mail@esi.dz");
                         input.ShowActivated = true;
                         input.Show();
-                        if (input.sortie)
-                            goto fin;
-
-                        if (input.aff)
-                        {
-                            pret.Employé.Email = input.txtAnswer.Text;
-                            responsable.Envoi_mail(pret, montant_prelevé);
-                        }
-                        fin:;
                     }
                 }
                 else
@@ -239,28 +230,20 @@ namespace WpfApp2
                                 responsable.Envoi_mail(pret, montant_prelevé);
                             else
                             {
-                                WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample("Veuillez entrer le mail de l'employé :", "mail@esi.dz");
+                                WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample(pret, montant_prelevé, "Veuillez entrer le mail de l'employé :", "mail@esi.dz");
                                 input.ShowActivated = true;
                                 input.Show();
-                                if (input.sortie)
-                                    goto fin;
-
-                                if (input.aff)
-                                {
-                                    pret.Employé.Email = input.txtAnswer.Text;
-                                    responsable.Envoi_mail(pret, montant_prelevé);
-                                }
-
                             }
                             break;
                         case MessageBoxResult.No:
-                            fin: MessageBox.Show("La notification sera pas envoyé", "Notification E-mail", MessageBoxButton.OK, MessageBoxImage.Information);
+                            MessageBox.Show("La notification sera pas envoyé", "Notification E-mail", MessageBoxButton.OK, MessageBoxImage.Information);
                             break;
                     }
                 }
             }
+
         }
-        
+
         private void retourner_suivi_click(object sender, RoutedEventArgs e)
         {
             

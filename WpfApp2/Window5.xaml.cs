@@ -7,16 +7,25 @@ namespace WpfTutorialSamples.Dialogs
 	{
 		public bool sortie = false;
 		public bool aff = false;
-		public InputDialogSample(string question, string defaultAnswer = "")
+		public double mo = 0;
+		WpfApp2.pret_remboursable pr;
+		public InputDialogSample(WpfApp2.pret_remboursable p, double m, string question, string defaultAnswer = "")
 		{
 			InitializeComponent();			
 			lblQuestion.Content = question;
 			txtAnswer.Text = defaultAnswer;
+			mo = m;
+			pr = p;
 		}
 
 		private void btnDialogOk_Click(object sender, RoutedEventArgs e)
 		{
+
+			pr.Employé.Email = txtAnswer.Text;
+
+			WpfApp2.responsable.Envoi_mail(pr, mo);
 			aff = true;
+			this.Close();
 			//this.DialogResult = true;
 		}
 

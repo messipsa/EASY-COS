@@ -152,8 +152,8 @@
     <Grid x:Name="archivees" Height="650" Width="1000" Background="#F2FFFFFF">
 
         <Grid x:Name="data_grid">
-            <DataGrid   CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_Archivage" AlternatingRowBackground="LightGray" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="415"  VerticalAlignment="Center" Margin="0,110,10,125" AutoGenerateColumns="False">
-                <DataGrid.Style>
+            <DataGrid Style="{StaticResource MaterialDesignDataGrid}"  CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_Archivage" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="415"  VerticalAlignment="Center" Margin="0,110,10,125" AutoGenerateColumns="False">
+                <!--DataGrid.Style>
                     <Style TargetType="DataGrid">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
@@ -174,28 +174,40 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </DataGrid.Style>
+                </-->
                 <DataGrid.Resources>
-
                     <Style TargetType="{x:Type DataGridColumnHeader}">
-                        <Setter Property="FontFamily" Value="Cambria"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
+                        <Setter Property="FontFamily" Value="Verdana"/>
+                        <Setter Property="Height" Value="50"></Setter>
+                        <Setter Property="BorderBrush" Value="AliceBlue"/>
                         <Setter Property="BorderThickness" Value="0,0,2,1"/>
+                        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"></Setter>
                         <Setter Property="FontSize" Value="15"></Setter>
+                        <Setter Property="BorderBrush" Value="AliceBlue"></Setter>
+                        <Setter Property="Background" Value="AliceBlue"></Setter>
+
                     </Style>
                     <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="FontSize" Value="15"/>
                         <Setter Property="FontFamily" Value="Verdana"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="BorderThickness" Value="0,0,2,1"/>
+                        <Setter Property="FrameworkElement.HorizontalAlignment" Value="Center"></Setter>
+                        <Setter Property="FontSize" Value="15"></Setter>
                         <Style.Triggers>
-                            <Trigger Property="DataGridCell.IsSelected" Value="True">
-                                <Setter Property="Background" Value="#CCDAFF" />
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="MediumAquamarine" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
+
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="MediumAquamarine" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+
                 </DataGrid.Resources>
                 <DataGrid.Columns>
 
