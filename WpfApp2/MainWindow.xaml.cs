@@ -50,6 +50,15 @@ namespace WpfApp2
             Grid_Principale.Children.Clear();
             Grid_Principale.Children.Add(new Accueil());
             CompteCosTotal.Text = responsable.tresor.ToString() + " DA";
+            
+            /*responsable.paiement_anticipé(1);
+            responsable.paiement_anticipé(2);
+            responsable.archiver_pret_non_remboursable();
+            responsable.archiver_pret_remboursable();
+           
+            Suivi_Prét patrach = new Suivi_Prét();
+            patrach.auto();*/
+            
             /*MontantTotalCOS.Content = "Le Tresor de COS contient : " + responsable.tresor.ToString() + " DA";
             #region compter le nombre de prets
 
@@ -286,7 +295,7 @@ namespace WpfApp2
 
         private void export_click(object sender, RoutedEventArgs e)
         {
-            responsable.export_prêts_remboursable();
+            //responsable.export_prêts_remboursable();
         }
 
         private void welcome_MediaEnded(object sender, RoutedEventArgs e)

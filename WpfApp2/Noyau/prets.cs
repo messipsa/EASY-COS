@@ -21,6 +21,10 @@ namespace WpfApp2
         public abstract string fin_paiement();
         public abstract string somme_rembours();
 
+        public abstract int Debor();
+
+       
+
         public Prets(int cle_,Employé employé, Type_pret type, string motif, int num_pv, DateTime date_pv, double montant, DateTime date_demande, string montant_lettre)
         {
             this.type = type;

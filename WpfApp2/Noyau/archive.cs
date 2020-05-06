@@ -96,5 +96,17 @@ namespace WpfApp2
                 this.durée = value;
             }
         }
+
+        public bool nino() // retourne vrai si le pret est le fils
+        {
+             if(this.Pret.Debor()==-1)
+            {
+                return true;
+            }
+             else
+            {
+                return false;
+            }
+        }
     }
 }

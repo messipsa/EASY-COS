@@ -74,7 +74,22 @@ namespace WpfApp2
 
         private void Selectionner_Tout_Click(object sender, RoutedEventArgs e)
         {
-            var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridTemplateColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
+            var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
+            foreach (var item in Donnée_Suivi_Prêt.Items)
+            {
+                var chBx = firstCol.GetCellContent(item) as CheckBox;
+                if (chBx == null)
+                {
+                    continue;
+                }
+                chBx.IsChecked = true;
+            }
+
+        }
+
+        private void Selection_Tout_Click(object sender, RoutedEventArgs e)
+        {
+            var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 1);
             foreach (var item in Donnée_Suivi_Prêt.Items)
             {
                 var chBx = firstCol.GetCellContent(item) as CheckBox;
@@ -92,6 +107,7 @@ namespace WpfApp2
         private void Annuler_Click(object sender, RoutedEventArgs e)
         {
             var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
+
             foreach (var item in Donnée_Suivi_Prêt.Items)
             {
                 var chBx = firstCol.GetCellContent(item) as CheckBox;
@@ -107,6 +123,27 @@ namespace WpfApp2
 
             Options_archiver.Visibility = Visibility.Hidden;
             Options_archiver.IsEnabled = false;
+        }
+
+        private void annule_Click(object sender, RoutedEventArgs e)
+        {
+            var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 1);
+
+            foreach (var item in Donnée_Suivi_Prêt.Items)
+            {
+                var chBx = firstCol.GetCellContent(item) as CheckBox;
+                if (chBx == null)
+                {
+                    continue;
+                }
+                chBx.IsChecked = false;
+            }
+            check_box_effacer.Visibility = Visibility.Hidden;
+            Options_Principale.Visibility = Visibility.Visible;
+            Options_Principale.IsEnabled = true;
+
+            Options_effacer.Visibility = Visibility.Hidden;
+            Options_effacer.IsEnabled = false;
         }
 
         private void ajouter_employe(object sender, RoutedEventArgs e)
@@ -299,10 +336,12 @@ namespace WpfApp2
                 year_pret = pret.Date_demande.Year;
                 Dictionary<DateTime, double> suivi = new Dictionary<DateTime, double>();
                 DateTime paiement = pret.Date_premier_paiment;
+                double sum = 0;
                 foreach(KeyValuePair<int, double> kvp in pret.Etat)
                 {
-                    if (kvp.Value != -1)
-                    {                        
+                    if (kvp.Value != -1 && sum<pret.Montant)
+                    {
+                        sum = sum + kvp.Value;
                         suivi.Add(paiement, kvp.Value);
                         paiement = paiement.AddMonths(1);
                     }
@@ -397,26 +436,42 @@ namespace WpfApp2
             }
             else
             {
+                double somme = 0;
+                foreach (pret_remboursable p in responsable.liste_pret_remboursable.Values)
+                {
+                    if (p.Debordement == pret.Cle)
+                    {
+                       somme = p.Somme_remboursée;
+                    }
+                }
                 year_pret = pret.Date_demande.Year;
                 List<double> mois_debor = new List<double>();
                 while (pret.Debordement != -1)
                 {
                     foreach (double d in pret.Etat.Values)
                     {
-                        mois_debor.Add(d);
+                        if (somme != pret.Montant)
+                        {
+                            somme = somme + d;
+                            mois_debor.Add(d);
+                        }
                     }
                     pret = pret.getFils();
                 }
                 foreach (double d in pret.Etat.Values)
                 {
-                    mois_debor.Add(d);
+                    //if (somme != pret.Montant)
+                    //{
+                        somme = somme + d;
+                        mois_debor.Add(d);
+                   // }
                 }
 
                 Dictionary<DateTime, double> suivi = new Dictionary<DateTime, double>();
                 DateTime paiement = pret.Date_premier_paiment;
                 foreach(double d in mois_debor)
                 {
-                    if (d != -1)
+                    if (d != -1 )
                     {
                         suivi.Add(paiement, d);
                         paiement = paiement.AddMonths(1);
@@ -1709,6 +1764,10 @@ namespace WpfApp2
                         }
                     }
                 }
+               // retourner_detail_click(sender, e);
+
+
+                Détails_Click(sender,e);
             }
 
             if (Window2.envoi_notif)
@@ -2051,13 +2110,34 @@ namespace WpfApp2
             Options_archiver.Visibility = Visibility.Visible;
             Options_archiver.IsEnabled = true;
         }
+        private void effacer_Click(object sender, RoutedEventArgs e)
+        {
+            check_box_effacer.Visibility = Visibility.Visible;
+            Options_Principale.Visibility = Visibility.Hidden;
+            Options_Principale.IsEnabled = false;
+
+            Options_effacer.Visibility = Visibility.Visible;
+            Options_effacer.IsEnabled = true;
+        }
         private void Confirmer_Click(object sender, RoutedEventArgs e)
         {
             int i = 0;
             var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
-            foreach (var item in Donnée_Suivi_Prêt.Items)
+           /* employee st = Donnée_Suivi_Prêt.SelectedItem as employee;
+            MessageBox.Show(st.Nom);
+            foreach(KeyValuePair<int,pret_remboursable> liste in responsable.liste_pret_remboursable)
             {
-                i++;
+                if(DateTime.Parse(st.Date_demande).Equals(liste.Value.Date_demande) && DateTime.Parse(st.Date_de_Pv).Equals(liste.Value.Date_pv) && Double.Parse(st.Montant_Prét) == liste.Value.Montant && st.Nom.Equals(liste.Value.Employé.Nom) && st.Prenom.Equals(liste.Value.Employé.Prenom) && Int32.Parse(st.N_Pv) == liste.Value.Num_pv && st.Type_Prêt.Equals(liste.Value.Type_Pret.Description) && liste.Value.isPere())
+                {
+                    i = liste.Value.Cle;
+                }
+
+            }*/
+            foreach (employee item in Donnée_Suivi_Prêt.Items)
+            {
+                
+                
+
                 var chBx = firstCol.GetCellContent(item) as CheckBox;
                 DataGridRow row = firstCol.GetCellContent(item) as DataGridRow;
                 if (chBx == null)
@@ -2067,31 +2147,166 @@ namespace WpfApp2
                 if (chBx.IsChecked == true)
                 {
                     chBx.Visibility = Visibility.Hidden;
-                    responsable.archiver_manuel_pret_remboursable(i);
+                    int a =0;
+                    foreach (pret_remboursable p in responsable.liste_pret_remboursable.Values)
+                    {
+                        if (DateTime.Parse(item.Date_demande).Equals(p.Date_demande) && DateTime.Parse(item.Date_de_Pv).Equals(p.Date_pv) && item.Nom.Equals(p.Employé.Nom) &&  item.Prenom.Equals(p.Employé.Prenom) && Double.Parse(item.Montant_Prét) == p.Montant && Int32.Parse(item.N_Pv) == p.Num_pv && item.Type_Prêt.Equals(p.Type_Pret.Description))
+                        {
+                            a = p.Cle;
+                        }
+                    }
+                    responsable.archiver_manuel_pret_remboursable(a);
+                }
+            }
+            
+            List<employee> source = new List<employee>();
+           
+            foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
+            {
+                if (liste.Value.isPere())
+                {
+                    employee Employe = new employee();
+                    Employe.Nom = liste.Value.Employé.Nom;
+                   // MessageBox.Show(Employe.Nom);
+                    Employe.Prenom = liste.Value.Employé.Prenom;
+                    Employe.N_Pv = liste.Value.Num_pv.ToString();
+                    Employe.Type_Prêt = liste.Value.Type_Pret.Description;
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    //Employe.Motif = liste.Value.Motif;
+                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
+                    Employe.Montant_Prét = liste.Value.Montant.ToString();
+                    source.Add(Employe);
+                }
+            }
+         
+           Donnée_Suivi_Prêt.ItemsSource = source;
+            Options_Principale.Visibility = Visibility.Visible;
+            Options_Principale.IsEnabled = true;
+            check_box_Archiver.Visibility = Visibility.Hidden;
+            
+            Options_archiver.Visibility = Visibility.Hidden;
+            Options_archiver.IsEnabled = false;
+        }
+
+        private void Confirmer_effacer(object sender, RoutedEventArgs e)
+        {
+            int i = 0;
+            var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 1);
+            /* employee st = Donnée_Suivi_Prêt.SelectedItem as employee;
+             MessageBox.Show(st.Nom);
+             foreach(KeyValuePair<int,pret_remboursable> liste in responsable.liste_pret_remboursable)
+             {
+                 if(DateTime.Parse(st.Date_demande).Equals(liste.Value.Date_demande) && DateTime.Parse(st.Date_de_Pv).Equals(liste.Value.Date_pv) && Double.Parse(st.Montant_Prét) == liste.Value.Montant && st.Nom.Equals(liste.Value.Employé.Nom) && st.Prenom.Equals(liste.Value.Employé.Prenom) && Int32.Parse(st.N_Pv) == liste.Value.Num_pv && st.Type_Prêt.Equals(liste.Value.Type_Pret.Description) && liste.Value.isPere())
+                 {
+                     i = liste.Value.Cle;
+                 }
+
+             }*/
+            foreach (employee item in Donnée_Suivi_Prêt.Items)
+            {
+
+
+
+                var chBx = firstCol.GetCellContent(item) as CheckBox;
+                DataGridRow row = firstCol.GetCellContent(item) as DataGridRow;
+                if (chBx == null)
+                {
+                    continue;
+                }
+                if (chBx.IsChecked == true)
+                {
+                    chBx.Visibility = Visibility.Hidden;
+                    int a = 0;
+                    foreach (pret_remboursable p in responsable.liste_pret_remboursable.Values)
+                    {
+                        if (DateTime.Parse(item.Date_demande).Equals(p.Date_demande) && DateTime.Parse(item.Date_de_Pv).Equals(p.Date_pv) && item.Nom.Equals(p.Employé.Nom) && item.Prenom.Equals(p.Employé.Prenom) && Double.Parse(item.Montant_Prét) == p.Montant && Int32.Parse(item.N_Pv) == p.Num_pv && item.Type_Prêt.Equals(p.Type_Pret.Description))
+                        {
+                            a = p.Cle;
+                        }
+                    }
+                    responsable.effacement_dettes(a);
                 }
             }
 
             List<employee> source = new List<employee>();
+
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
             {
-                employee Employe = new employee();
-                Employe.Nom = liste.Value.Employé.Nom;
-                Employe.Prenom = liste.Value.Employé.Prenom;
-                Employe.N_Pv = liste.Value.Num_pv.ToString();
-                Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
-                //Employe.Motif = liste.Value.Motif;
-                Employe.Date_demande = liste.Value.Date_demande.ToString();
-                //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
-                Employe.Montant_Prét = liste.Value.Montant.ToString();
-                source.Add(Employe);
+                if (liste.Value.isPere())
+                {
+                    employee Employe = new employee();
+                    Employe.Nom = liste.Value.Employé.Nom;
+                    Employe.Prenom = liste.Value.Employé.Prenom;
+                    Employe.N_Pv = liste.Value.Num_pv.ToString();
+                    Employe.Type_Prêt = liste.Value.Type_Pret.Description;
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    //Employe.Motif = liste.Value.Motif;
+                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
+                    Employe.Montant_Prét = liste.Value.Montant.ToString();
+                    source.Add(Employe);
+                }
             }
+
             Donnée_Suivi_Prêt.ItemsSource = source;
+            Options_Principale.Visibility = Visibility.Visible;
+            Options_Principale.IsEnabled = true;
+            check_box_effacer.Visibility = Visibility.Hidden;
+
+            Options_effacer.Visibility = Visibility.Hidden;
+            Options_effacer.IsEnabled = false;
+
         }
 
-        private void Sortie_excel_Click(object sender, RoutedEventArgs e)
+        public   void auto()
         {
-            responsable.export_prêts_remboursable();
+            List<employee> source = new List<employee>();
+
+            foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
+            {
+                if (liste.Value.isPere())
+                {
+                    employee Employe = new employee();
+                    Employe.Nom = liste.Value.Employé.Nom;
+                    Employe.Prenom = liste.Value.Employé.Prenom;
+                    Employe.N_Pv = liste.Value.Num_pv.ToString();
+                    Employe.Type_Prêt = liste.Value.Type_Pret.Description;
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    //Employe.Motif = liste.Value.Motif;
+                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
+                    Employe.Montant_Prét = liste.Value.Montant.ToString();
+                    source.Add(Employe);
+                }
+            }
+        
+
+            Donnée_Suivi_Prêt.ItemsSource = source;
+        }
+        private void Donnée_dons_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            if (check_box_Archiver.Visibility == Visibility.Visible)
+            {
+                var firstCol = Donnée_Suivi_Prêt.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
+                foreach (var item in Donnée_Suivi_Prêt.Items)
+                {
+                    var chBx = firstCol.GetCellContent(item) as CheckBox;
+                    DataGridRow row = firstCol.GetCellContent(item) as DataGridRow;
+                    if ((chBx != null) && (row != null))
+                    {
+                        if (row.IsSelected)
+                        {
+                            chBx.IsChecked = true;
+                        }
+                    }
+
+                }
+            }
+            }
+            private void Sortie_excel_Click(object sender, RoutedEventArgs e)
+        {
+            //responsable.export_prêts_remboursable();
         }
 
     }

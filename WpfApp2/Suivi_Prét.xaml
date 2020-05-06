@@ -68,13 +68,8 @@
                     </Style>
                 </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn IsReadOnly="False" x:Name="check_box_Archiver" Visibility="Hidden" DisplayIndex="0">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding Path=Include}"></CheckBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridCheckBoxColumn x:Name="check_box_Archiver" Visibility="Hidden"></DataGridCheckBoxColumn>
+                    <DataGridCheckBoxColumn x:Name="check_box_effacer" Visibility="Hidden"></DataGridCheckBoxColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="      Nom     " Width="auto" Binding="{Binding Path=Nom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="       Description du Prêt   " Width="auto" Binding="{Binding Path=Type_Prêt}"></DataGridTextColumn>
@@ -111,6 +106,9 @@
                 <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="30,0,0,0">
                     <Button x:Name="Archiver" VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Archiver" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Archiver_Click"></Button>
                 </Border>
+                <Border CornerRadius="20" Width="200" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="30,0,0,0">
+                    <Button x:Name="Effacement" VerticalAlignment="Bottom" Width="200" Background="Transparent" Content="Effacement de dettes " Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="effacer_Click"></Button>
+                </Border>
             </StackPanel>
             <StackPanel x:Name="Options_archiver" Visibility="Hidden" IsEnabled="False" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="-22,0,22,64">
                 <Border  HorizontalAlignment="left" VerticalAlignment="Bottom" Width="100" Height="32" CornerRadius="20" Background="#FF1FAB89" Margin="30,0,0,0">
@@ -121,6 +119,17 @@
                 </Border>
                 <Border  HorizontalAlignment="left" VerticalAlignment="Bottom" Width="100" Height="32" CornerRadius="20" Background="#FF1FAB89" Margin="30,0,0,0">
                     <Button x:Name="Annuler" VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="1,0,0,0" BorderBrush="{x:Null}" Click="Annuler_Click"></Button>
+                </Border>
+            </StackPanel>
+            <StackPanel x:Name="Options_effacer" Visibility="Hidden" IsEnabled="False" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="-22,0,22,64">
+                <Border  HorizontalAlignment="left" VerticalAlignment="Bottom" Width="100" Height="32" CornerRadius="20" Background="#FF1FAB89" Margin="30,0,0,0">
+                    <Button x:Name="Confirmer_eff" VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Confirmer" Foreground="White" FontWeight="Bold" Margin="1,0,0,0" BorderBrush="{x:Null}" Click="Confirmer_effacer"></Button>
+                </Border>
+                <Border CornerRadius="20" Width="150" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="30,0,0,0">
+                <Button x:Name="Selectionner_Tou" VerticalAlignment="Bottom" Width="150" Background="Transparent" Content="Selectionner Tout" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Selection_Tout_Click"></Button>
+                </Border>
+                <Border  HorizontalAlignment="left" VerticalAlignment="Bottom" Width="100" Height="32" CornerRadius="20" Background="#FF1FAB89" Margin="30,0,0,0">
+                    <Button x:Name="Annuler_eff" VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="1,0,0,0" BorderBrush="{x:Null}" Click="annule_Click"></Button>
                 </Border>
             </StackPanel>
 

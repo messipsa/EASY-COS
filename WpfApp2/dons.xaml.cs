@@ -619,7 +619,7 @@ namespace WpfApp2
 
         private void Sortie_excel_Click(object sender, RoutedEventArgs e)
         {
-            responsable.export_prêts_non_remboursable();
+            //responsable.export_prêts_non_remboursable();
         }
     }
 }

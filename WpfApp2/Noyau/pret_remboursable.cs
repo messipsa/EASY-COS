@@ -41,16 +41,16 @@ namespace WpfApp2
                 if (d != -1)
                 {
                     this.somme_remboursée = this.somme_remboursée + d;
+                    if (this.somme_remboursée < this.montant)
+                    {
+                        this.date_actuelle = this.date_actuelle.AddMonths(1);
+                        this.mois_actuel++;
+                    }
+                    if (this.somme_remboursée == this.montant)
+                    {
+                        this.mois_actuel = 11;
+                    }
                 }
-            }
-            foreach (double d in this.etat.Values)
-            {
-                if (d != -1)
-                {
-                    this.date_actuelle = this.date_actuelle.AddMonths(1);
-                    this.mois_actuel++;
-                }
-
             }
         }
 
@@ -175,9 +175,391 @@ namespace WpfApp2
 
 
         }
+        public override int Debor()
+        {
+            return this.Debordement;
+        }
+        /* public void paiement()
+         {
+             int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
+             if (difference > 0)
+             {
+                 if ((this.montant - this.somme_remboursée) > (this.montant / this.durée))
+                 {
+                     if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
+                     {
+                         this.etat.Remove(this.mois_actuel);
+                         this.etat.Add(this.mois_actuel, this.montant / this.durée);
+                         responsable.tresor = responsable.tresor + (this.montant / this.durée);
+                         this.somme_remboursée = this.somme_remboursée + (this.montant / this.durée);
+                         this.date_actuelle = this.date_actuelle.AddMonths(1);
+                         this.mois_actuel++;
+                     }
+
+                     else
+                     {
+                         if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
+                         {
+                             pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
+                             p.cle = responsable.cle_a_affecter_pret_remboursable();
+                             p.Date_actuelle = this.Date_actuelle;
+                             Dictionary<int, double> dico2 = new Dictionary<int, double>();
+                             for (int i = 0; i < 10; i++)
+                             {
+                                 dico2.Add(i, -1);
+                             }
+                             p.Etat = dico2;
+                             this.debordement = p.cle;
+                             this.mois_actuel++;
+                             p.mois_actuel = 0;
+                             p.somme_remboursée = this.somme_remboursée;
+                             //p.paiement();
+                             responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
+                         }
+                         else
+                         {
+                             if ((this.mois_actuel == 10) && (this.debordement != -1))
+                             {
+                                 this.mois_actuel++;
+                             }
+                         }
+
+
+                     }
+                     if ((this.En_cours == 0) && (this.mois_actuel < 10))
+                     {
+                         this.etat.Remove(this.mois_actuel);
+                         this.etat.Add(this.mois_actuel, 0);
+                         this.mois_actuel++;
+                         this.date_actuelle = this.date_actuelle.AddMonths(1);
+                         this.en_cours = 0;
+                     }
+                     if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
+                     {
+                         int cpt = this.mois_actuel;
+                         if (cpt < 10)
+                         {
+                             for (cpt = this.mois_actuel; cpt < 10; cpt++)
+                             {
+                                 this.etat.Remove(cpt);
+                                 this.etat.Add(cpt, 0);
+                             }
+                         }
+                         this.mois_actuel = 11;
+                         this.date_actuelle = this.date_actuelle.AddMonths(-1);
+                     }
+                 }
+                 else
+                 {
+                     this.paiement_anticipé();
+                 }
+
+                 foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                 {
+                     if ((this.debordement == kvp.Key))
+                     {
+                         kvp.Value.paiement();
+                     }
+                 }
+                 foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                 {
+                     if ((this.debordement == element.Key))
+                     {
+                         element.Value.paiement();
+                     }
+                 }
+
+             }
+
+             this.En_cours = 1;
+         }
+
+         public void paiement_spécial(double cout)
+         {
+             int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
+             if (difference > 0)
+             {
+                 if ((this.montant - this.somme_remboursée) > cout)
+                 {
+                     if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
+                     {
+                         this.etat.Remove(this.mois_actuel);
+                         this.etat.Add(this.mois_actuel, cout);
+                         responsable.tresor = responsable.tresor + cout;
+                         this.somme_remboursée = this.somme_remboursée + cout;
+                         this.date_actuelle = this.date_actuelle.AddMonths(1);
+                         this.mois_actuel++;
+                     }
+
+                     else
+                     {
+                         if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
+                         {
+                             pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
+                             p.cle = responsable.cle_a_affecter_pret_remboursable();
+                             p.Date_actuelle = this.Date_actuelle;
+                             Dictionary<int, double> dico2 = new Dictionary<int, double>();
+                             for (int i = 0; i < 10; i++)
+                             {
+                                 dico2.Add(i, -1);
+                             }
+                             p.Etat = dico2;
+                             this.debordement = p.cle;
+                             this.mois_actuel++;
+                             p.mois_actuel = 0;
+                             p.somme_remboursée = this.somme_remboursée;
+                             //p.paiement();
+                             responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
+                         }
+                         else
+                         {
+                             if ((this.mois_actuel == 10) && (this.debordement != -1))
+                             {
+                                 this.mois_actuel++;
+                             }
+                         }
+
+
+                     }
+                     if ((this.En_cours == 0) && (this.mois_actuel < 10))
+                     {
+                         this.etat.Remove(this.mois_actuel);
+                         this.etat.Add(this.mois_actuel, 0);
+                         this.mois_actuel++;
+                         this.date_actuelle = this.date_actuelle.AddMonths(1);
+                         this.en_cours = 0;
+                     }
+                     if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
+                     {
+                         int cpt = this.mois_actuel;
+                         if (cpt < 10)
+                         {
+                             for (cpt = this.mois_actuel; cpt < 10; cpt++)
+                             {
+                                 this.etat.Remove(cpt);
+                                 this.etat.Add(cpt, 0);
+                             }
+                         }
+                         this.mois_actuel = 11;
+                         this.date_actuelle = this.date_actuelle.AddMonths(-1);
+                     }
+                 }
+                 else
+                 {
+                     this.paiement_anticipé();
+                 }
+
+                 foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                 {
+                     if ((this.debordement == kvp.Key))
+                     {
+                         kvp.Value.paiement_spécial(cout);
+                     }
+                 }
+                 foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                 {
+                     if ((this.debordement == element.Key))
+                     {
+                         element.Value.paiement_spécial(cout);
+                     }
+                 }
+             }
+         }
+
+         public void retardement()
+         {
+             int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
+             if (difference > 0)
+             {
+                 this.En_cours = 0;
+                 foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                 {
+                     if (this.debordement == kvp.Key)
+                     {
+                         kvp.Value.retardement();
+                     }
+                 }
+
+                 foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                 {
+                     if ((this.debordement == kvp.Key))
+                     {
+                         kvp.Value.retardement();
+                     }
+                 }
+                 foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                 {
+                     if ((this.debordement == element.Key))
+                     {
+                         element.Value.retardement();
+                     }
+                 }
+             }
+         }
+
+         public void paiement_anticipé()
+         {
+             int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
+             if (difference > 0)
+             {
+
+                 int trace = -1;
+                 if ((this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
+                 {
+                     this.etat.Remove(this.mois_actuel);
+                     this.etat.Add(this.mois_actuel, (this.montant - this.somme_remboursée));
+                     responsable.tresor = responsable.tresor + (this.montant - this.somme_remboursée);
+                     this.somme_remboursée = this.montant;
+                     this.date_actuelle = this.date_actuelle.AddMonths(1);
+                     int cpt = this.mois_actuel;
+                     for (cpt = this.mois_actuel + 1; cpt < 10; cpt++)
+                     {
+                         this.etat.Remove(cpt);
+                         this.etat.Add(cpt, 0);
+
+                     }
+                     this.mois_actuel = 11;
+                 }
+                 else
+                 {
+                     if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
+                     {
+                         pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
+                         p.cle = responsable.cle_a_affecter_pret_remboursable();
+                         trace = p.cle;
+                         Dictionary<int, double> dico2 = new Dictionary<int, double>();
+                         for (int i = 0; i < 10; i++)
+                         {
+                             dico2.Add(i, -1);
+                         }
+                         p.Etat = dico2;
+                         this.debordement = p.cle;
+                         this.mois_actuel++;
+                         p.mois_actuel = 0;
+                         p.somme_remboursée = this.somme_remboursée;
+                         p.paiement_anticipé();
+                         responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
+                     }
+                     else
+                     {
+                         if ((this.mois_actuel == 10) && (this.debordement != -1))
+                         {
+                             this.mois_actuel++;
+                         }
+                     }
+                 }
+
+                 foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                 {
+                     if ((this.debordement == kvp.Key))
+                     {
+                         kvp.Value.paiement_anticipé();
+                     }
+                 }
+                 foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                 {
+                     if ((this.debordement == element.Key))
+                     {
+                         element.Value.paiement_anticipé();
+                     }
+                 }
+             }
+         }
+
+         public void paiement_plusieurs_mois(int nb_mois)
+         {
+             int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
+             if (difference > 0)
+             {
+                 if ((this.montant - this.somme_remboursée) > (this.montant / this.durée) * nb_mois)
+                 {
+                     if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
+                     {
+                         this.etat.Remove(this.mois_actuel);
+                         this.etat.Add(this.mois_actuel, (this.montant / this.durée) * nb_mois);
+                         responsable.tresor = responsable.tresor + ((this.montant / this.durée) * nb_mois);
+                         this.somme_remboursée = this.somme_remboursée + ((this.montant / this.durée) * nb_mois);
+                         this.date_actuelle = this.date_actuelle.AddMonths(1);
+                         this.mois_actuel++;
+                     }
+
+                     else
+                     {
+                         if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
+                         {
+                             pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
+                             p.cle = responsable.cle_a_affecter_pret_remboursable();
+                             p.Date_actuelle = this.Date_actuelle;
+                             Dictionary<int, double> dico2 = new Dictionary<int, double>();
+                             for (int i = 0; i < 10; i++)
+                             {
+                                 dico2.Add(i, -1);
+                             }
+                             p.Etat = dico2;
+                             this.debordement = p.cle;
+                             this.mois_actuel++;
+                             p.mois_actuel = 0;
+                             p.somme_remboursée = this.somme_remboursée;
+                             //p.paiement();
+                             responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
+                         }
+                         else
+                         {
+                             if ((this.mois_actuel == 10) && (this.debordement != -1))
+                             {
+                                 this.mois_actuel++;
+                             }
+                         }
+
+
+                     }
+                     if ((this.En_cours == 0) && (this.mois_actuel < 10))
+                     {
+                         this.etat.Remove(this.mois_actuel);
+                         this.etat.Add(this.mois_actuel, 0);
+                         this.mois_actuel++;
+                         this.date_actuelle = this.date_actuelle.AddMonths(1);
+                         this.en_cours = 0;
+                     }
+                     if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
+                     {
+                         int cpt = this.mois_actuel;
+                         if (cpt < 10)
+                         {
+                             for (cpt = this.mois_actuel; cpt < 10; cpt++)
+                             {
+                                 this.etat.Remove(cpt);
+                                 this.etat.Add(cpt, 0);
+                             }
+                         }
+                         this.mois_actuel = 11;
+                         this.date_actuelle = this.date_actuelle.AddMonths(-1);
+                     }
+                 }
+                 else
+                 {
+                     this.paiement_anticipé();
+                 }
+
+                 foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                 {
+                     if ((this.debordement == kvp.Key))
+                     {
+                         kvp.Value.paiement_plusieurs_mois(nb_mois);
+                     }
+                 }
+                 foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                 {
+                     if ((this.debordement == element.Key))
+                     {
+                         element.Value.paiement_plusieurs_mois(nb_mois);
+                     }
+                 }
+             }
+         }*/
         public void paiement()
         {
-            int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
+            int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
             if (difference > 0)
             {
                 if ((this.montant - this.somme_remboursée) > (this.montant / this.durée))
@@ -188,8 +570,10 @@ namespace WpfApp2
                         this.etat.Add(this.mois_actuel, this.montant / this.durée);
                         responsable.tresor = responsable.tresor + (this.montant / this.durée);
                         this.somme_remboursée = this.somme_remboursée + (this.montant / this.durée);
+
                         this.date_actuelle = this.date_actuelle.AddMonths(1);
                         this.mois_actuel++;
+
                     }
 
                     else
@@ -269,97 +653,6 @@ namespace WpfApp2
             this.En_cours = 1;
         }
 
-        public void paiement_spécial(double cout)
-        {
-            int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
-            if (difference > 0)
-            {
-                if ((this.montant - this.somme_remboursée) > cout)
-                {
-                    if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
-                    {
-                        this.etat.Remove(this.mois_actuel);
-                        this.etat.Add(this.mois_actuel, cout);
-                        responsable.tresor = responsable.tresor + cout;
-                        this.somme_remboursée = this.somme_remboursée + cout;
-                        this.date_actuelle = this.date_actuelle.AddMonths(1);
-                        this.mois_actuel++;
-                    }
-
-                    else
-                    {
-                        if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
-                        {
-                            pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
-                            p.cle = responsable.cle_a_affecter_pret_remboursable();
-                            Dictionary<int, double> dico2 = new Dictionary<int, double>();
-                            for (int i = 0; i < 10; i++)
-                            {
-                                dico2.Add(i, -1);
-                            }
-                            p.Etat = dico2;
-                            this.debordement = p.cle;
-                            this.mois_actuel++;
-                            p.mois_actuel = 0;
-                            p.somme_remboursée = this.somme_remboursée;
-                            //p.paiement();
-                            responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
-                        }
-                        else
-                        {
-                            if ((this.mois_actuel == 10) && (this.debordement != -1))
-                            {
-                                this.mois_actuel++;
-                            }
-                        }
-
-
-                    }
-                    if ((this.En_cours == 0) && (this.mois_actuel < 10))
-                    {
-                        this.etat.Remove(this.mois_actuel);
-                        this.etat.Add(this.mois_actuel, 0);
-                        this.mois_actuel++;
-                        this.date_actuelle = this.date_actuelle.AddMonths(1);
-                        this.en_cours = 0;
-                    }
-                    if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
-                    {
-                        int cpt = this.mois_actuel;
-                        if (cpt < 10)
-                        {
-                            for (cpt = this.mois_actuel; cpt < 10; cpt++)
-                            {
-                                this.etat.Remove(cpt);
-                                this.etat.Add(cpt, 0);
-                            }
-                        }
-                        this.mois_actuel = 11;
-                        this.date_actuelle = this.date_actuelle.AddMonths(-1);
-                    }
-                }
-                else
-                {
-                    this.paiement_anticipé();
-                }
-
-                foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
-                {
-                    if ((this.debordement == kvp.Key))
-                    {
-                        kvp.Value.paiement_spécial(cout);
-                    }
-                }
-                foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
-                {
-                    if ((this.debordement == element.Key))
-                    {
-                        element.Value.paiement_spécial(cout);
-                    }
-                }
-            }
-        }
-
         public void retardement()
         {
             int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
@@ -390,10 +683,9 @@ namespace WpfApp2
                 }
             }
         }
-
         public void paiement_anticipé()
         {
-            int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
+            int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
             if (difference > 0)
             {
 
@@ -404,12 +696,12 @@ namespace WpfApp2
                     this.etat.Add(this.mois_actuel, (this.montant - this.somme_remboursée));
                     responsable.tresor = responsable.tresor + (this.montant - this.somme_remboursée);
                     this.somme_remboursée = this.montant;
-                    this.date_actuelle = this.date_actuelle.AddMonths(1);
                     int cpt = this.mois_actuel;
                     for (cpt = this.mois_actuel + 1; cpt < 10; cpt++)
                     {
                         this.etat.Remove(cpt);
                         this.etat.Add(cpt, 0);
+
 
                     }
                     this.mois_actuel = 11;
@@ -460,98 +752,194 @@ namespace WpfApp2
             }
         }
 
-        public void paiement_plusieurs_mois(int nb_mois)
-        {
-            int difference = DateTime.Compare(DateTime.Now, this.date_premier_paiment);
-            if (difference > 0)
-            {
-                if ((this.montant - this.somme_remboursée) > (this.montant / this.durée) * nb_mois)
-                {
-                    if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
-                    {
-                        this.etat.Remove(this.mois_actuel);
-                        this.etat.Add(this.mois_actuel, (this.montant / this.durée) * nb_mois);
-                        responsable.tresor = responsable.tresor + ((this.montant / this.durée) * nb_mois);
-                        this.somme_remboursée = this.somme_remboursée + ((this.montant / this.durée) * nb_mois);
-                        this.date_actuelle = this.date_actuelle.AddMonths(1);
-                        this.mois_actuel++;
-                    }
 
-                    else
+
+            public void paiement_plusieurs_mois(int nb_mois)
+            {
+                int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
+                if (difference > 0)
+                {
+                    if ((this.montant - this.somme_remboursée) > (this.montant / this.durée) * nb_mois)
                     {
-                        if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
+                        if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
                         {
-                            pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
-                            p.cle = responsable.cle_a_affecter_pret_remboursable();
-                            Dictionary<int, double> dico2 = new Dictionary<int, double>();
-                            for (int i = 0; i < 10; i++)
-                            {
-                                dico2.Add(i, -1);
-                            }
-                            p.Etat = dico2;
-                            this.debordement = p.cle;
+                            this.etat.Remove(this.mois_actuel);
+                            this.etat.Add(this.mois_actuel, (this.montant / this.durée) * nb_mois);
+                            responsable.tresor = responsable.tresor + ((this.montant / this.durée) * nb_mois);
+                            this.somme_remboursée = this.somme_remboursée + ((this.montant / this.durée) * nb_mois);
+                            this.date_actuelle = this.date_actuelle.AddMonths(1);
                             this.mois_actuel++;
-                            p.mois_actuel = 0;
-                            p.somme_remboursée = this.somme_remboursée;
-                            //p.paiement();
-                            responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
                         }
+
                         else
                         {
-                            if ((this.mois_actuel == 10) && (this.debordement != -1))
+                            if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
                             {
+                                pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
+                                p.cle = responsable.cle_a_affecter_pret_remboursable();
+                                Dictionary<int, double> dico2 = new Dictionary<int, double>();
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    dico2.Add(i, -1);
+                                }
+                                p.Etat = dico2;
+                                this.debordement = p.cle;
                                 this.mois_actuel++;
+                                p.mois_actuel = 0;
+                                p.somme_remboursée = this.somme_remboursée;
+                                //p.paiement();
+                                responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
                             }
-                        }
-
-
-                    }
-                    if ((this.En_cours == 0) && (this.mois_actuel < 10))
-                    {
-                        this.etat.Remove(this.mois_actuel);
-                        this.etat.Add(this.mois_actuel, 0);
-                        this.mois_actuel++;
-                        this.date_actuelle = this.date_actuelle.AddMonths(1);
-                        this.en_cours = 0;
-                    }
-                    if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
-                    {
-                        int cpt = this.mois_actuel;
-                        if (cpt < 10)
-                        {
-                            for (cpt = this.mois_actuel; cpt < 10; cpt++)
+                            else
                             {
-                                this.etat.Remove(cpt);
-                                this.etat.Add(cpt, 0);
+                                if ((this.mois_actuel == 10) && (this.debordement != -1))
+                                {
+                                    this.mois_actuel++;
+                                }
                             }
-                        }
-                        this.mois_actuel = 11;
-                        this.date_actuelle = this.date_actuelle.AddMonths(-1);
-                    }
-                }
-                else
-                {
-                    this.paiement_anticipé();
-                }
 
-                foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
-                {
-                    if ((this.debordement == kvp.Key))
-                    {
-                        kvp.Value.paiement_plusieurs_mois(nb_mois);
+
+                        }
+                        if ((this.En_cours == 0) && (this.mois_actuel < 10))
+                        {
+                            this.etat.Remove(this.mois_actuel);
+                            this.etat.Add(this.mois_actuel, 0);
+                            this.mois_actuel++;
+                            this.date_actuelle = this.date_actuelle.AddMonths(1);
+                            this.en_cours = 0;
+                        }
+                        if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
+                        {
+                            int cpt = this.mois_actuel;
+                            if (cpt < 10)
+                            {
+                                for (cpt = this.mois_actuel; cpt < 10; cpt++)
+                                {
+                                    this.etat.Remove(cpt);
+                                    this.etat.Add(cpt, 0);
+                                }
+                            }
+                            this.mois_actuel = 11;
+                            this.date_actuelle = this.date_actuelle.AddMonths(-1);
+                        }
                     }
-                }
-                foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
-                {
-                    if ((this.debordement == element.Key))
+                    else
                     {
-                        element.Value.paiement_plusieurs_mois(nb_mois);
+                        this.paiement_anticipé();
+                    }
+
+                    foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                    {
+                        if ((this.debordement == kvp.Key))
+                        {
+                            kvp.Value.paiement_plusieurs_mois(nb_mois);
+                        }
+                    }
+                    foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                    {
+                        if ((this.debordement == element.Key))
+                        {
+                            element.Value.paiement_plusieurs_mois(nb_mois);
+                        }
                     }
                 }
             }
-        }
 
-        public pret_remboursable pere()
+
+
+
+            public void paiement_spécial(double cout)
+            {
+                int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
+                if (difference > 0)
+                {
+                    if ((this.montant - this.somme_remboursée) > cout)
+                    {
+                        if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
+                        {
+                            this.etat.Remove(this.mois_actuel);
+                            this.etat.Add(this.mois_actuel, cout);
+                            responsable.tresor = responsable.tresor + cout;
+                            this.somme_remboursée = this.somme_remboursée + cout;
+                            this.date_actuelle = this.date_actuelle.AddMonths(1);
+                            this.mois_actuel++;
+                        }
+
+                        else
+                        {
+                            if ((this.mois_actuel == 10) && (this.debordement == -1) && (this.somme_remboursée < this.montant))
+                            {
+                                pret_remboursable p = (pret_remboursable)this.MemberwiseClone();
+                                p.cle = responsable.cle_a_affecter_pret_remboursable();
+                                Dictionary<int, double> dico2 = new Dictionary<int, double>();
+                                for (int i = 0; i < 10; i++)
+                                {
+                                    dico2.Add(i, -1);
+                                }
+                                p.Etat = dico2;
+                                this.debordement = p.cle;
+                                this.mois_actuel++;
+                                p.mois_actuel = 0;
+                                p.somme_remboursée = this.somme_remboursée;
+                                //p.paiement();
+                                responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
+                            }
+                            else
+                            {
+                                if ((this.mois_actuel == 10) && (this.debordement != -1))
+                                {
+                                    this.mois_actuel++;
+                                }
+                            }
+
+
+                        }
+                        if ((this.En_cours == 0) && (this.mois_actuel < 10))
+                        {
+                            this.etat.Remove(this.mois_actuel);
+                            this.etat.Add(this.mois_actuel, 0);
+                            this.mois_actuel++;
+                            this.date_actuelle = this.date_actuelle.AddMonths(1);
+                            this.en_cours = 0;
+                        }
+                        if ((this.somme_remboursée == this.montant) || ((this.somme_remboursée + 1 >= this.montant)))
+                        {
+                            int cpt = this.mois_actuel;
+                            if (cpt < 10)
+                            {
+                                for (cpt = this.mois_actuel; cpt < 10; cpt++)
+                                {
+                                    this.etat.Remove(cpt);
+                                    this.etat.Add(cpt, 0);
+                                }
+                            }
+                            this.mois_actuel = 11;
+                            this.date_actuelle = this.date_actuelle.AddMonths(-1);
+                        }
+                    }
+                    else
+                    {
+                        this.paiement_anticipé();
+                    }
+
+                    foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
+                    {
+                        if ((this.debordement == kvp.Key))
+                        {
+                            kvp.Value.paiement_spécial(cout);
+                        }
+                    }
+                    foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable_provisoire)
+                    {
+                        if ((this.debordement == element.Key))
+                        {
+                            element.Value.paiement_spécial(cout);
+                        }
+                    }
+                }
+            }
+
+                public pret_remboursable pere()
         {
             foreach (KeyValuePair<int, pret_remboursable> kvp in responsable.liste_pret_remboursable)
             {
@@ -564,7 +952,7 @@ namespace WpfApp2
         }
         public void archiver() //archivage automatique apres un mois
         {
-            int difference = DateTime.Compare(DateTime.Now, this.date_actuelle.AddDays(int.Parse(Window2.durée_avant_archivage_d) + (int.Parse(Window2.durée_avant_archivage_m) * 30)));
+            int difference = DateTime.Compare(DateTime.Now, this.date_actuelle.AddDays(int.Parse(Window2.durée_avant_archivage_d) + (int.Parse(Window2.durée_avant_archivage_m) * -30)));
             if ((this.debordement == -1) && (this.montant == this.somme_remboursée) && (difference == 1))
             {
                 string observ;
@@ -740,6 +1128,7 @@ namespace WpfApp2
         }
         public override string fin_paiement()
         {
+
             return (this.Date_actuelle.ToString());
         }
         public override string somme_rembours()

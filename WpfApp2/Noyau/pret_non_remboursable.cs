@@ -15,6 +15,10 @@ namespace WpfApp2
         {
             this.affiche_attribus();
         }
+        public override int Debor()
+        {
+            return -1;
+        }
 
 
         public void archiver(string observation = "Aucune observation indroduite par l'utilisateur.")

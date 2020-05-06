@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Data.SqlClient;
 using System.IO;
-using Excel = Microsoft.Office.Interop.Excel;
-using Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
+//using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 using System.Net.Mail;
 
@@ -30,13 +30,13 @@ namespace WpfApp2
         public static Dictionary<int, Archive> liste_archives_provisoire = new Dictionary<int, Archive>();
 
         public static List<Modification> pile_modifications = new List<Modification>();
-
+        public static List<String> services = new List<String>();
         public static Dictionary<int, Archive> liste_filtres = new Dictionary<int, Archive>();
         public static Dictionary<int, pret_remboursable> liste_filtres_rem = new Dictionary<int, pret_remboursable>();
         public static Dictionary<int, pret_non_remboursable> liste_filtres_non_rem = new Dictionary<int, pret_non_remboursable>();
         public static List<int> clés_employés = new List<int>();
         public static List<int> clés_types = new List<int>();
-
+        public static List<String> choix_service = new List<string>();
         public static Dictionary<int, int> liste_stat_1 = new Dictionary<int, int>();
         public static Dictionary<int, double> list_sup = new Dictionary<int, double>();
         public static Dictionary<int, double> list_inf = new Dictionary<int, double>();
@@ -532,6 +532,20 @@ namespace WpfApp2
                 }
             }
             return cpt;
+        }
+
+
+        //service
+        public static void ajout_service()
+        {
+            foreach (Employé emp in responsable.liste_employes.Values)
+            {
+                if (!services.Contains(emp.Service))
+                {
+                    services.Add(emp.Service);
+                }
+
+            }
         }
 
         //methodes de creation-----------------------------------------------------------
@@ -1538,6 +1552,33 @@ namespace WpfApp2
             responsable.clés_types.Clear();
         }
 
+        public static void filtrer_par_service(bool service)
+        {
+
+            int cpt = 0;
+            if (service == true)
+            {
+                foreach (KeyValuePair<int, Archive> kvp in liste_archives)
+                {
+                    foreach (String s in choix_service)
+                    {
+                        if (s.Equals(kvp.Value.Pret.Employé.Service))
+                        {
+                            cpt++;
+                        
+                        }
+                    }
+
+                    if (cpt == 0)
+                    {
+                        liste_filtres.Remove(kvp.Key);
+                    }
+                    cpt = 0;
+                }
+            }
+            responsable.choix_service.Clear();
+        }
+
         public static void filtrer_par_date_recru_min(bool date, DateTime d_recru_min)
         {
 
@@ -1603,7 +1644,7 @@ namespace WpfApp2
             filtrer_par_date_recru_max(b, drmax);
         }
 
-        public static void recherche_par_criteres_deux(bool remboursable, int choix, bool date1, DateTime d_inf, bool date2, DateTime d_max, bool date3, DateTime pv_min, bool date4, DateTime pv_max, bool durée1, int durée_min, bool durée2, int durée_max, bool somme1, double somme_min, bool somme2, double somme_max, bool employé, bool type)
+        public static void recherche_par_criteres_deux(bool remboursable, int choix, bool date1, DateTime d_inf, bool date2, DateTime d_max, bool date3, DateTime pv_min, bool date4, DateTime pv_max, bool durée1, int durée_min, bool durée2, int durée_max, bool somme1, double somme_min, bool somme2, double somme_max, bool employé, bool type,bool service)
         {
             responsable.remplissage_liste_filtres();
             filtrer_par_remboursable_ou_non(remboursable, choix);
@@ -1615,6 +1656,7 @@ namespace WpfApp2
             filtrer_par_durée_max(durée2, durée_max);
             filtrer_par_employés(employé);
             filtrer_par_types(type);
+            filtrer_par_service(service);
             filtrer_par_somme_min(somme1, somme_min);
             filtrer_par_somme_max(somme2, somme_max);
         }
@@ -2333,7 +2375,7 @@ namespace WpfApp2
 
 
 
-        public static void export_prêts_remboursable()
+       /* public static void export_prêts_remboursable()
         {
             Excel.Application excel = new Excel.Application();
             excel.Visible = true;
@@ -2524,7 +2566,7 @@ namespace WpfApp2
                                     if (b.Equals("paiement régulier"))
                                     {
                                         int e = 1; // en cours en int
-                                        /***création du nouveau préts **/
+                                        //création du nouveau préts 
                                         pret_remboursable u = new pret_remboursable(cle_a_affecter_pret_remboursable(), c, t, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString(), DateTime.Parse(sheet.Cells[i, 11].Value.ToString()), Int32.Parse(sheet.Cells[i, 13].Value.ToString()), e, dicot, -1);
                                         responsable.liste_pret_remboursable.Add(u.Cle, u);
                                     }
@@ -2585,7 +2627,7 @@ namespace WpfApp2
                 }
                 excelApp.Quit();
             }
-        }
+        }*/
 
         public static void Envoi_mail(pret_remboursable pret, double montant)
         {
