@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8220bd0f-cfb3-4d29-9e7b-af5272221a64" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1aWvTfWEED0aNDxC2VBIKQXGaed" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/templatemo_529_ramayana/shortcodes.html" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8220bd0f-cfb3-4d29-9e7b-af5272221a64" name="Default Changelist" comment="" />
+      <created>1586864173746</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586864173746</updated>
+      <workItem from="1586864175262" duration="345000" />
+      <workItem from="1586886494816" duration="10176000" />
+      <workItem from="1586957578287" duration="1773000" />
+      <workItem from="1587847087727" duration="9248000" />
+      <workItem from="1587858056112" duration="2357000" />
+      <workItem from="1587897653159" duration="15780000" />
+      <workItem from="1587935745447" duration="601000" />
+      <workItem from="1587981355164" duration="1054000" />
+      <workItem from="1588064211965" duration="336000" />
+      <workItem from="1588066875222" duration="118000" />
+      <workItem from="1588078163154" duration="763000" />
+      <workItem from="1588435831824" duration="7509000" />
+      <workItem from="1588500283200" duration="8293000" />
+      <workItem from="1588519820203" duration="2179000" />
+      <workItem from="1588587216479" duration="7144000" />
+      <workItem from="1588601216354" duration="1881000" />
+      <workItem from="1588610677446" duration="1696000" />
+      <workItem from="1588667484927" duration="45000" />
+      <workItem from="1588668181895" duration="696000" />
+      <workItem from="1589043869757" duration="3618000" />
+      <workItem from="1589113415621" duration="3829000" />
+      <workItem from="1589119393158" duration="154000" />
+      <workItem from="1589120488892" duration="7123000" />
+      <workItem from="1589196382787" duration="2699000" />
+      <workItem from="1589226928924" duration="2461000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="421" y="167" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1586893336594">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="421" y="167" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1586893336594" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1586892592314">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1586892592314" />
+  </component>
+</project>
