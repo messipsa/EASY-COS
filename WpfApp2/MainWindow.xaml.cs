@@ -23,7 +23,7 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class EasyCOS : Window
     {
         public static string montant;
         public static bool Clos =false;
@@ -39,19 +39,15 @@ namespace WpfApp2
 
 
 
-        public MainWindow()
+        public EasyCOS()
         {
             InitializeComponent();
             media.Play();
             responsable.charger_montant_tresor();
-            /*welcome.Position = new TimeSpan(0, 0, 0);
-            welcome.Pause();*/
             Loading();
             Grid_Principale.Children.Clear();
             Grid_Principale.Children.Add(new Accueil());
             CompteCosTotal.Text = responsable.tresor.ToString() + " DA";
-
-
             methode_prelevement.Items.Add("Paiement Standard.");
             methode_prelevement.Items.Add("Paiement sur plusieurs mois.");
             methode_prelevement.Items.Add("Paiement Anticipé (Total).");
@@ -67,6 +63,11 @@ namespace WpfApp2
             {
                 montant_restant2.Text = responsable.tresor.ToString() + " DA";
                 CompteCosTotal.Text = responsable.tresor.ToString() + " DA";
+            }, this.Dispatcher);
+
+            DispatcherTimer timer2 = new DispatcherTimer(new TimeSpan(0,0,1), DispatcherPriority.Normal, delegate
+            {
+                actualiser();
             }, this.Dispatcher);
         }
 
@@ -89,15 +90,15 @@ namespace WpfApp2
         private void deconnexion(object sender, RoutedEventArgs e)
         {
             responsable.ecriture_modif_tresor();
+            responsable.sauvgarder_montant_tresor();
             responsable.initialisation_archive_auto();
-
             responsable.sauvgarde_archive();
             responsable.sauvgarde_Employe();
             responsable.sauvgarde_pret_non_remboursable();
             responsable.sauvgarde_pret_remboursable();
             responsable.sauvgarde_Type_pret();
             this.Close();
-            Window1 connexion = new Window1();
+            Connexion connexion = new Connexion();
             connexion.connexion_grid.Margin = new Thickness(0, 0, 0, 0);
             // connexion.intro.Close();
             connexion.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -115,34 +116,50 @@ namespace WpfApp2
                 case 0:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new Accueil());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 1:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new Suivi_Prét());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 2:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new dons());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 3:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new NouveauPrêts());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 4:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new stat());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 5:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new Archivage());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 6:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new Employes());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 case 7:
                     Grid_Principale.Children.Clear();
                     Grid_Principale.Children.Add(new Bilan());
+                    prelevement.Visibility = Visibility.Hidden;
+                    export_grid.Visibility = Visibility.Hidden;
                     break;
                 default:
                     break;
@@ -153,7 +170,7 @@ namespace WpfApp2
         private void MoveCursorMenu(int index)
         {
             Transition.OnApplyTemplate();
-            GridCursor.Margin = new Thickness(0, (131 + (70 * index)), 0, 0);
+            GridCursor.Margin = new Thickness(0, (106 + (70 * index)), 0, 0);
         }
 
         private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -519,7 +536,7 @@ namespace WpfApp2
                     nb_mois_saisi.Visibility = Visibility.Hidden;
                     m.Visibility = Visibility.Hidden;
                     montant_prelevement.IsReadOnly = true;
-                    MainWindow.montant = "      " + (pret.Montant / pret.Durée).ToString();
+                    EasyCOS.montant = "      " + (pret.Montant / pret.Durée).ToString();
                 }
                 else
                 {
@@ -531,7 +548,7 @@ namespace WpfApp2
                         double nb_mois_ = Double.Parse(nb_mois_saisi.Text);
                         double montant_multip = (pret.Montant / (double)pret.Durée) * nb_mois_;
                         montant_prelevement.IsReadOnly = true;
-                        MainWindow.montant = "      " + montant_multip.ToString();
+                        EasyCOS.montant = "      " + montant_multip.ToString();
                     }
                     else
                     {
@@ -541,7 +558,7 @@ namespace WpfApp2
                             nb_mois_saisi.Visibility = Visibility.Hidden;
                             m.Visibility = Visibility.Hidden;
                             montant_prelevement.IsReadOnly = true;
-                            MainWindow.montant = "      " + (pret.Montant - pret.Somme_remboursée).ToString();
+                            EasyCOS.montant = "      " + (pret.Montant - pret.Somme_remboursée).ToString();
                         }
                         else
                         {
@@ -551,7 +568,7 @@ namespace WpfApp2
                                 nb_mois_saisi.Visibility = Visibility.Hidden;
                                 m.Visibility = Visibility.Hidden;
                                 montant_prelevement.IsReadOnly = true;
-                                MainWindow.montant = "      0";
+                                EasyCOS.montant = "      0";
                             }
                             else
                             {
@@ -561,7 +578,7 @@ namespace WpfApp2
                                     nb_mois_saisi.Visibility = Visibility.Hidden;
                                     m.Visibility = Visibility.Hidden;
                                     montant_prelevement.IsReadOnly = true;
-                                    MainWindow.montant = "      0";
+                                    EasyCOS.montant = "      0";
                                 }
                                 else
                                 {
@@ -580,7 +597,7 @@ namespace WpfApp2
             }
             catch(System.NullReferenceException ex)
             {
-                MessageBox.Show("Selectionez dabord un pret pour faire le prélèvement !");
+                MessageBox.Show("Selectionez d'abord un pret pour faire le prélèvement !");
             }
         }
         private void confirmer_Prélèvement_click(object sender, RoutedEventArgs e)
@@ -722,9 +739,9 @@ namespace WpfApp2
             {
                 double nb_mois_ = Double.Parse(nb_mois_saisi.Text);
                 double montant_multip = (pret.Montant / (double)pret.Durée) * nb_mois_;
-                MainWindow.montant = "      " + montant_multip.ToString();
+                EasyCOS.montant = "      " + montant_multip.ToString();
             }
-            montant_prelevement.Text = MainWindow.montant;
+            montant_prelevement.Text = EasyCOS.montant;
         }
 
         private void excel_click(object sender, RoutedEventArgs e)

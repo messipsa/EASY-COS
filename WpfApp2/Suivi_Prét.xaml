@@ -12,28 +12,6 @@
         <Grid x:Name="data_grid">
             <Label  Content="Liste des Prêts accordés :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,25,0,0"/>
             <DataGrid Style="{StaticResource MaterialDesignDataGrid}" Background="White" CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_Suivi_Prêt" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="74,125" AutoGenerateColumns="False" >
-                <!--DataGrid.Style>
-                    <Style TargetType="DataGrid">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGrid">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                <TextBlock  Text="Aucun prêt n'est en cours, appuyez sur Ajouter pour créer un nouveau suivi de prêt" TextAlignment="Center" VerticalAlignment="Center" FontSize="22" Grid.Row="1" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </-->
                 <DataGrid.Resources>
 
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -149,8 +127,8 @@
             </Grid.RowDefinitions>
             <Label  Content="Veuillez remplir le formulaire suivant :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,25,0,0"/>
             <Label Content="*les champs indiqués avec ce symbole (*) sont obligatoires" FontSize="12" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,75,0,0" Foreground="Red" ></Label>
-            <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,183,0,0" Foreground="Red" FontSize="20"/>
-            <Label x:Name="Remarque" Visibility="Hidden" Width="600" Height="40" Content="Vous devez fournir toutes les informations demandées dans formulaire !! " Foreground="Red" FontSize="15" Margin="28,61,372,129"></Label>
+            <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="116,183,0,0" Foreground="Red" FontSize="20"/>
+            <Label x:Name="Remarque" Visibility="Hidden" Width="600" Height="40" Content="Vous devez fournir toutes les informations demandées dans formulaire !! " Foreground="Red" FontSize="15" Margin="28,99,372,91"></Label>
             <ComboBox x:Name="Prêt_Type_ajout" Width="220" materialdesign:HintAssist.Hint="Type Du Prêt" Margin="80,255,700,125" Height="40" Grid.Row="1" IsReadOnly="False" IsEditable="True" IsTextSearchEnabled="False" IsTextSearchCaseSensitive="False" RenderTransformOrigin="0.24,2.25" TextBoxBase.TextChanged="liste_types_TextChanged"></ComboBox>
             <TextBox x:Name="Numero_Pv_ajout" Width="220" Height="40" materialdesign:HintAssist.Hint="Numero du Pv" FontFamily="Verdana" Foreground="Black" Margin="80,50,700,330" Grid.Row="1"></TextBox>
             <DatePicker x:Name="Date_pv_ajout" Height="40" materialdesign:HintAssist.Hint="Date du Pv" Margin="80,154,700,226" RenderTransformOrigin="0.507,-0.3" Width="220" Grid.Row="1"/>
@@ -164,7 +142,7 @@
             <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="746,0,0,28" Grid.Row="1">
                 <Button x:Name="Annuler_Ajout_Copy"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Annuler_Ajout_Click" />
             </Border>
-            <Label  Content="Introduire un employé :" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="80,146,0,0"/>
+            <Label  Content="Introduire un employé :" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="137,192,0,0"/>
 
             <ComboBox x:Name="liste_employes" HorizontalAlignment="Left" Margin="416,190,0,0" materialdesign:HintAssist.Hint="Choisir un emlpoye" VerticalAlignment="Top" Width="220"  IsTextSearchEnabled="false" Height="40" TextBoxBase.TextChanged="liste_employes_TextChanged" IsReadOnly="False" IsEditable="True"  IsTextSearchCaseSensitive="False" RenderTransformOrigin="0.24,2.25"/>
             <TextBox x:Name="durée" Height="40" materialdesign:HintAssist.Hint="Durée de remboursement(en mois)" Margin="416,49,364,331" Grid.Row="1"/>
@@ -174,6 +152,8 @@
             <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="679,145,0,0" Foreground="Red" FontSize="20" Grid.Row="1"/>
             <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="380,40,0,0" Foreground="Red" FontSize="20" Grid.Row="1"/>
             <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="679,40,0,0" Foreground="Red" FontSize="20" Grid.Row="1"/>
+            <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,40,0,0" Foreground="Red" FontSize="20" Grid.Row="1"/>
+            <Label Content="*" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="45,145,0,0" Foreground="Red" FontSize="20" Grid.Row="1"/>
 
         </Grid>
         

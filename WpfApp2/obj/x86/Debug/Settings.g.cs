@@ -382,7 +382,7 @@ namespace WpfApp2 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp2;component/settings.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EASY COS;component/settings.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Settings.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -562,9 +562,6 @@ C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\loa
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\Accueil1.mp4
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\Connexion.mp4
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\introduction2.mp4
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\WpfApp2.exe.config
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\WpfApp2.exe
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\WpfApp2.pdb
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\LiveCharts.dll
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\LiveCharts.Wpf.dll
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\MaterialDesignColors.dll
@@ -603,8 +600,6 @@ C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Win
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Window5.g.cs
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Window6.g.cs
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\App.g.cs
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2_MarkupCompile.cache
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2_MarkupCompile.lref
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\App.baml
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Accueil.baml
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Archivage.baml
@@ -622,10 +617,24 @@ C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\don
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\UserControl1.baml
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Window3.baml
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\Window4.baml
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.g.resources
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.Properties.Resources.resources
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.csproj.GenerateResource.cache
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.csproj.CoreCompileInputs.cache
 C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.csproj.CopyComplete
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.exe
-C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\WpfApp2.pdb
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\BouncyCastle.Crypto.dll
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\Newtonsoft.Json.dll
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\Pubnub.dll
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\System.ValueTuple.dll
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\WPFNotification.dll
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\BouncyCastle.Crypto.pdb
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\BouncyCastle.Crypto.xml
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\Newtonsoft.Json.xml
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\System.ValueTuple.xml
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\EASY COS_MarkupCompile.cache
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\EASY COS_MarkupCompile.lref
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\EASY COS.g.resources
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\EASY COS.pdb
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\EASY COS.exe.config
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\EASY COS.exe
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\bin\x86\Debug\EASY COS.pdb
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\EasyCOS.Properties.Resources.resources
+C:\Users\Mohamed Nassim\Desktop\PRJP-2CP-FINALE-finale\WpfApp2\obj\x86\Debug\EASY COS.exe

@@ -34,8 +34,16 @@ namespace WpfApp2
                     this.somme_remboursée = p.Somme_remboursée;
                 }
             }
-            this.durée = durée;
-            this.date_actuelle = date_premier_paiment;
+            this.durée = durée;            
+            this.Date_actuelle = this.Date_premier_paiment;
+            foreach (pret_remboursable p in responsable.liste_pret_remboursable.Values)
+            {
+                pret_remboursable k = p;
+                if (this.cle == k.Debordement)
+                {
+                    this.Date_actuelle = k.Date_actuelle;
+                }
+            }
             foreach (double d in this.etat.Values)
             {
                 if (d != -1)
@@ -502,7 +510,6 @@ namespace WpfApp2
                             this.mois_actuel++;
                             p.mois_actuel = 0;
                             p.somme_remboursée = this.somme_remboursée;
-                            //p.paiement();
                             responsable.liste_pret_remboursable_provisoire.Add(p.cle, p);
                         }
                         else
@@ -575,7 +582,7 @@ namespace WpfApp2
         }
         public void archiver() //archivage automatique apres un mois
         {
-            int difference = DateTime.Compare(DateTime.Now, this.date_actuelle.AddDays(int.Parse(Window2.durée_avant_archivage_d) + (int.Parse(Window2.durée_avant_archivage_m) * 30)));
+            int difference = DateTime.Compare(DateTime.Now, this.date_actuelle.AddDays(Int32.Parse(Window2.durée_avant_archivage_d) + (Int32.Parse(Window2.durée_avant_archivage_m) * 30)));
             if ((this.debordement == -1) && (this.montant == this.somme_remboursée) && (difference == 1) && (Window2.mode_archivage))
             {
                 string observ;

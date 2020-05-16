@@ -52,7 +52,7 @@ namespace WpfApp2 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp2;component/fenetre1.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EASY COS;component/fenetre1.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\fenetre1.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

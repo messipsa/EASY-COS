@@ -880,7 +880,7 @@ namespace WpfApp2
                 {
                     cmd.CommandText = "SET IDENTITY_INSERT employes ON;";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT employes (cle,nom, prenom, num_securite_sociale, date_naissance, grade, date_prem, etat_sociale, ccp, cle_ccp, tel, matricule,service_travail,email,etat_fonction) VALUES(" + liste.Key + ",'" + liste.Value.Nom + "','" + liste.Value.Prenom + "','" + liste.Value.sec_soc + "','" + liste.Value.Date_naissance.ToShortDateString() + "','" + liste.Value.Grade + "','" + liste.Value.Date_prem.ToShortDateString() + "','" + liste.Value.etats + "','" + liste.Value.compte_ccp + "','" + liste.Value.Cle_ccp + "','" + liste.Value.tel + ",'" + liste.Value.Matricule + "','" + liste.Value.Service + "','" + liste.Value.Email + "','" + liste.Value.Etat_service + "');";
+                    cmd.CommandText = "INSERT employes (cle,nom, prenom, num_securite_sociale, date_naissance, grade, date_prem, etat_sociale, ccp, cle_ccp, tel, matricule,service_travail,email,etat_fonction) VALUES(" + liste.Key + ",'" + liste.Value.Nom + "','" + liste.Value.Prenom + "','" + liste.Value.sec_soc + "','" + liste.Value.Date_naissance.ToShortDateString() + "','" + liste.Value.Grade + "','" + liste.Value.Date_prem.ToShortDateString() + "','" + liste.Value.etats + "','" + liste.Value.compte_ccp + "','" + liste.Value.Cle_ccp + "','" + liste.Value.tel + "','" + liste.Value.Matricule + "','" + liste.Value.Service + "','" + liste.Value.Email + "','" + liste.Value.Etat_service + "');";
                     cmd.ExecuteNonQuery();
                 }
             }

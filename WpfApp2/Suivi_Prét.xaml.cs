@@ -146,8 +146,6 @@ namespace WpfApp2
 
         private void Confirmer_Ajout_Click(object sender, RoutedEventArgs e)
         {
-            // if ((introduire.SelectedItem.ToString().Equals("Choisir un employe parmis la liste") && Date_Demande_ajout.SelectedDate.Equals(null) || (Prêt_Type_ajout.SelectedItem.Equals(null)) || Montant_Prêt_ajout.Text.Equals("") || ((introduire.SelectedItem.ToString().Equals("Créer un nouvel employe")) && (Date_Demande_ajout.SelectedDate.Equals(null) || (Prêt_Type_ajout.SelectedItem.Equals(null)) || Montant_Prêt_ajout.Text.Equals("")))))
-
             Remarque.Visibility = Visibility.Visible;
             DoubleAnimation a = new DoubleAnimation();
             a.From = 1.0; a.To = 0.0;
@@ -155,21 +153,46 @@ namespace WpfApp2
             Remarque.BeginAnimation(OpacityProperty, a);
             int k = 0;
             int cpt = 0;
+            if(liste_employes.SelectedIndex == -1)
+            {
+                MessageBox.Show("Choisissez un employé", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                cpt++;
+            }
+            if (Prêt_Type_ajout.SelectedIndex == -1)
+            {
+                MessageBox.Show("Choisissez un type de prêt", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                cpt++;
+            }
             if (!int.TryParse(Montant_Prêt_ajout.Text, out k))
             {
-                MessageBox.Show("entrez un montant valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Entrez un montant valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 cpt++;
             }
             if (!int.TryParse(Numero_Pv_ajout.Text, out k))
             {
-                MessageBox.Show("entrez un numero de pv valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Entrez un numero de pv valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 cpt++;
             }
             if (!int.TryParse(durée.Text, out k))
             {
-                MessageBox.Show("entrez une durée de paiement valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Entrez une durée de paiement valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                cpt++;
+            }    
+            if(Date_Demande_ajout.SelectedDate == null)
+            {
+                MessageBox.Show("Choisissez une date de demande", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 cpt++;
             }
+            if (Date_prem_paiement.SelectedDate == null)
+            {
+                MessageBox.Show("Choisissez une date de premier paiement", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                cpt++;
+            }    
+            if (Date_pv_ajout.SelectedDate == null)
+            {
+                MessageBox.Show("Entrez la date du PV", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                cpt++;
+            }            
             int i = 0;
             int j = 0;
 
@@ -181,42 +204,16 @@ namespace WpfApp2
 
             foreach (KeyValuePair<int, Employé> value in responsable.liste_employes)
             {
-                if ((liste_employes.Text.Split(')'))[0].Equals(value.Key.ToString()))
+                if (liste_employes.Text.Split(')')[0].Equals(value.Key.ToString()))
                 {
                     j = value.Key;
-
                 }
-
             }
-            //int a = Int32.Parse(Numero_Pv_ajout.Text);
             if (cpt == 0)
             {
                 responsable.Creer_pret_remboursable(j, i, Motif_ajout.Text, Int32.Parse(Numero_Pv_ajout.Text), DateTime.Parse(Date_pv_ajout.SelectedDate.ToString()), Double.Parse(Montant_Prêt_ajout.Text), DateTime.Parse(Date_Demande_ajout.SelectedDate.ToString()), Montant_Prêt_lettre_ajout.Text, DateTime.Parse(Date_prem_paiement.SelectedDate.ToString()), Int32.Parse(durée.Text));
-            }
-            // actualiser();
-            List<employee> source = new List<employee>();
-            //source.Clear();
-            foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
-            {
-
-                if (liste.Value.isPere())
-                {
-                    employee Employe = new employee();
-                    Employe.Nom = liste.Value.Employé.Nom;
-                    Employe.Prenom = liste.Value.Employé.Prenom;
-                    Employe.N_Pv = liste.Value.Num_pv.ToString();
-                    Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
-                    //Employe.Motif = liste.Value.Motif;
-                    Employe.Date_demande = liste.Value.Date_demande.ToString();
-                    //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
-                    Employe.Montant_Prét = liste.Value.Montant.ToString();
-                    source.Add(Employe);
-                }
-            }
-            Donnée_Suivi_Prêt.ItemsSource = source;
-            if (cpt == 0)
-            {
+                responsable.affiche_liste_pret_remboursable();
+                actualiser();
                 data_grid.Visibility = Visibility.Visible; data_grid.IsEnabled = true;
                 Grid_Ajout.Visibility = Visibility.Hidden; Grid_Ajout.IsEnabled = false;
                 Prêt_Type_ajout.SelectedIndex = -1;
@@ -412,17 +409,17 @@ namespace WpfApp2
                                         switch (liste.Key.Month)
                                         {
                                             case 1: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 2: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 3: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 4: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 5: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 6: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 7: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 8: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 9: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 10: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 11: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 12: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 2: { fevrier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 3: { mars.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 4: { avril.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 5: { mai.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 6: { juin.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 7: { juillet.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 8: { aout.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 9: { septembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 10: { octobre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 11: { novembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 12: { decembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
                                         }
                                     }
                                 }
@@ -721,17 +718,18 @@ namespace WpfApp2
                                             switch (liste.Key.Month)
                                             {
                                                 case 1: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 2: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 3: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 4: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 5: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 6: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 7: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 8: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 9: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 10: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 11: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 12: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 2: { fevrier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 3: { mars.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 4: { avril.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 5: { mai.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 6: { juin.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 7: { juillet.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 8: { aout.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 9: { septembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 10: { octobre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 11: { novembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 12: { decembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                
                                             }
                                         }
                                     }
@@ -896,17 +894,17 @@ namespace WpfApp2
                                             switch (liste.Key.Month)
                                             {
                                                 case 1: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 2: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 3: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 4: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 5: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 6: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 7: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 8: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 9: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 10: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 11: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 12: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 2: { fevrier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 3: { mars.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 4: { avril.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 5: { mai.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 6: { juin.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 7: { juillet.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 8: { aout.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 9: { septembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 10: { octobre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 11: { novembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 12: { decembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
                                             }
                                         }
                                     }
@@ -1073,17 +1071,17 @@ namespace WpfApp2
                                             switch (liste.Key.Month)
                                             {
                                                 case 1: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 2: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 3: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 4: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 5: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 6: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 7: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 8: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 9: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 10: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 11: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 12: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 2: { fevrier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 3: { mars.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 4: { avril.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 5: { mai.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 6: { juin.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 7: { juillet.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 8: { aout.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 9: { septembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 10: { octobre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 11: { novembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 12: { decembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
                                             }
                                         }
                                     }
@@ -1248,17 +1246,17 @@ namespace WpfApp2
                                             switch (liste.Key.Month)
                                             {
                                                 case 1: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 2: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 3: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 4: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 5: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 6: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 7: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 8: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 9: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 10: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 11: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                                case 12: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 2: { fevrier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 3: { mars.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 4: { avril.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 5: { mai.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 6: { juin.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 7: { juillet.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 8: { aout.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 9: { septembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 10: { octobre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 11: { novembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                                case 12: { decembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
                                             }
                                         }
                                     }

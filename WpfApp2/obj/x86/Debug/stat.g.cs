@@ -63,7 +63,7 @@ namespace WpfApp2 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp2;component/stat.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EASY COS;component/stat.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\stat.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

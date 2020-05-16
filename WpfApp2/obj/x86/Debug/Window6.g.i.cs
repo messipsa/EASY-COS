@@ -70,7 +70,7 @@ namespace WpfTutorialSamples.Dialogs {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp2;component/window6.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EASY COS;component/window6.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Window6.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

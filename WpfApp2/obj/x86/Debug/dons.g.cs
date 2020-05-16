@@ -567,7 +567,7 @@ namespace WpfApp2 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp2;component/dons.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EASY COS;component/dons.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\dons.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

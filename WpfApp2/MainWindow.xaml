@@ -1,4 +1,4 @@
-﻿<Window x:Class="WpfApp2.MainWindow"
+﻿<Window x:Class="WpfApp2.EasyCOS"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:WpfApp2"
         xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" Margin="0" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize" >
+        Title="MainWindow" Height="700" Width="1200" WindowStartupLocation="CenterScreen" Margin="0" AllowsTransparency="True" WindowStyle="None" ResizeMode="NoResize">
+    
 
     <Grid MouseDown="Grid_MouseDown" x:Name="grid_gnrl" >
         <Canvas x:Name="Menu" >
@@ -55,10 +56,10 @@
 
 
             <Grid  Width="180"  HorizontalAlignment="Left" Background="#FF272A33" Height="700">
-                <materialdesign:TransitioningContent x:Name="Transition" OpeningEffect="{materialdesign:TransitionEffect Kind=SlideInFromLeft, Duration=0:0:0.2}" Margin="0,0,0,100">
-                    <Grid x:Name="GridCursor" Margin="0,131,0,0" VerticalAlignment="Top" Background="#FF64D4A4" Width="10" HorizontalAlignment="Left" Height="48" ></Grid>
+                <materialdesign:TransitioningContent x:Name="Transition" OpeningEffect="{materialdesign:TransitionEffect Kind=SlideInFromLeft, Duration=0:0:0.2}" Margin="0,0,0,50">
+                    <Grid x:Name="GridCursor" Margin="0,106,0,0" VerticalAlignment="Top" Background="#FF64D4A4" Width="10" HorizontalAlignment="Left" Height="48" ></Grid>
                 </materialdesign:TransitioningContent>
-                <ListView x:Name="listMenu" Margin="0,130,0,0"  SelectionChanged="listMenu_SelectionChanged">
+                <ListView x:Name="listMenu" Margin="0,105,0,0"  SelectionChanged="listMenu_SelectionChanged">
                     <ListViewItem Height="60" Margin="0,0,0,10" Padding="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <materialdesign:PackIcon Margin="8,0,0,0" Kind="Home" Width="40" Height="30" Foreground="White"  VerticalAlignment="Center"></materialdesign:PackIcon>
@@ -306,7 +307,7 @@
             </Grid>
         </Canvas>
         <Grid x:Name="Description_grid" Height="700" Width="250" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,-250,0">
-            <Image Stretch="Fill" Source="ESI.png"  HorizontalAlignment="Center"  VerticalAlignment="Top" Height="200" Width="250"></Image>
+            <Image x:Name="description_image" Stretch="Fill" Source="ESI.png"  HorizontalAlignment="Center"  VerticalAlignment="Top" Height="200" Width="250"></Image>
             <TextBlock Height="500" VerticalAlignment="Bottom" Text=" &#x0a; &#x0a; &#x0a;&#x0a;&#x0a;&#x0a;&#x0a;    L'application Easy COS a été &#x0a;   réalisé dans le Cadre du projet&#x0a;    2CP 2019/2020, son objectif : &#x0a;  Facilité la gestion des différents &#x0a;              types de prêts ... " Foreground="White" FontSize="16" Background="#FF272A33" Width="250"></TextBlock>
             <Button VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Background="Transparent" x:Name="back_description" BorderBrush="{x:Null}" Width="59" Height="40" Click="back_description_Click">
                 <materialdesign:PackIcon Width="30" Height="30" Margin="-10,0,0,0" Foreground="White" Kind="ArrowRightDropCircleOutline"></materialdesign:PackIcon>

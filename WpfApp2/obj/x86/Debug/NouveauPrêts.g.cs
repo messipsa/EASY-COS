@@ -231,7 +231,7 @@ namespace WpfApp2 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WpfApp2;component/nouveaupr%c3%aats.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EASY COS;component/nouveaupr%c3%aats.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\NouveauPrêts.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

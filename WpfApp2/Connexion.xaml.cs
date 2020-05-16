@@ -20,11 +20,11 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class Connexion : Window
     {
         private static bool isRun = false;
         private static readonly object syncLock = new object();
-        public Window1()
+        public Connexion()
         {
             Lecture_BDD();
             Window2.charger_option();
@@ -50,7 +50,7 @@ namespace WpfApp2
             verification.Stop();
             a.Stop();
             Connexion_Grid.Visibility = Visibility.Hidden;
-            MainWindow window = new MainWindow();
+            EasyCOS window = new EasyCOS();
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.Password_show.Password = user_paswword;
             window.Pseudo_show.Text = user_name;
@@ -82,7 +82,7 @@ namespace WpfApp2
             if (Nom_utilisateur.Text.Equals(user_name) && pwd.Equals(user_paswword))
             {
                 Loading();
-                Connexion.IsEnabled = false;
+                Connexion_button.IsEnabled = false;
             }
             else
             {
@@ -164,7 +164,6 @@ namespace WpfApp2
 
         private void hide_pwd_click(object sender, RoutedEventArgs e)
         {
-            string pwd = "";
             if (mot_de_passe.Visibility == Visibility.Visible)
             {
                 mot_de_passe.Visibility = Visibility.Hidden;
