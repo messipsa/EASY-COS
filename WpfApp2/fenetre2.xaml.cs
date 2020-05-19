@@ -48,12 +48,6 @@ namespace WpfApp2
         {
 
             Resultats_recherche.ItemsSource = null;
-            //  liste_employes.ItemsSource = null;
-            // type_pret_datagrid.Items.Clear();
-            //Prêt_Type_ajout.ItemsSource = null;
-
-
-            //responsable.liste_filtres.Add(40, responsable.liste_archives[1]);
             List<employee> source = new List<employee>();
             source.Clear();
             foreach (KeyValuePair<int, Archive> liste in responsable.liste_filtres)
@@ -98,8 +92,6 @@ namespace WpfApp2
 
         private void details(object sender, RoutedEventArgs e)
         {
-            //archivees.Visibility = Visibility.Hidden; archivees.IsEnabled = false;
-
             fenet.Visibility = Visibility.Visible; fenet.IsEnabled = true;
             employee st = Resultats_recherche.SelectedItem as employee;
             Archivage sv = Resultats_recherche.SelectedItem as Archivage;
@@ -118,8 +110,6 @@ namespace WpfApp2
                 }
             }
 
-            // nom_info.Text = pret.Pret.Employé.Nom;
-            //prenom_info.Text = pret.Pret.Employé.Prenom;
             nom_detail.Text = pret.Pret.Employé.Nom + " " + pret.Pret.Employé.Prenom;
             prenom_detail.Text = pret.Pret.Employé.Email;
             date_nais_info.Text = pret.Pret.Employé.Date_naissance.ToString();

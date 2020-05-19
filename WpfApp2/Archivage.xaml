@@ -11,109 +11,7 @@
 
         <Grid x:Name="data_grid">
             <Label  Content="Liste des Prêts archivés :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,30,0,0"/>
-            <!--<DataGrid   CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_Archivage" AlternatingRowBackground="LightGray" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="415"  VerticalAlignment="Center" Margin="0,110,10,125" AutoGenerateColumns="False">
-                <DataGrid.Style>
-                    <Style TargetType="DataGrid">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGrid">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                <TextBlock  Text="Aucun prêt n'est encore archivé" TextAlignment="Center" VerticalAlignment="Center" FontSize="22" Grid.Row="1" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Style>
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type DataGridColumnHeader}">
-                        <Setter Property="FontFamily" Value="Cambria"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="BorderThickness" Value="0,0,2,1"/>
-                        <Setter Property="FontSize" Value="15"></Setter>
-                    </Style>
-                    <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="BorderThickness" Value="0,0,1,1"/>
-                        <Setter Property="BorderBrush" Value="Black"/>
-                        <Setter Property="FontSize" Value="15"/>
-                        <Setter Property="FontFamily" Value="Verdana"/>
-                        <Style.Triggers>
-                            <Trigger Property="DataGridCell.IsSelected" Value="True">
-                                <Setter Property="Background" Value="#CCDAFF" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Resources>
-                <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True" Header="      Nom     " Width="auto" Binding="{Binding Path=Nom}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Type Du Prêt   " Width="auto" Binding="{Binding Path=Type_Prêt}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="   N­° Pv   " Width="auto" Binding="{Binding Path=N_Pv}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="  Date De Demande  " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Date du premier paiement    " Width="auto" Binding="{Binding Path=prem_paiement }"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Date du dernier paiement    " Width="auto" Binding="{Binding Path=fin_paiement }"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="  Durée  " Width="auto" Binding="{Binding Path=Durée}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt    " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt En Lettre    " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="  Somme remboursée " Width="auto" Binding="{Binding Path=sum_rembours}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="       Motif       " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="       Observation       " Width="auto" Binding="{Binding Path=Observation}"></DataGridTextColumn>
-                    <DataGridTemplateColumn IsReadOnly="True" Header=" Percentage  " Width="auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ProgressBar Height="10" Value="{Binding Path=PercentageDownloaded, Mode=OneWay}" Minimum="0" Maximum="100" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn IsReadOnly="True" Header="" Width="auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <materialdesign:PopupBox Foreground="Black">
-                                    <StackPanel>
-                                        <Button Content="Modifier"></Button>
-                                        <Button x:Name="Détails" Content="Détails"  Click="details"></Button>
-                                    </StackPanel>
-                                </materialdesign:PopupBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>-->
             <DataGrid Style="{StaticResource MaterialDesignDataGrid}" Background="White" CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_Archivage" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="18,123,17,127" AutoGenerateColumns="False" >
-                <!--DataGrid.Style>
-                    <Style TargetType="DataGrid">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGrid">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                <TextBlock  Text="Aucun prêt n'est en cours, appuyez sur Ajouter pour créer un nouveau suivi de prêt" TextAlignment="Center" VerticalAlignment="Center" FontSize="22" Grid.Row="1" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </-->
                 <DataGrid.Resources>
 
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -151,17 +49,17 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn IsReadOnly="True" Header="      Nom     " Width="auto" Binding="{Binding Path=Nom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Type Du Prêt   " Width="auto" Binding="{Binding Path=Type_Prêt}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="          Type Du Prêt         " Width="auto" Binding="{Binding Path=Type_Prêt}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="   N­° Pv   " Width="auto" Binding="{Binding Path=N_Pv}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="  Date De Demande  " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
 
 
                     <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt    " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt En Lettre    " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="     Montant Prêt En Lettre      " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></DataGridTextColumn>
 
                     <DataGridTextColumn IsReadOnly="True" Header="       Motif       " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="       Observation       " Width="auto" Binding="{Binding Path=Observation}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="          Observation          " Width="auto" Binding="{Binding Path=Observation}"></DataGridTextColumn>
 
 
                     <DataGridTemplateColumn IsReadOnly="True" Header="       " Width="auto">
@@ -169,7 +67,6 @@
                             <DataTemplate>
                                 <materialdesign:PopupBox Foreground="Black">
                                     <StackPanel>
-                                        <Button Content="Modifier"></Button>
                                         <Button x:Name="Détails" Content="Détails"  Click="details"></Button>
                                     </StackPanel>
                                 </materialdesign:PopupBox>
@@ -208,23 +105,13 @@
 
 
             <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="890,0,0,28">
-                <Button x:Name="Confirmer_Flitrage"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Confirmer" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Confirmer_Filtrage_Click" ></Button>
+                <Button x:Name="Confirmer_Flitrage"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Confirmer" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" ></Button>
             </Border>
             <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="746,0,0,28">
-                <Button x:Name="Annuler_Filtrage"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Annuler_Filtrage_Click" ></Button>
+                <Button x:Name="Annuler_Filtrage"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" ></Button>
             </Border>
         </Grid>
         <Grid x:Name="archi" Background="White" Visibility="Hidden" Margin="0,4,0,-4">
-            <!--   <Border x:Name="border_emploue" BorderBrush="#FF1FAB89" BorderThickness="3"  HorizontalAlignment="Left" Height="155" Margin="20,20,0,0" VerticalAlignment="Top" Width="460">
-                <Grid Margin="-3">
-                    <Label Content="Informations Employe :" HorizontalAlignment="Left" Height="30" Margin="40,7,0,0" VerticalAlignment="Top" Width="190" Foreground="#FF1FAB89" FontSize="16" FontWeight="Bold"/>
-                    <Label Content="Nom :" HorizontalAlignment="Left" Height="30" Margin="10,42,0,0" VerticalAlignment="Top" Width="60" Foreground="Black" FontSize="14" />
-                    <Label Content="Prénom :" HorizontalAlignment="Left" Height="30" Margin="10,77,0,0" VerticalAlignment="Top" Width="73" Foreground="Black" FontSize="14" />
-                    <TextBox x:Name="nom_info" HorizontalAlignment="Left" Height="30" Margin="240,38,0,0" VerticalAlignment="Top" Width="150" IsReadOnly="True"/>
-                    <TextBox x:Name="prenom_info" HorizontalAlignment="Left" Height="30" Margin="240,73,0,0" VerticalAlignment="Top" Width="150" IsReadOnly="True"/>
-                    <materialdesign:PackIcon Margin="10,10,0,119" Kind="face" Width="25" Height="26" Foreground="#FF1FAB89"  VerticalAlignment="Center" RenderTransformOrigin="0.6,0.36"></materialdesign:PackIcon>
-                </Grid>
-            </Border>-->
             <Border x:Name="border_pret" BorderBrush="#FF5B39BB" BorderThickness="3"  HorizontalAlignment="Left" Height="600" Margin="12,10,10,0" VerticalAlignment="Top" Width="475">
                 <Grid Margin="-3">
                     <Label Content="Informations Prêt :" HorizontalAlignment="Left" Height="30" Margin="40,7,0,0" VerticalAlignment="Top" Width="190" Foreground="#FF5B39BB" FontSize="16" FontWeight="Bold"/>

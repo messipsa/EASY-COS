@@ -22,15 +22,10 @@ namespace WpfApp2
     /// </summary>
     public partial class NouveauPrêts : UserControl
     {
+        //Class principale de l'interface des types de prets
+
         public NouveauPrêts()
         {
-            /*InitializeComponent();
-            List<string> source = new List<string>();
-            foreach (KeyValuePair<int, Type_pret> liste in responsable.liste_types)
-            {
-                source.Add(liste.Value.Description);
-            }
-            Types_existants.ItemsSource = source;*/
             InitializeComponent();
 
             List<PRET> prets = new List<PRET>();
@@ -62,12 +57,18 @@ namespace WpfApp2
             Types_Prets.ItemsSource = prets;
         }
 
+
+        //class interne pour permettre l'affectation des données
+
         public class PRET
         {
             public string Description { get; set; }
             public string Remboursable { get; set; }
             public string Disponible { get; set; }
         }
+
+
+        //methodes de manupulation de l'interface
 
         private void Annuler_formulaire_Click(object sender, RoutedEventArgs e)
         {
@@ -79,56 +80,8 @@ namespace WpfApp2
 
         private void Confirmer_formulaire_Click(object sender, RoutedEventArgs e)
         {
-            /*if(Description.Text!="")
-            {
-                //Récupération des données du l ajout du formulaire
-                bool a = (bool)Remboursable.IsChecked;
-                bool b = (bool)Disponible.IsChecked;
-                string c = Description.Text;
-
-                //ajout dans la listeview
-                Types_existants.ItemsSource = null;
-                List<string> source = new List<string>();
-                foreach (KeyValuePair<int, Type_pret> liste in responsable.liste_types)
-                {                   
-                    source.Add(liste.Value.Description);
-                }
-                source.Add(c);
-                Types_existants.ItemsSource = source;               
-                int cpt = 1;
-                foreach (KeyValuePair<int, Type_pret> liste in responsable.liste_types)
-                {
-                    if (liste.Value.Type_de_pret >= cpt)
-                        cpt = liste.Value.Type_de_pret + 1;
-                }
-                int dispo=1;
-                if (b == false) dispo = 0;
-                int remb = 1;
-                if (a == false) remb = 0;
-                responsable.Creer_Type_pret(cpt, dispo, c, remb);
-
-                Erreur_formulaire.Visibility = Visibility.Hidden;
-                Ajouter_type_label.Visibility = Visibility.Visible;
-                DoubleAnimation d = new DoubleAnimation();
-                d.From = 1.0; d.To = 0.0;
-                d.Duration = new Duration(TimeSpan.FromSeconds(4));
-                Ajouter_type_label.BeginAnimation(OpacityProperty, d);
-
-                d.Completed += new EventHandler(d_completed);
-
-            }
-            else
-            {
-                Erreur_formulaire.Visibility = Visibility.Visible;
-                Ajouter_type_label.Visibility = Visibility.Hidden;
-                DoubleAnimation k = new DoubleAnimation();
-                k.From = 1.0; k.To=0.0;
-                k.Duration = new Duration(TimeSpan.FromSeconds(4));
-                Erreur_formulaire.BeginAnimation(OpacityProperty, k);
-            }*/
             if (Description.Text != "")
             {
-                //Récupération des données du l ajout du formulaire
                 bool a = (bool)Remboursable.IsChecked;
                 bool b = (bool)Disponible.IsChecked;
                 string c = Description.Text;
@@ -242,22 +195,6 @@ namespace WpfApp2
 
         private void Confirmer_modification_Click(object sender, RoutedEventArgs e)
         {
-            /*bool b = (bool)Disponible_existant.IsChecked;
-            string c = Types_existants.SelectedItem.ToString();
-            int dispo = 1;
-            if (b == false) dispo = 0;
-            foreach (KeyValuePair<int, Type_pret> liste in responsable.liste_types)
-            {
-                if (liste.Value.Description.Equals(c))
-                    liste.Value.Disponibilité = dispo;
-            }
-
-            Mise_a_jour_type.Visibility = Visibility.Visible;
-            DoubleAnimation k= new DoubleAnimation();
-            k.From = 1.0; k.To = 0.0;
-            k.Duration = new Duration(TimeSpan.FromSeconds(4));
-            Mise_a_jour_type.BeginAnimation(OpacityProperty, k);          
-            k.Completed += new EventHandler(k_completed);*/
             bool b = (bool)Disponible_existant.IsChecked;
             PRET pret = (PRET)Types_Prets.SelectedItem;
             string c = pret.Description;
@@ -295,18 +232,6 @@ namespace WpfApp2
 
         private void Modifier_type_Click(object sender, RoutedEventArgs e)
         {
-            /*if(Types_existants.SelectedItems.Count==1)
-            {
-                Modification.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                Erreur_Modification.Visibility = Visibility.Visible;
-                DoubleAnimation n = new DoubleAnimation();
-                n.From = 1.0; n.To = 0.0;
-                n.Duration = new Duration(TimeSpan.FromSeconds(4));
-                Erreur_Modification.BeginAnimation(OpacityProperty, n);
-            } */
             if (Types_Prets.SelectedItems.Count == 1)
             {
                 Modification.Visibility = Visibility.Visible;

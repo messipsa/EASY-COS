@@ -194,7 +194,7 @@ namespace WpfApp2
             int difference = DateTime.Compare(DateTime.Now, this.Date_premier_paiment);
             if (difference > 0)
             {
-                if ((this.montant - this.somme_remboursée) > (this.montant / this.durée))
+                if ((this.montant - this.somme_remboursée) >= (this.montant / this.durée))
                 {
                     if ((this.en_cours == 1) && (this.mois_actuel < 10) && (this.somme_remboursée < this.montant))
                     {
@@ -426,7 +426,7 @@ namespace WpfApp2
                     for (cpt = this.mois_actuel + 1; cpt < 10; cpt++)
                     {
                         this.etat.Remove(cpt);
-                        this.etat.Add(cpt, 0);
+                        this.etat.Add(cpt, -1);
                     }
                     this.mois_actuel = 11;
                 }

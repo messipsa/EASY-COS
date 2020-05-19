@@ -17,6 +17,9 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour Window4.xaml
     /// </summary>
+
+    //Class principale de l'interface de statistiques par graph
+
     public partial class Window4 : UserControl
     {
         public Window4()
@@ -24,6 +27,9 @@ namespace WpfApp2
             InitializeComponent();
             actualiser();
         }
+
+        //class interne pour permettre l'affectation des données
+
         public class employee
         {
             public String Nom { get; set; }
@@ -40,17 +46,14 @@ namespace WpfApp2
             public String Date_dernier_paiment { get; set; }
             public String Duree_de_paiment { get; set; }
         }
+
+        //methodes de manupulation de l'interface
+
         private void actualiser()
         {
             double somme = 0;
 
             Resultats_recherche.ItemsSource = null;
-            //  liste_employes.ItemsSource = null;
-            // type_pret_datagrid.Items.Clear();
-            //Prêt_Type_ajout.ItemsSource = null;
-
-
-            //responsable.liste_filtres.Add(40, responsable.liste_archives[1]);
             List<employee> source = new List<employee>();
             source.Clear();
             foreach (KeyValuePair<int, Archive> liste in responsable.liste_filtres)
@@ -61,14 +64,14 @@ namespace WpfApp2
                 Employe.etat_social = liste.Value.Pret.Employé.etats;
                 Employe.N_Pv = liste.Value.Pret.Num_pv.ToString();
                 Employe.Type_Prêt = liste.Value.Pret.Type_Pret.Description;
-                Employe.Date_de_Pv = liste.Value.Pret.Date_pv.ToString();
+                Employe.Date_de_Pv = liste.Value.Pret.Date_pv.ToShortDateString();
                 Employe.Motif = liste.Value.Pret.Motif;
-                Employe.Date_de_recrutement = liste.Value.Pret.Employé.Date_prem.ToString();
+                Employe.Date_de_recrutement = liste.Value.Pret.Employé.Date_prem.ToShortDateString();
                 Employe.Montant_Prét_lettre = liste.Value.Pret.Montant_lettre;
                 Employe.Montant_Prét = liste.Value.Pret.Montant.ToString();
-                Employe.Date_dernier_paiment = liste.Value.Date_fin_remboursement.ToString();
+                Employe.Date_dernier_paiment = liste.Value.Date_fin_remboursement.ToShortDateString();
                 if (liste.Value.Durée < 0) { Employe.Duree_de_paiment = "/"; Employe.Date_demande = "/"; }
-                else { Employe.Duree_de_paiment = liste.Value.Durée.ToString(); Employe.Date_demande = liste.Value.Pret.Date_demande.ToString(); }
+                else { Employe.Duree_de_paiment = liste.Value.Durée.ToString(); Employe.Date_demande = liste.Value.Pret.Date_demande.ToShortDateString(); }
                 source.Add(Employe);
             }
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_filtres_rem)
@@ -79,14 +82,14 @@ namespace WpfApp2
                 Employe.etat_social = liste.Value.Employé.etats;
                 Employe.N_Pv = liste.Value.Num_pv.ToString();
                 Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                 Employe.Motif = liste.Value.Motif;
-                Employe.Date_de_recrutement = liste.Value.Employé.Date_prem.ToString();
+                Employe.Date_de_recrutement = liste.Value.Employé.Date_prem.ToShortDateString();
                 Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 Employe.Montant_Prét = liste.Value.Montant.ToString();
                 Employe.Date_dernier_paiment = "En cours";
                 Employe.Duree_de_paiment = "En cours";
-                Employe.Date_demande = liste.Value.Date_demande.ToString();
+                Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                 source.Add(Employe);
             }
             foreach (KeyValuePair<int, pret_non_remboursable> liste in responsable.liste_filtres_non_rem)
@@ -97,9 +100,9 @@ namespace WpfApp2
                 Employe.etat_social = liste.Value.Employé.etats;
                 Employe.N_Pv = liste.Value.Num_pv.ToString();
                 Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                 Employe.Motif = liste.Value.Motif;
-                Employe.Date_de_recrutement = liste.Value.Employé.Date_prem.ToString();
+                Employe.Date_de_recrutement = liste.Value.Employé.Date_prem.ToShortDateString();
                 Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 Employe.Montant_Prét = liste.Value.Montant.ToString();
                 Employe.Date_dernier_paiment = "/";

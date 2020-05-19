@@ -60,7 +60,7 @@
                     <DataGridTextColumn IsReadOnly="True" Header="        Montant Prêt     " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="        Montant Prêt Lettre      " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="          Motif          " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="        Date de fin de paiemnt       " Width="auto" Binding="{Binding Path=Date_dernier_paiment}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="        Date de fin de paiement       " Width="auto" Binding="{Binding Path=Date_dernier_paiment}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="        Duree de remboursement       " Width="auto" Binding="{Binding Path=Duree_de_paiment}"></DataGridTextColumn>
 
                 </DataGrid.Columns>

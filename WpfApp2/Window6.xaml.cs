@@ -5,10 +5,15 @@ namespace WpfTutorialSamples.Dialogs
 {
 	public partial class InputDialogSample2 : Window
 	{
+		//Class principale de la fenetre de reinitialisation de la base de données
+
 		public InputDialogSample2()
 		{
 			InitializeComponent();
 		}
+
+
+		//class interne pour permettre l'affectation des données
 
 		private void btnDialogOk_Click(object sender, RoutedEventArgs e)
 		{

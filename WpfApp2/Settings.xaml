@@ -20,7 +20,7 @@
                 </StackPanel>
             </Grid>
             <Grid Margin="0,50,0,0" Width="1000" Height="650" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,1,0,69">
                     <StackPanel>
                         
                         <Label  Content="Options d'archivage" FontWeight="DemiBold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,20,0,0"/>
@@ -47,9 +47,9 @@
                         <Label  Content="Options de comptes" FontWeight="DemiBold" FontSize="15" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,20,0,0"/>
 
                         <GridSplitter BorderThickness="0" Width="900" Height="1" Margin="0,-140,0,-140" Background="Gray"  HorizontalAlignment="Center"></GridSplitter>
-                        <Button FontSize="15" x:Name="Label_nom_utilisateur" Background="SeaGreen" Click="Label_nom_utilisateur_Click" Margin="90,20,0,0" Content="Modification nom d'utilisateur " VerticalAlignment="Center" HorizontalAlignment="Left"></Button>
+                        <Button FontSize="15" x:Name="Label_nom_utilisateur" Background="SeaGreen" Click="Label_nom_utilisateur_Click" Margin="90,20,0,0" Content="Modification nom d'utilisateur " VerticalAlignment="Center" HorizontalAlignment="Left" Width="247"></Button>
                         
-                        <StackPanel Visibility="Collapsed" x:Name="Pseudo_modification"  Width="583" Height="86" HorizontalAlignment="Right" Margin="0,-45,0,0">
+                        <StackPanel Visibility="Collapsed" x:Name="Pseudo_modification"  Width="583" Height="86" HorizontalAlignment="Right" Margin="0,-35,30,0">
                             <TextBox x:Name="Nom_utilisateur_nouveau" Margin="7,0,339,20" materialdesign:HintAssist.Hint="Nouveau nom d'utilisateur"></TextBox>
                             <StackPanel Orientation="Horizontal" Margin="272,-42,00,20" Height="29">
                                 <PasswordBox x:Name="mot_de_passe" Width="260" Margin="0,-20,0,0" materialdesign:HintAssist.Hint="Saisissez votre mot de passe" PasswordChanged="mot_de_passe_PasswordChanged" Height="33"></PasswordBox>
@@ -67,7 +67,7 @@
                                 </Border>
                             </StackPanel>
                         </StackPanel>
-                        <Button FontSize="15" Content="Changer la photo de profil " Background="SeaGreen" x:Name="Label_photo" Click="Label_photo_Click" Width="243" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,20,0,0" ></Button>
+                        <Button FontSize="15" Content="Changer la photo de profil " Background="SeaGreen" x:Name="Label_photo" Click="Label_photo_Click" Width="248" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,20,0,0" ></Button>
                         <StackPanel x:Name="Image_modification" Visibility="Collapsed" Width="400" Height="106" Margin="120,-20,0,0">
                             <Grid Width="100" Height="100" Margin="-200,0,0,0">
                                 <materialdesign:PackIcon Visibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Center" Kind="QuestionMark" Foreground="White" Background="LightGray" Width="100" Height="100" x:Name="default_picture" Margin="0,0,0,0"></materialdesign:PackIcon>
@@ -88,8 +88,8 @@
                             </StackPanel>
                             <Label Width="400" Height="30" Margin="0,10,0,0" Content="Mise a jour de la photo de profil terminé avec succés !" x:Name="profil_confirmation" Visibility="Hidden" Foreground="White" Background="#FF272A33" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></Label>
                         </StackPanel>
-                        <Button FontSize="15" Content="Changer le mot de passe " Background="SeaGreen" Width="243" x:Name="Label_pwd" Click="Label_pwd_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,20,20,-40" ></Button>
-                        <StackPanel  x:Name="mot_de_passe_modification" Visibility="Collapsed" Width="300" Height="170" Margin="0,0,0,-40">
+                        <Button FontSize="15" Content="Changer le mot de passe " Background="SeaGreen" Width="250" x:Name="Label_pwd" Click="Label_pwd_Click" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="90,20,20,0" ></Button>
+                        <StackPanel  x:Name="mot_de_passe_modification" Visibility="Collapsed" Width="300" Height="170" Margin="70,-30,0,-40">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                                 <PasswordBox x:Name="mot_de_passe_actuel" Margin="0,0,0,0" Width="260" materialdesign:HintAssist.Hint="Mot de Passe actuel" PasswordChanged="mot_de_passe_actuel_PasswordChanged"></PasswordBox>
                                 <Grid Width="40">
@@ -117,24 +117,39 @@
                                 </Border>
                             </StackPanel>
                         </StackPanel>
-                        <Button x:Name="remise_new" Content="Reinitialisation des données" Background="SeaGreen" BorderBrush="SeaGreen"  Height="39" Margin="0,100,300,-40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="210" Click="remise_new_Click"/>
-                        <Label FontSize="20"  FontWeight="DemiBold" Content="Besoin d'aide ?" x:Name="Label_aide" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,100,0" MouseDoubleClick="Label_aide_MouseDoubleClick" Width="145" Height="38">
-                            <Label.Resources>
-                                <Style TargetType="Label">
-                                    <Setter Property="ContentTemplate">
-                                        <Setter.Value>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding}" TextDecorations="Underline"/>
-                                            </DataTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                    <Setter Property="Foreground" Value="Blue"></Setter>
-                                </Style>
-                            </Label.Resources>
-                        </Label>
+                        <Button FontSize="15" x:Name="Label_mail" Background="SeaGreen" Click="Label_mail_Click" Margin="90,20,0,-60" Content="Modification des options E-Mail" VerticalAlignment="Center" HorizontalAlignment="Left"></Button>
+
+                        <StackPanel Visibility="Collapsed" x:Name="mdp_modification"  Width="583" Height="86" HorizontalAlignment="Right" Margin="0,20,0,0">
+                            <TextBox x:Name="Mail" Margin="7,0,339,20" materialdesign:HintAssist.Hint="Nouveau mail"></TextBox>
+                            <PasswordBox x:Name="mdp_mail" Margin="270,-50,45,20" materialdesign:HintAssist.Hint="Mot de passe du mail"></PasswordBox>
+                            <StackPanel Orientation="Horizontal" x:Name="stack_mail">
+                                <Border   HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="31" CornerRadius="20" Background="#FF1FAB89">
+                                    <Button x:Name="Confirmer_changement_mail" Background="Transparent" VerticalAlignment="Center" Width="100" Padding="0"  Content="Confirmer" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,0" BorderBrush="{x:Null}" Click="Confirmer_changement_mail_Click"></Button>
+                                </Border>
+                                <Border   HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="100" Height="31" CornerRadius="20" Background="#FF1FAB89" Margin="80,0,0,0">
+                                    <Button x:Name="Annuler_changement_mail" Background="Transparent" VerticalAlignment="Center" Width="100" Padding="0"  Content="Annuler" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,0" BorderBrush="{x:Null}" Click="Annuler_changement_mail_Click"></Button>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                       
 
                     </StackPanel>
                 </ScrollViewer>
+                <Button x:Name="remise_new" Content="Reinitialisation des données" Background="SeaGreen" BorderBrush="SeaGreen"  Height="39" Margin="0,100,300,20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="210" Click="remise_new_Click"/>
+                <Label FontSize="20"  FontWeight="DemiBold" Content="Besoin d'aide ?" x:Name="Label_aide" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,100,20" MouseDoubleClick="Label_aide_MouseDoubleClick" Width="145" Height="38">
+                    <Label.Resources>
+                        <Style TargetType="Label">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" TextDecorations="Underline"/>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground" Value="Blue"></Setter>
+                        </Style>
+                    </Label.Resources>
+                </Label>
             </Grid>
         </Grid>
 

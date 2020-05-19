@@ -18,6 +18,9 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour stat.xaml
     /// </summary>
+    
+    //fenetre intermediaire pour choix du mode de statistiques
+
     public partial class stat : UserControl
     {
         public stat()

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfApp2"
         xmlns:materialdesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Name="Connexion_Grid" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True">
+        Title="EasyCOS" Height="450" Name="Connexion_Grid" Width="800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True">
     <Grid x:Name="connexion_grid" >
         <StackPanel>
             <Grid Height="40" VerticalAlignment="Top">
@@ -47,7 +47,6 @@
                     <Border Width="110" Height="100" VerticalAlignment="Bottom" Background="White" Margin="145,0,145,10">
                         <MediaElement Visibility="Visible"  Width="110" Height="85" Source="check.gif" HorizontalAlignment="Center" VerticalAlignment="Bottom" Stretch="Fill" UnloadedBehavior="Manual" LoadedBehavior="Manual" x:Name="verification" MediaEnded="checked_MediaEnded" Margin="0,0,0,15"></MediaElement>
                     </Border>
-                    <!--<Label Content="Nouveau Utilisateur ? Créer Votre Propre compte !" Margin="0,50,0,0"></Label>-->
                 </Grid>
             </Grid>
         </StackPanel>

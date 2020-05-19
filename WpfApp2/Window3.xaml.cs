@@ -20,6 +20,10 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour Window3.xaml
     /// </summary>
+    /// 
+
+    //Class principale de l'interface de recherche statiatique par liste
+
     public partial class Window3 : UserControl
     {
 
@@ -38,6 +42,8 @@ namespace WpfApp2
         }
 
 
+
+        //methodes de manupulation de l'interface
 
         private void complete_type_pret()
         {
@@ -59,14 +65,14 @@ namespace WpfApp2
         {
             cmb3.Items.Add("marié");
             cmb3.Items.Add("celibataire");
+            cmb3.Items.Add("divorcé");
+            cmb3.Items.Add("veuf(ve)");
         }
 
 
         private void recherche_Click(object sender, RoutedEventArgs e)
         {
             int compt = 0;
-            NumberStyles styles = NumberStyles.AllowDecimalPoint;
-            IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-GB");
 
             responsable.liste_filtres.Clear();
             char[] whitespace = new char[] { ' ', '\t' };
@@ -159,7 +165,7 @@ namespace WpfApp2
                 somme1 = true;
                 try
                 {
-                    somme_min = double.Parse(som_min.Text, styles, provider);
+                    somme_min = double.Parse(som_min.Text);
                 }
                 catch (FormatException)
                 {
@@ -174,7 +180,7 @@ namespace WpfApp2
                 try
                 {
 
-                    somme_max = double.Parse(som_max.Text, styles, provider);
+                    somme_max = double.Parse(som_max.Text);
                 }
                 catch (FormatException)
                 {
@@ -232,12 +238,12 @@ namespace WpfApp2
             if (DateTime.Compare(d_inf, d_max) > 0 && !String.IsNullOrEmpty(min_pm.Text) && !String.IsNullOrEmpty(max_pm.Text))
             {
                 compt++;
-                MessageBox.Show("La date minimale de demande doit etre inférieure à la durée maximale de demande","erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("La date minimale de demande doit etre inférieure à la date maximale de demande","erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             if (DateTime.Compare(pv_min, pv_max) > 0 && !String.IsNullOrEmpty(max_pv.Text) && !String.IsNullOrEmpty(min_pv.Text))
             {
                 compt++;
-                MessageBox.Show("La date minimale de PV doit etre inférieure à la durée maximale de PV", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("La date minimale de PV doit etre inférieure à la date maximale de PV", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             if (durée_min > durée_max && !String.IsNullOrEmpty(dur_max.Text) && !String.IsNullOrEmpty(dur_min.Text))
             {
@@ -365,17 +371,10 @@ namespace WpfApp2
                 MessageBox.Show("Pas de recherche Tant que les données entrées sont érronnées");
                 compt = 0;
             }
-                //Console.WriteLine(responsable.liste_filtres.Count);
-                /*foreach (KeyValuePair<int, Archive> liste in responsable.liste_filtres)
-                {
-                    Console.WriteLine("{0}---{1}---{2}", liste.Value.Pret.Date_demande, liste.Value.Pret.Date_pv, liste.Value.Pret.Employé.Nom);
-                }*/
-            }
+        }
 
         private void oui_Checked(object sender, RoutedEventArgs e)
-        {
-            //dur_min.Visibility = Visibility.Visible;
-            //dur_max.Visibility = Visibility.Visible;
+        { 
 
             dur_min.IsEnabled = true;
             dur_max.IsEnabled = true;
@@ -386,8 +385,6 @@ namespace WpfApp2
 
         private void non_Checked(object sender, RoutedEventArgs e)
         {
-            //dur_min.Visibility = Visibility.Hidden;
-            //dur_max.Visibility = Visibility.Hidden;
 
             dur_min.IsEnabled = false;
             dur_max.IsEnabled = false;

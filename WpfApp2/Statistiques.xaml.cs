@@ -29,16 +29,19 @@ namespace WpfApp2
         public static double montant = 0;
         public static bool s_f = true;
 
+        //Class principale de l'interface de statistiques par graphe
+
         public Statistiques()
         {
             InitializeComponent();
 
         }
+
+        //methodes de manupulation de l'interface
+
         private void Chart_OnDataClick(object sender, ChartPoint chartpoint)
         {
             var chart = (LiveCharts.Wpf.PieChart)chartpoint.ChartView;
-
-            //clear selected slice.
             foreach (PieSeries series in chart.Series)
                 series.PushOut = 0;
 
@@ -77,30 +80,39 @@ namespace WpfApp2
             if (!int.TryParse(Année.Text, out parsedtvalue))
             {
                 year = parsedtvalue;
+                MessageBox.Show("entrez une année valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            else
+            {
+                year = int.Parse(Année.Text);
+                if (year >= 2000 && year <= 2050)
+                {
+                    grid_stat_principale.Children.Clear();
+                    PointLabel = chartPoint =>
+                    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
-            year = int.Parse(Année.Text);
-            grid_stat_principale.Children.Clear();
-            PointLabel = chartPoint =>
-            string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+                    chargement_Piechart();
+                    chargement_tresor();
+                    chargement_nombre_prêt();
 
-            chargement_Piechart();
-            chargement_tresor();
-            chargement_nombre_prêt();
+                    //SeriesCollection[3].Values.Add(5d);
+                    DataContext = this;
 
-            //SeriesCollection[3].Values.Add(5d);
-            DataContext = this;
+                    grid_stat_principale.Children.Add(second_page_grid);
+                    grid_stat_principale.Children.Add(first_page_statistiques);
+                    grid_stat_principale.Children.Add(Année);
+                    grid_stat_principale.Children.Add(submit_year);
 
-            grid_stat_principale.Children.Add(second_page_grid);
-            grid_stat_principale.Children.Add(first_page_statistiques);
-            grid_stat_principale.Children.Add(Année);
-            grid_stat_principale.Children.Add(submit_year);
-
-            Année.Visibility = Visibility.Hidden;
-            submit_year.Visibility = Visibility.Hidden;
-            first_page_statistiques.Visibility = Visibility.Hidden;
-            second_page_grid.Visibility = Visibility.Visible;
-
+                    Année.Visibility = Visibility.Hidden;
+                    submit_year.Visibility = Visibility.Hidden;
+                    first_page_statistiques.Visibility = Visibility.Hidden;
+                    second_page_grid.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    MessageBox.Show("entrez une année récente", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
 

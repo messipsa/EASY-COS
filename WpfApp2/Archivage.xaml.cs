@@ -20,9 +20,12 @@ namespace WpfApp2
     /// </summary>
     public partial class Archivage : UserControl
     {
+        //Class principale de l'interface d'archive
         public Archivage()
         {
             InitializeComponent();
+
+            //affectation des données dans la table de données des archives de l'application 
 
             List<Archives> source = new List<Archives>();
             foreach (KeyValuePair<int, Archive> liste in responsable.liste_archives)
@@ -35,12 +38,12 @@ namespace WpfApp2
                     arch.Prenom = liste.Value.Pret.Employé.Prenom;
                     arch.N_Pv = liste.Value.Pret.Num_pv.ToString();
                     arch.Motif = liste.Value.Pret.Motif;
-                    arch.Date_demande = liste.Value.Pret.Date_demande.ToString();
+                    arch.Date_demande = liste.Value.Pret.Date_demande.ToShortDateString();
                     arch.Montant_Prét = liste.Value.Pret.Montant.ToString();
                     arch.Montant_Prét_lettre = liste.Value.Pret.Montant_lettre;
                     arch.Observation = liste.Value.Observations;
                     arch.Type_Prêt = liste.Value.Pret.Type_Pret.Description.ToString();
-                    arch.Date_de_Pv = liste.Value.Pret.Date_pv.ToString();
+                    arch.Date_de_Pv = liste.Value.Pret.Date_pv.ToShortDateString();
                     arch.prem_paiement = liste.Value.Pret.prem_paiment();
                     arch.fin_paiement = liste.Value.Pret.fin_paiement();
                     arch.sum_rembours = liste.Value.Pret.somme_rembours();
@@ -56,15 +59,11 @@ namespace WpfApp2
                 }
             }
             Donnée_Archivage.ItemsSource = source;
-
-            /* foreach (KeyValuePair<int, Employé> liste in responsable.liste_employes)
-             {
-                 liste_employes.Items.Add(liste.Key.ToString() + " ) " + liste.Value.Nom + " " + liste.Value.Prenom + ".");
-             }
-             introduire.Items.Add("Choisir un employe parmis la liste");
-             introduire.Items.Add("Créer un nouvel employe");*/
         }
 
+
+
+        //class interne pour permettre l'affectation des données
         public class Archives
         {
             public String Nom { get; set; }
@@ -85,6 +84,10 @@ namespace WpfApp2
             public string sum_rembours { get; set; }
         }
 
+
+
+        //methodes de manupulation de l'interface
+
         private void Filtrer_Click(object sender, RoutedEventArgs e)
         {
             archivees.Children.Clear();
@@ -96,30 +99,13 @@ namespace WpfApp2
             responsable.export_Archive();
         }
 
-        private void Détails_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void Confirmer_Filtrage_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-        private void Annuler_Filtrage_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Recherche_Click(object sender, RoutedEventArgs e)
         {
             data_grid.Visibility = Visibility.Hidden;
             data_grid.IsEnabled = false;
-            //grid_rech.Visibility = Visibility.Visible;
-            //grid_rech.IsEnabled = true;
         }
         private void details(object sender, RoutedEventArgs e)
         {
-            //archivees.Visibility = Visibility.Hidden; archivees.IsEnabled = false;
-
             archi.Visibility = Visibility.Visible; archi.IsEnabled = true;
             Archives st = Donnée_Archivage.SelectedItem as Archives;
             Archive pret = null;
@@ -134,15 +120,12 @@ namespace WpfApp2
                     }
                 }
             }
-
-            // nom_info.Text = pret.Pret.Employé.Nom;
-            //prenom_info.Text = pret.Pret.Employé.Prenom;
             nom_detail.Text = pret.Pret.Employé.Nom + " " + pret.Pret.Employé.Prenom;
             prenom_detail.Text = pret.Pret.Employé.Email;
-            date_nais_info.Text = pret.Pret.Employé.Date_naissance.ToString();
+            date_nais_info.Text = pret.Pret.Employé.Date_naissance.ToShortDateString();
             num_sec_info.Text = pret.Pret.Employé.sec_soc;
             matricule_info.Text = pret.Pret.Employé.Matricule;
-            date_recru_info.Text = pret.Pret.Employé.Date_prem.ToString();
+            date_recru_info.Text = pret.Pret.Employé.Date_prem.ToShortDateString();
             etat_soc_info.Text = pret.Pret.Employé.etats;
             service_info.Text = pret.Pret.Employé.Service;
             num_tel_info.Text = pret.Pret.Employé.tel;
@@ -151,8 +134,8 @@ namespace WpfApp2
             grade_info.Text = pret.Pret.Employé.Grade;
             description_info.Text = pret.Pret.Type_Pret.Description;
             num_pv_info.Text = pret.Pret.Num_pv.ToString();
-            date_pv_info.Text = pret.Pret.Date_pv.ToString();
-            date_demande_info.Text = pret.Pret.Date_demande.ToString();
+            date_pv_info.Text = pret.Pret.Date_pv.ToShortDateString();
+            date_demande_info.Text = pret.Pret.Date_demande.ToShortDateString();
             montant_info.Text = pret.Pret.Montant.ToString();
             montant_lettre_info.Text = pret.Pret.Montant_lettre;
             motif_info.Text = pret.Pret.Motif;

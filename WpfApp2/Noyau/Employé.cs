@@ -48,8 +48,7 @@ namespace WpfApp2
             this.ccp = ccp;
             this.tel = tel;
             this.service = service;
-            this.email = email;
-            this.email = ""; // cette ligne est temporaire
+            this.email = email;            
             this.etat_service = etat_service;
             // Console.WriteLine(this.cle + " " + this.Nom);
             // responsable.ajouter_employe(this);// ajout automatique d'un employé à la liste des employés.

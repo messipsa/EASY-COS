@@ -16,30 +16,8 @@
                 </Border>
             </StackPanel>
             <materialdesign:PackIcon  Margin="915,5,0,545" Kind="Cached" Width="40" Height="30" Foreground="Black"  VerticalAlignment="Center"></materialdesign:PackIcon>
-            <Button x:Name="actualiser_datagrid" VerticalAlignment="Top" HorizontalAlignment="Left" Width="auto" Background="Transparent" Foreground="Transparent" Margin="918,35,0,0" BorderBrush="{x:Null}" Click="actualiser_datagrid_Click"></Button>
+            <Button x:Name="actualiser_datagrid" VerticalAlignment="Top" HorizontalAlignment="Left" Width="auto" Background="Transparent" Foreground="Transparent" Margin="918,35,0,0" BorderBrush="{x:Null}" ></Button>
             <DataGrid Style="{StaticResource MaterialDesignDataGrid}" Background="White"  SelectionMode="Extended" SelectionUnit="FullRow" SelectedCellsChanged="Donnée_dons_SelectedCellsChanged" CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="Donnée_dons" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Height="375"  VerticalAlignment="Center" Margin="97,130,98,145" AutoGenerateColumns="False">
-                <!--DataGrid.Style>
-                    <Style TargetType="DataGrid">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="DataGrid">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="Auto" />
-                                                    <RowDefinition Height="*" />
-                                                </Grid.RowDefinitions>
-                                                <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                <TextBlock  Text="Aucun Dons n'a encore était fait" TextAlignment="Center" VerticalAlignment="Center" FontSize="22" Grid.Row="1" />
-                                            </Grid>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Style-->
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="FontFamily" Value="Verdana"/>
@@ -76,10 +54,8 @@
                     <DataGridTextColumn IsReadOnly="True" Header="      Nom     " Width="auto" Binding="{Binding Path=Nom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="   N­° Pv   " Width="auto" Binding="{Binding Path=N_Pv}"></DataGridTextColumn>
-                    <!--DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></-->
                     <DataGridTextColumn IsReadOnly="True" Header="    Date De Demande    " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Montant Prêt     " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
-                    <!--DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt En Lettre    " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></-->
                     <DataGridTextColumn IsReadOnly="True" Header="          Motif          " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
 
                     <DataGridTemplateColumn IsReadOnly="True" Header="       " Width="auto">
@@ -87,7 +63,6 @@
                             <DataTemplate>
                                 <materialdesign:PopupBox Foreground="Black">
                                     <StackPanel>
-                                        <Button Content="Modifier"></Button>
                                         <Button x:Name="Détails" Content="Détails"  Click="Détails_Click"></Button>
                                     </StackPanel>
                                 </materialdesign:PopupBox>
@@ -170,28 +145,6 @@
             </Border>
             <ComboBox x:Name="Type" Height="40" materialdesign:HintAssist.Hint="Type du pret : " FontFamily="Verdana" Foreground="Black" Margin="391,502,394,108"/>
         </Grid>
-        <!--  <Grid x:Name="Grid_Ajout_employe" Background="White" Visibility="Hidden">
-            <Label  Content="Veuillez remplir le formulaire suivant :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,25,0,0"/>
-            <TextBox x:Name="nom_ajout" Height="40" materialdesign:HintAssist.Hint="Nom Empolye : " FontFamily="Verdana" Foreground="Black" Margin="215,115,570,495"/>
-            <TextBox x:Name="prenom_ajout" Height="40" materialdesign:HintAssist.Hint="Prénom Empolye : " FontFamily="Verdana" Foreground="Black" Margin="215,200,570,410"/>
-            <TextBox x:Name="matricule" Height="40" materialdesign:HintAssist.Hint="Matricule Empolye(sur 7 chiffres) : " FontFamily="Verdana" Foreground="Black" Margin="215,280,570,330"/>
-            <TextBox x:Name="num_sec_social" Height="40" materialdesign:HintAssist.Hint="Num_Sec_Social Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,360,570,250"/>
-            <TextBox x:Name="grade" Height="40" materialdesign:HintAssist.Hint="Grade Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,445,570,165"/>
-            <TextBox x:Name="etat" Height="40" materialdesign:HintAssist.Hint="Etat social Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,520,570,90"/>
-            <TextBox x:Name="ccp" Height="40" materialdesign:HintAssist.Hint="CCP Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,115,215,495"/>
-            <TextBox x:Name="cle_ccp" Height="40" materialdesign:HintAssist.Hint="Clé CCP Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,200,215,410"/>
-            <TextBox x:Name="telephone" Height="40" materialdesign:HintAssist.Hint="Num Telephone de l'Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,280,215,330"/>
-            <DatePicker x:Name="date_naiss" HorizontalAlignment="Left" Margin="570,360,0,0" materialdesign:HintAssist.Hint="Date de naissance de l'Employe : " VerticalAlignment="Top" Width="215" Height="40"/>
-            <DatePicker x:Name="date_prem" HorizontalAlignment="Left" Margin="570,445,0,0" materialdesign:HintAssist.Hint="Date de recrutement de l'Employe : " VerticalAlignment="Top" Width="215" Height="40"/>
-            <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="890,0,0,28">
-                <Button x:Name="Confirmer_Ajout_emp"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Confirmer" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Confirmer_Ajout_emp_Click" ></Button>
-            </Border>
-            <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="746,0,0,28">
-                <Button x:Name="Annuler_Ajout_emp"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Annuler_Ajout_emp_Click" />
-            </Border>
-            <Label x:Name="Remarque" Visibility="Hidden" Width="600" Height="40" Content="Vous devez fournir toutes les informations demandées dans formulaire !! " Foreground="Red" FontSize="15" Margin="28,61,372,549"></Label>
-            <TextBox x:Name="Service_emp" Height="40" materialdesign:HintAssist.Hint="Service : " FontFamily="Verdana" Foreground="Black" Margin="569,520,216,90"/>
-        </Grid>-->
         <Grid x:Name="suivi" Background="White" Visibility="Hidden" Margin="0,4,0,-4">
             <Border x:Name="border_emploue" BorderBrush="#FF1FAB89" BorderThickness="3"  HorizontalAlignment="Left" Height="155" Margin="20,20,0,0" VerticalAlignment="Top" Width="460">
                 <Grid Margin="-3">

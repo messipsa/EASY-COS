@@ -14,12 +14,15 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace WpfApp2
 {
     /// <summary>
     /// Logique d'interaction pour Window4.xaml
     /// </summary>
+
+    //Class principale de l'interface de Dons
 
     public partial class dons : UserControl
     {
@@ -38,15 +41,11 @@ namespace WpfApp2
         private static string service_emp_;
         private static string email_;
         private static string etat_service_;
+
         public dons()
         {
 
-
-            /*try
-            {
-                Donnée_dons.Items.Clear();
-            }
-            catch (Exception e) { }*/
+            //affectation des données dans la table de données des Dons de l'application 
 
             InitializeComponent();
             List<don> source = new List<don>();
@@ -59,7 +58,7 @@ namespace WpfApp2
                 d.Prenom = liste.Value.Employé.Prenom;
                 d.N_Pv = liste.Value.Num_pv.ToString();
                 d.Motif = liste.Value.Motif;
-                d.Date_demande = liste.Value.Date_demande.ToString();
+                d.Date_demande = liste.Value.Date_demande.ToShortDateString();
                 d.Montant_Prét = liste.Value.Montant.ToString();
                 d.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 d.type = liste.Value.Type_Pret.Cle.ToString();
@@ -85,11 +84,10 @@ namespace WpfApp2
                     Type.Items.Add(liste.Value.Description);
                 }
             }
-
-            // introduire.Items.Add("Choisir un employe parmis la liste");
-            // introduire.Items.Add("Créer un nouvel employe");
-
         }
+
+        //class interne pour permettre l'affectation des données
+
         public class don
         {
             public int cle { get; set; }
@@ -106,6 +104,9 @@ namespace WpfApp2
             public String type { get; set; }
         }
 
+
+        //methodes de manupulation de l'interface
+
         private void Ajouter_Click(object sender, RoutedEventArgs e)
         {
             data_grid.Visibility = Visibility.Hidden; data_grid.IsEnabled = false;
@@ -114,19 +115,10 @@ namespace WpfApp2
 
         private void introduire_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (introduire.SelectedItem.ToString().Equals("Choisir un employe parmis la liste"))
             {
                 liste_employes.Visibility = Visibility.Visible;
-                //employe.Visibility = Visibility.Hidden;
             }
-            /*  if (introduire.SelectedItem.ToString().Equals("Créer un nouvel employe"))
-              {
-                  employe.Visibility = Visibility.Visible;
-                  liste_employes.Visibility = Visibility.Hidden;
-              }*/
         }
-
-        // Annuler_Ajout_Click
 
         private void Confirmer_Ajout_Click(object sender, RoutedEventArgs e)
         {
@@ -145,10 +137,11 @@ namespace WpfApp2
                 try
                 {
                     int k = 0;
+                    double d1 = 0;
 
                     if (!liste_employes.Items.Contains(liste_employes.Text))
                     { MessageBox.Show("entrez un employé valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); }
-                    if (!int.TryParse(montant.Text, out k))
+                    if (!double.TryParse(montant.Text, out d1))
                     {
                         MessageBox.Show("entrez un montant valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                         cpt++;
@@ -158,60 +151,70 @@ namespace WpfApp2
                         MessageBox.Show("entrez un numero de pv valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                         cpt++;
                     }
-                    /* if (!Type.Items.Contains(liste_types.Text))
-                     { MessageBox.Show("entrez un type de pret valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); }*/
-
-
-                    //if (introduire.Text.Equals("Choisir un employe parmis la liste"))
+                    if (DateTime.Compare(date_pv.SelectedDate.Value.Date, date_dem.SelectedDate.Value.Date) > 0)
                     {
-                        int i = 0;
-                        int j = 0;
-
-                        foreach (KeyValuePair<int, Type_pret> value in responsable.liste_types)
+                        cpt++;
+                        MessageBox.Show("La date de demande doit etre inférieure à la date de PV", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                    if (cpt == 0)
+                    {
+                        if (d1 <= 0)
                         {
-                            if (value.Value.Description.Equals(Type.Text))
-                                i = value.Key;
+                            cpt++;
+                            MessageBox.Show("Le montant doit etre positif", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
-
-                        foreach (KeyValuePair<int, Employé> value in responsable.liste_employes)
+                        if (k <= 0)
                         {
-                            if ((liste_employes.Text.Split(')'))[0].Equals(value.Key.ToString()))
-                            {
-                                j = value.Key;
-                            }
-
-                        }
-                        if (cpt == 0)
-                        {
-
-                            responsable.Creer_pret_non_remboursable(j, i, motif.Text, int.Parse(num_pv.Text), date_pv.SelectedDate.Value.Date, Double.Parse(montant.Text), date_dem.SelectedDate.Value.Date, montant_lettre.Text);
-                            responsable.tresor = responsable.tresor - Double.Parse(montant.Text);
-                        }
-                        List<don> source = new List<don>();
-                        foreach (KeyValuePair<int, pret_non_remboursable> liste in responsable.liste_pret_non_remboursables)
-                        {
-                            don d = new don();
-                            d.cle = liste.Key;
-                            d.Nom = liste.Value.Employé.Nom;
-                            d.Prenom = liste.Value.Employé.Prenom;
-                            d.N_Pv = liste.Value.Num_pv.ToString();
-                            d.Motif = liste.Value.Motif;
-                            d.Date_demande = liste.Value.Date_demande.ToString();
-                            d.Montant_Prét = liste.Value.Montant.ToString();
-                            d.Montant_Prét_lettre = liste.Value.Montant_lettre;
-                            source.Add(d);
-                        }
-                        Donnée_dons.ItemsSource = source;
-                        liste_employes.ItemsSource = null;
-                        foreach (KeyValuePair<int, Employé> liste in responsable.liste_employes)
-                        {
-                            liste_employes.Items.Add(liste.Key + ") " + liste.Value.Nom + " " + liste.Value.Prenom);
+                            cpt++;
+                            MessageBox.Show("Le numéro de PV doit etre positif", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                         }
                     }
+                    int i = 0;
+                    int j = 0;
+
+                    foreach (KeyValuePair<int, Type_pret> value in responsable.liste_types)
+                    {
+                        if (value.Value.Description.Equals(Type.Text))
+                            i = value.Key;
+                    }
+
+                    foreach (KeyValuePair<int, Employé> value in responsable.liste_employes)
+                    {
+                        if ((liste_employes.Text.Split(')'))[0].Equals(value.Key.ToString()))
+                        {
+                            j = value.Key;
+                        }
+
+                    }
+                    if (cpt == 0)
+                    {
+                        responsable.Creer_pret_non_remboursable(j, i, motif.Text, int.Parse(num_pv.Text), date_pv.SelectedDate.Value.Date, Double.Parse(montant.Text), date_dem.SelectedDate.Value.Date, montant_lettre.Text);
+                        responsable.tresor = responsable.tresor - Double.Parse(montant.Text);
+                    }
+                    List<don> source = new List<don>();
+                    foreach (KeyValuePair<int, pret_non_remboursable> liste in responsable.liste_pret_non_remboursables)
+                    {
+                        don d = new don();
+                        d.cle = liste.Key;
+                        d.Nom = liste.Value.Employé.Nom;
+                        d.Prenom = liste.Value.Employé.Prenom;
+                        d.N_Pv = liste.Value.Num_pv.ToString();
+                        d.Motif = liste.Value.Motif;
+                        d.Date_demande = liste.Value.Date_demande.ToShortDateString();
+                        d.Montant_Prét = liste.Value.Montant.ToString();
+                        d.Montant_Prét_lettre = liste.Value.Montant_lettre;
+                        source.Add(d);
+                    }
+                    Donnée_dons.ItemsSource = source;
+                    liste_employes.ItemsSource = null;
+                    foreach (KeyValuePair<int, Employé> liste in responsable.liste_employes)
+                    {
+                        liste_employes.Items.Add(liste.Key + ") " + liste.Value.Nom + " " + liste.Value.Prenom);
+                    }
+
                 }
                 catch (Exception r)
-                {
-                    //MessageBox.Show("Veuillez entrer des informations valides");
+                {                    
                     verif = false;
                 }
                 if (verif)
@@ -232,11 +235,6 @@ namespace WpfApp2
             data_grid.Visibility = Visibility.Visible; data_grid.IsEnabled = true;
         }
 
-        /*private void ajouter_employe(object sender, RoutedEventArgs e)
-        {
-            Grid_Ajout.Visibility = Visibility.Hidden; Grid_Ajout.IsEnabled = false;
-            Grid_Ajout_employe.Visibility = Visibility.Visible; Grid_Ajout_employe.IsEnabled = true;
-        }*/
         private void Détails_Click(object sender, RoutedEventArgs e)
         {
             data_grid.Visibility = Visibility.Hidden; data_grid.IsEnabled = false;
@@ -256,10 +254,10 @@ namespace WpfApp2
             prenom_info.Text = pret.Employé.Prenom;
             nom_detail.Text = pret.Employé.Nom;
             prenom_detail.Text = pret.Employé.Prenom;
-            date_nais_info.Text = pret.Employé.Date_naissance.ToString();
+            date_nais_info.Text = pret.Employé.Date_naissance.ToShortDateString();
             num_sec_info.Text = pret.Employé.sec_soc;
             matricule_info.Text = pret.Employé.Matricule;
-            date_recru_info.Text = pret.Employé.Date_prem.ToString();
+            date_recru_info.Text = pret.Employé.Date_prem.ToShortDateString();
             etat_soc_info.Text = pret.Employé.etats;
             service_info.Text = pret.Employé.Service;
             num_tel_info.Text = pret.Employé.tel;
@@ -268,8 +266,8 @@ namespace WpfApp2
             grade_info.Text = pret.Employé.Grade;
             description_info.Text = pret.Type_Pret.Description;
             num_pv_info.Text = pret.Num_pv.ToString();
-            date_pv_info.Text = pret.Date_pv.ToString();
-            date_demande_info.Text = pret.Date_demande.ToString();
+            date_pv_info.Text = pret.Date_pv.ToShortDateString();
+            date_demande_info.Text = pret.Date_demande.ToShortDateString();
             montant_info.Text = pret.Montant.ToString();
             montant_lettre_info.Text = pret.Montant_lettre;
             motif_info.Text = pret.Motif;
@@ -280,80 +278,6 @@ namespace WpfApp2
             data_grid.Visibility = Visibility.Visible; data_grid.IsEnabled = true;
             suivi.Visibility = Visibility.Hidden;
         }
-
-        /*  private void Annuler_Ajout_emp_Click(object sender, RoutedEventArgs e)
-          {
-              Grid_Ajout_employe.Visibility = Visibility.Hidden; Grid_Ajout_employe.IsEnabled = false;
-              Grid_Ajout.Visibility = Visibility.Visible; Grid_Ajout.IsEnabled = true;
-          }/
-
-
-
-         /* private void Confirmer_Ajout_emp_Click(object sender, RoutedEventArgs e)
-          {
-              if (nom_ajout.Text.Equals("") || prenom_ajout.Text.Equals("") || matricule.Text.Equals("") || num_sec_social.Text.Equals("") || grade.Text.Equals("") || etat.Text.Equals("") || ccp.Text.Equals("") || cle_ccp.Text.Equals("") || telephone.Text.Equals("") || date_naiss.SelectedDate.Equals(null) || date_prem.SelectedDate.Equals(null))
-              {
-                  Remarquee.Visibility = Visibility.Visible;
-                  DoubleAnimation a = new DoubleAnimation();
-                  a.From = 1.0; a.To = 0.0;
-                  a.Duration = new Duration(TimeSpan.FromSeconds(5));
-                  Remarquee.BeginAnimation(OpacityProperty, a);
-              }
-              else
-              {
-                  int k;
-                  bool verif = true;
-                  try
-                  {
-
-                      if (!int.TryParse(matricule.Text, out k))
-                      { MessageBox.Show("entrez un matricule valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); verif = false; }*/
-        /*if (!int.TryParse(num_sec_social.Text, out k))
-        { MessageBox.Show("entrez un numero de securité sociale valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); verif = false; }*/
-        /* if (!int.TryParse(telephone.Text, out k))
-         { MessageBox.Show("entrez un numero de telephone valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); verif = false; }*/
-        /*if (!int.TryParse(ccp.Text, out k))
-        { MessageBox.Show("entrez un CCP valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); verif = false; }*/
-        /*  if (!int.TryParse(cle_ccp.Text, out k))
-          { MessageBox.Show("entrez une clé CCP valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error); }
-
-
-          nom_emp_ = nom_ajout.Text;
-          prenom_emp_ = prenom_ajout.Text;
-          matricule_emp_ = matricule.Text;
-          num_sec_seoc_emp_ = num_sec_social.Text;
-          grade_emp_ = grade.Text;
-          etat_emp_ = etat.Text;
-          ccp_emp_ = ccp.Text;
-          cle_ccp_emp_ = cle_ccp.Text;
-          tel_emp_ = telephone.Text;
-          date_naiss_emp_ = date_naiss.SelectedDate.ToString();
-          date_recru_emp_ = date_prem.SelectedDate.ToString();
-          service_emp_ = Service_emp.Text;
-
-
-          responsable.Creer_employe(matricule.Text, nom_ajout.Text, prenom_ajout.Text, num_sec_social.Text, DateTime.Parse(date_naiss.SelectedDate.ToString()), grade.Text, DateTime.Parse(date_prem.SelectedDate.ToString()), etat.Text, ccp.Text, cle_ccp.Text, telephone.Text, service_emp_, email_, etat_service_);
-
-          liste_employes.ItemsSource = null;
-          liste_employe_rech.ItemsSource = null;
-          foreach (KeyValuePair<int, Employé> liste in responsable.liste_employes)
-          {
-              liste_employes.Items.Add(liste.Key.ToString() + " ) " + liste.Value.Nom + " " + liste.Value.Prenom);
-              liste_employe_rech.Items.Add(liste.Key.ToString() + " ) " + liste.Value.Nom + " " + liste.Value.Prenom);
-          }
-
-      }
-      catch (Exception j)
-      {
-          verif = false;
-      }
-      if (verif)
-      {
-          Grid_Ajout_employe.Visibility = Visibility.Hidden; Grid_Ajout_employe.IsEnabled = false;
-          Grid_Ajout.Visibility = Visibility.Visible; Grid_Ajout.IsEnabled = true;
-      }
-  }
-}*/
 
         private void liste_employes_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -385,9 +309,6 @@ namespace WpfApp2
                 }
             }
         }
-
-
-
 
         //methodes recherche
         private void Recherche_Click(object sender, RoutedEventArgs e)
@@ -434,6 +355,7 @@ namespace WpfApp2
                 }
             }
         }
+
         private void liste_employe_rech_TextChanged(object sender, TextChangedEventArgs e)
         {
             liste_employe_rech.Items.Clear();
@@ -464,6 +386,7 @@ namespace WpfApp2
                 }
             }
         }
+
         private void Confirmer_rech_Click(object sender, RoutedEventArgs e)
         {
             if (!liste_types.Text.Equals(""))
@@ -485,11 +408,16 @@ namespace WpfApp2
 
                 }
             }
-            //responsable.recherche_par_criteres_non_rem(!date_dem_inf.Equals(null),date_dem_inf.SelectedDate.Value, !date_de_sup.Equals(null),date_de_sup.SelectedDate.Value, !date_pv_inf.Equals(null), date_pv_inf.SelectedDate.Value, !date_pv_sup.Equals(null), date_pv_sup.SelectedDate.Value, !somme_min.Equals(null),int.Parse(somme_min.Text.ToString()), !somme_max.Equals(null), int.Parse(somme_max.Text.ToString()), !liste_employe_rech.Text.Equals(null), !liste_types.Text.Equals(null))     ;
+          
+
             responsable.remplissage_liste_filtres_non_rem();
 
             responsable.filtrer_par_employés_non_rem(!liste_employe_rech.Text.Equals(""));
             responsable.filtrer_par_types_non_rem(!liste_types.Text.Equals(""));
+
+            int cpt = 0;
+            double c1 = 0;
+            double c2 = 0;
 
             if (!(date_dem_inf.SelectedDate.Equals(null)))
                 responsable.filtrer_par_date_demande_inf_non_rem(!date_dem_inf.Equals(null), date_dem_inf.SelectedDate.Value.Date);
@@ -499,10 +427,24 @@ namespace WpfApp2
                 responsable.filtrer_par_date_pv_inf_non_rem(!date_pv_inf.Equals(null), date_pv_inf.SelectedDate.Value.Date);
             if (!date_pv_sup.SelectedDate.Equals(null))
                 responsable.filtrer_par_date_pv_max_non_rem(!date_pv_sup.Equals(null), date_pv_sup.SelectedDate.Value.Date);
-            if (!somme_min.Text.Equals(""))
-                responsable.filtrer_par_somme_min_non_rem(!somme_min.Equals(null), int.Parse(somme_min.Text.ToString()));
-            if (!somme_max.Text.Equals(""))
-                responsable.filtrer_par_somme_max_non_rem(!somme_max.Equals(null), int.Parse(somme_max.Text.ToString()));
+            if (!double.TryParse(somme_min.Text, out c1))
+            {
+                cpt++;
+                MessageBox.Show("entrez une somme minimale valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                responsable.filtrer_par_somme_min_non_rem(!somme_min.Equals(null), double.Parse(somme_min.Text.ToString()));
+            }
+            if (!double.TryParse(somme_max.Text, out c2))
+            {
+                cpt++;
+                MessageBox.Show("entrez une somme maximale valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                responsable.filtrer_par_somme_max_non_rem(!somme_max.Equals(null), double.Parse(somme_max.Text.ToString()));
+            }
 
             List<don> source = new List<don>();
             foreach (KeyValuePair<int, pret_non_remboursable> liste in responsable.liste_filtres_non_rem)
@@ -512,7 +454,7 @@ namespace WpfApp2
                 d.Prenom = liste.Value.Employé.Prenom;
                 d.N_Pv = liste.Value.Num_pv.ToString();
                 d.Motif = liste.Value.Motif;
-                d.Date_demande = liste.Value.Date_demande.ToString();
+                d.Date_demande = liste.Value.Date_demande.ToShortDateString();
                 d.Montant_Prét = liste.Value.Montant.ToString();
                 d.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 source.Add(d);
@@ -531,8 +473,6 @@ namespace WpfApp2
             data_grid.Visibility = Visibility.Visible;
             data_grid.IsEnabled = true;
         }
-
-
 
         //metrhodes archive
         private void Archiver_Click(object sender, RoutedEventArgs e)
@@ -566,7 +506,6 @@ namespace WpfApp2
                         cpt++;
                         if (i == cpt)
                         {
-                            //Console.WriteLine(cpt+"order in grid"+ elem.cle+"order in list");
                             responsable.archiver_manuel_pret_non_remboursable(elem.cle);
                         }
                     }
@@ -582,13 +521,14 @@ namespace WpfApp2
                 d.Prenom = liste.Value.Employé.Prenom;
                 d.N_Pv = liste.Value.Num_pv.ToString();
                 d.Motif = liste.Value.Motif;
-                d.Date_demande = liste.Value.Date_demande.ToString();
+                d.Date_demande = liste.Value.Date_demande.ToShortDateString();
                 d.Montant_Prét = liste.Value.Montant.ToString();
                 d.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 source.Add(d);
             }
             Donnée_dons.ItemsSource = source;
         }
+
         private void Selectionner_Tout_Click(object sender, RoutedEventArgs e)
         {
             var firstCol = Donnée_dons.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
@@ -602,6 +542,7 @@ namespace WpfApp2
                 chBx.IsChecked = true;
             }
         }
+
         private void Annuler_Click(object sender, RoutedEventArgs e)
         {
             var firstCol = Donnée_dons.Columns.OfType<DataGridCheckBoxColumn>().FirstOrDefault(c => c.DisplayIndex == 0);
@@ -644,11 +585,6 @@ namespace WpfApp2
             }
         }
 
-        private void actualiser_datagrid_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Sortie_excel_Click(object sender, RoutedEventArgs e)
         {
             responsable.export_prêts_non_remboursable();
@@ -668,7 +604,7 @@ namespace WpfApp2
                 d.Prenom = liste.Value.Employé.Prenom;
                 d.N_Pv = liste.Value.Num_pv.ToString();
                 d.Motif = liste.Value.Motif;
-                d.Date_demande = liste.Value.Date_demande.ToString();
+                d.Date_demande = liste.Value.Date_demande.ToShortDateString();
                 d.Montant_Prét = liste.Value.Montant.ToString();
                 d.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 d.type = liste.Value.Type_Pret.Cle.ToString();

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -20,29 +22,55 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour Window1.xaml
     /// </summary>
+
+    //Class principale de l'interface de connexion
+
     public partial class Connexion : Window
     {
         private static bool isRun = false;
         private static readonly object syncLock = new object();
         public Connexion()
         {
+            //Install_DB();
             Lecture_BDD();
             Window2.charger_option();
             user_name = Window2.user_name;
             user_paswword = Window2.user_Password;
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             InitializeComponent();
-            //intro.Play();
             verification.Close();
             verification.Visibility = Visibility.Hidden;
             DoubleAnimation a = new DoubleAnimation();
             a.From = 0.0; a.To = 1.0;
             a.Duration = new Duration(TimeSpan.FromSeconds(3));
-            //Droit.BeginAnimation(OpacityProperty, a);
 
         }
         static string user_name ;
         static string user_paswword ;
+
+        //Lecture de la base de données
+
+        public void Lecture_BDD()
+        {
+            lock (syncLock)
+            {
+                if (!isRun)
+                {
+                    responsable.initialiser_dictionnaire_employes();
+                    responsable.initialiser_dictionnaire_archive();
+                    responsable.initialiser_dictionnaire_types_prets();
+                    responsable.initialiser_dictionnaire_pret_remboursable();
+                    responsable.initialiser_dictionnaire_pret_non_remboursable();
+                    responsable.charger_montant_tresor();
+                    responsable.initialisation_archive_auto();
+                    isRun = true;
+                }
+            }
+        }
+
+
+        //methodes de manupulation de l'interface
+
 
         DispatcherTimer a = new DispatcherTimer();
         private void timer_tick(object sender, EventArgs e)
@@ -120,25 +148,6 @@ namespace WpfApp2
             sb.Begin();
         }
 
-
-        public void Lecture_BDD()
-        {
-            lock (syncLock)
-            {
-                if (!isRun)
-                {
-                    responsable.initialiser_dictionnaire_employes();
-                    responsable.initialiser_dictionnaire_archive();
-                    responsable.initialiser_dictionnaire_types_prets();
-                    responsable.initialiser_dictionnaire_pret_remboursable();
-                    responsable.initialiser_dictionnaire_pret_non_remboursable();
-                    responsable.charger_montant_tresor();
-                    responsable.initialisation_archive_auto();
-                    isRun = true;
-                }
-            }
-        }
-
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -181,5 +190,34 @@ namespace WpfApp2
                 eye.Visibility = Visibility.Hidden;
             }
         }
+
+        /*public void Install_DB()
+        {
+            FileStream lect = new FileStream(@".\\Install_Check.bin", FileMode.Open);
+            BinaryReader BinaryReader = new BinaryReader(lect);
+            bool b = BinaryReader.ReadBoolean();
+            BinaryReader.Close();
+            lect.Close();
+            if (b == false)
+            {
+                Microsoft.Data.SqlClient.SqlConnection cnx = new Microsoft.Data.SqlClient.SqlConnection("Data Source = .\\SQLEXPRESS;  Integrated Security = True");
+                cnx.Open();
+                Microsoft.Data.SqlClient.SqlCommand cmd = cnx.CreateCommand();
+                string script;
+                Server server = new Server(new ServerConnection(cnx));
+                using (var streamReader = new StreamReader(@".\\BDD_COS.sql", Encoding.UTF8))
+                {
+                    script = streamReader.ReadToEnd();
+                }
+                server.ConnectionContext.ExecuteNonQuery(script);
+                FileStream ecr = new FileStream(@".\\Install_Check.bin", FileMode.Truncate);
+                ecr.Close();
+                FileStream fs = new FileStream(@".\\Install_Check.bin", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                bw.Write(true);
+                bw.Close();
+                fs.Close();
+            }
+        }*/
     }
 }

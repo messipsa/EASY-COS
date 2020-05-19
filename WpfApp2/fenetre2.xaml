@@ -59,14 +59,8 @@
                     <DataGridTextColumn IsReadOnly="True" Header="   N­° Pv   " Width="auto" Binding="{Binding Path=N_Pv}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="  Date De Demande  " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
-
-                    <!-- <DataGridTextColumn IsReadOnly="True" Header=" Date de fin de paiemnt " Width="auto" Binding="{Binding Path=Date_dernier_paiment}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="  Durée  " Width="auto" Binding="{Binding Path=Durée}"></DataGridTextColumn>-->
                     <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt    " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="   Montant Prêt Lettre   " Width="auto" Binding="{Binding Path=Montant_Prét_lettre}"></DataGridTextColumn>
-
-                    <!--  <DataGridTextColumn IsReadOnly="True" Header=" Duree de remboursement " Width="auto" Binding="{Binding Path=Duree_de_paiment}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="  Somme remboursée " Width="auto" Binding="{Binding Path=sum_rembours}"></DataGridTextColumn>-->
                     <DataGridTextColumn IsReadOnly="True" Header="       Motif       " Width="auto" Binding="{Binding Path=Motif}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="       Observation       " Width="auto" Binding="{Binding Path=Observation}"></DataGridTextColumn>
 
@@ -92,17 +86,6 @@
             <Button Content="Retour" HorizontalAlignment="Left" Margin="766,548,0,0" VerticalAlignment="Top" Width="109" Background="SeaGreen" BorderBrush="SeaGreen" Click="Retour_Click"/>
         </Grid>
         <Grid x:Name="fenet" Background="White" Visibility="Hidden" Margin="0,4,0,-4">
-            <!-- <Border x:Name="border_emploue" BorderBrush="#FF1FAB89" BorderThickness="3"  HorizontalAlignment="Left" Height="155" Margin="20,20,0,0" VerticalAlignment="Top" Width="460">
-                <Grid Margin="-3">
-                    <Label Content="Informations Employe :" HorizontalAlignment="Left" Height="30" Margin="40,7,0,0" VerticalAlignment="Top" Width="190" Foreground="#FF1FAB89" FontSize="16" FontWeight="Bold"/>
-                    <Label Content="Nom :" HorizontalAlignment="Left" Height="30" Margin="10,42,0,0" VerticalAlignment="Top" Width="60" Foreground="Black" FontSize="14" />
-                    <Label Content="Prénom :" HorizontalAlignment="Left" Height="30" Margin="10,77,0,0" VerticalAlignment="Top" Width="73" Foreground="Black" FontSize="14" />
-                    <TextBox x:Name="nom_info" HorizontalAlignment="Left" Height="30" Margin="240,38,0,0" VerticalAlignment="Top" Width="150" IsReadOnly="True"/>
-                    <TextBox x:Name="prenom_info" HorizontalAlignment="Left" Height="30" Margin="240,73,0,0" VerticalAlignment="Top" Width="150" IsReadOnly="True"/>
-                    <materialdesign:PackIcon Margin="10,10,0,119" Kind="face" Width="25" Height="26" Foreground="#FF1FAB89"  VerticalAlignment="Center" RenderTransformOrigin="0.6,0.36"></materialdesign:PackIcon>
-
-                </Grid>
-            </Border>-->
             <Border x:Name="border_pret" BorderBrush="#FF5B39BB" BorderThickness="3"  HorizontalAlignment="Left" Height="600" Margin="12,10,10,0" VerticalAlignment="Top" Width="475">
                 <Grid Margin="-3">
                     <Label Content="Informations Prêt :" HorizontalAlignment="Left" Height="30" Margin="40,7,0,0" VerticalAlignment="Top" Width="190" Foreground="#FF5B39BB" FontSize="16" FontWeight="Bold"/>

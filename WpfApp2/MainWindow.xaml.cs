@@ -23,10 +23,13 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour MainWindow.xaml
     /// </summary>
+    
+    
     public partial class EasyCOS : Window
     {
         public static string montant;
         public static bool Clos =false;
+        public static bool neg_tres = false;
         public class pret_ac
         {
             public String Nom { get; set; }
@@ -37,8 +40,7 @@ namespace WpfApp2
             public String Montant_Prét { get; set; }
         }
 
-
-
+        //Class principale de l'interface principale
         public EasyCOS()
         {
             InitializeComponent();
@@ -63,13 +65,27 @@ namespace WpfApp2
             {
                 montant_restant2.Text = responsable.tresor.ToString() + " DA";
                 CompteCosTotal.Text = responsable.tresor.ToString() + " DA";
+                if(!neg_tres)
+                {
+                    if(responsable.tresor<=0)
+                    {
+                        MessageBox.Show("Le tresor est d'un montant nul ou inferieur à zero.\nVeuillez cloturer l'année d'abord", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        neg_tres = true;
+                    }
+                }
             }, this.Dispatcher);
 
-            DispatcherTimer timer2 = new DispatcherTimer(new TimeSpan(0,0,1), DispatcherPriority.Normal, delegate
+            DispatcherTimer timer2 = new DispatcherTimer(new TimeSpan(0,0,100), DispatcherPriority.Normal, delegate
             {
                 actualiser();
             }, this.Dispatcher);
         }
+
+
+
+
+
+        //methodes de manupulation de l'interface
 
         DispatcherTimer a = new DispatcherTimer();
 
@@ -89,14 +105,14 @@ namespace WpfApp2
 
         private void deconnexion(object sender, RoutedEventArgs e)
         {
-            responsable.ecriture_modif_tresor();
+           /* responsable.ecriture_modif_tresor();
             responsable.sauvgarder_montant_tresor();
             responsable.initialisation_archive_auto();
             responsable.sauvgarde_archive();
             responsable.sauvgarde_Employe();
             responsable.sauvgarde_pret_non_remboursable();
             responsable.sauvgarde_pret_remboursable();
-            responsable.sauvgarde_Type_pret();
+            responsable.sauvgarde_Type_pret();*/
             this.Close();
             Connexion connexion = new Connexion();
             connexion.connexion_grid.Margin = new Thickness(0, 0, 0, 0);
@@ -180,13 +196,10 @@ namespace WpfApp2
 
         private void Paramétres_Click(object sender, RoutedEventArgs e)
         {
-            //grid_gnrl.Children.Clear();
             Grid_Principale.Children.Clear();
             Grid_Principale.Children.Add(new Accueil());
             listMenu.SelectedIndex = 0;
             grid_gnrl.Children.Add(new Window2(Pseudo_show, Password_show, image_info));
-            //setting.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            //setting.Show(); 
         }
 
         private void media_MediaEnded(object sender, RoutedEventArgs e)
@@ -294,15 +307,6 @@ namespace WpfApp2
 
         public void Display_Detail_Click(object sender, RoutedEventArgs e)
         {
-            //CompteCosTotal.Text = responsable.tresor.ToString() + " DA";
-
-            /*Montant cos restant*/
-            //montant_restant2.Text = responsable.tresor.ToString() + " DA";
-
-            #region nombre de prets remboursable            
-
-
-
             double montant_t_r = 0;
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
             {
@@ -324,26 +328,22 @@ namespace WpfApp2
             }
             nbr_prt_socials2.Text = mon_res.ToString() + "DA"; ;
 
-            #endregion
 
-
-
-            #region nombre de prets en cours de suivi
 
             int cpt2 = 0;
             foreach (KeyValuePair<int, pret_remboursable> pret in responsable.liste_pret_remboursable)
             {
                 if (pret.Value.Somme_remboursée < pret.Value.Montant)
                 {
-                    cpt2++;
+                    if (pret.Value.isPere())
+                    {
+                        cpt2++;
+                    }
                 }
             }
 
-            nbr_prt_cours_suivi2.Text = cpt2.ToString();
+            nbr_prt_cours_suivi2.Text = Donnée_pret_ac.Items.Count.ToString();
 
-            #endregion
-
-            #region date de prelevement la plus proche
 
             var listeDates = new List<DateTime>();
             foreach (KeyValuePair<int, pret_remboursable> pret in responsable.liste_pret_remboursable)
@@ -365,9 +365,7 @@ namespace WpfApp2
             }
 
             DateTime smallest = listeDates.Min();
-            //date_prelev_plus_proch2.Text = smallest.ToString("d", CultureInfo.CreateSpecificCulture("fr-FR"));
 
-            #endregion
             if (border_memer.Height == 330)
             {
                 Duration duration = new Duration(TimeSpan.FromSeconds(0.5));
@@ -492,7 +490,6 @@ namespace WpfApp2
                 double value1 = value0 + responsable.tresor;
                 responsable.tresor = value1 ;
                 responsable.nouveau_tresor(value1);
-                //CompteCosTotal.Text = value1.ToString() + " DA";
 
                 Accepted.Visibility = Visibility.Visible;
                 DoubleAnimation a = new DoubleAnimation();
@@ -595,13 +592,14 @@ namespace WpfApp2
                     }
                 }
             }
-            catch(System.NullReferenceException ex)
+            catch(Exception ex)
             {
-                MessageBox.Show("Selectionez d'abord un pret pour faire le prélèvement !");
+                MessageBox.Show("Selectionez d'abord un pret pour faire le prélèvement ou entrer une valeur valide !");
             }
         }
         private void confirmer_Prélèvement_click(object sender, RoutedEventArgs e)
         {
+            try { 
             pret_ac st = Donnée_pret_ac.SelectedItem as pret_ac;
             pret_remboursable pret = null;
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
@@ -618,7 +616,7 @@ namespace WpfApp2
                 responsable.paiement_standard(pret.Cle);
                 actualiser();
                 int mois = pret.Date_actuelle.Month - 1;
-                MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK, MessageBoxImage.Question, MessageBoxResult.No);
+                MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
                 montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
             }
             else
@@ -630,7 +628,7 @@ namespace WpfApp2
                     actualiser();
                     int mois = pret.Date_actuelle.Month - 1;
                     double d = pret.Etat[mois - 2];
-                    MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK, MessageBoxImage.Question, MessageBoxResult.No);
+                    MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
                     montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
                 }
                 else
@@ -642,7 +640,7 @@ namespace WpfApp2
                         responsable.paiement_anticipé(pret.Cle);
                         actualiser();
                         int mois = pret.Date_actuelle.Month - 1;
-                        MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK);
+                        MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK, MessageBoxImage.Information);
                         montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
                     }
                     else
@@ -652,7 +650,7 @@ namespace WpfApp2
                             responsable.retardement_paiement(pret.Cle);
                             actualiser();
                             int mois = pret.Date_actuelle.Month - 1;
-                            MessageBoxResult result = MessageBox.Show("Retardement effectué avec succès !", "Notification Retardement", MessageBoxButton.OK);
+                            MessageBoxResult result = MessageBox.Show("Retardement effectué avec succès !", "Notification Retardement", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
                         else
                         {
@@ -661,7 +659,7 @@ namespace WpfApp2
                                 responsable.effacement_dettes(pret.Cle);
                                 actualiser();
                                 int mois = pret.Date_actuelle.Month;
-                                MessageBoxResult result = MessageBox.Show("Effacement des dettes fait avec succès !", "Notification Effacement des dettes", MessageBoxButton.OK);
+                                MessageBoxResult result = MessageBox.Show("Effacement des dettes fait avec succès !", "Notification Effacement des dettes", MessageBoxButton.OK, MessageBoxImage.Information);
                             }
                             else
                             {
@@ -672,7 +670,7 @@ namespace WpfApp2
                                     responsable.paiement_spécial(pret.Cle, montant);
                                     actualiser();
                                     int mois = pret.Date_actuelle.Month - 1;
-                                    MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK);
+                                    MessageBoxResult result = MessageBox.Show("Prélèvement fait avec succès !", "Notification Prélèvement", MessageBoxButton.OK,MessageBoxImage.Information);
                                     montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
                                 }
                             }
@@ -715,6 +713,13 @@ namespace WpfApp2
                     }
                 }
             }
+            }
+            catch (Exception l)
+            {
+                MessageBox.Show("Veuillez selectionner un pret.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+            methode_prelevement.Text = "";
+            montant_prelevement.Text = "";
 
         }
 
@@ -726,6 +731,7 @@ namespace WpfApp2
 
         private void affiche_montant_click(object sender, RoutedEventArgs e)
         {
+            try { 
             pret_ac st = Donnée_pret_ac.SelectedItem as pret_ac;
             pret_remboursable pret = null;
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
@@ -742,6 +748,11 @@ namespace WpfApp2
                 EasyCOS.montant = "      " + montant_multip.ToString();
             }
             montant_prelevement.Text = EasyCOS.montant;
+            }
+            catch(Exception l)
+            {
+                MessageBox.Show("Veuillez selectionner un pret.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
         }
 
         private void excel_click(object sender, RoutedEventArgs e)
@@ -770,7 +781,7 @@ namespace WpfApp2
                             p.Prenom = pret.Employé.Prenom;
                             p.N_Pv = pret.Num_pv.ToString();
                             p.description = pret.Type_Pret.Description;
-                            p.Date_paiement = pret.Date_actuelle.ToString();
+                            p.Date_paiement = pret.Date_actuelle.ToShortDateString();
                             p.Montant_Prét = pret.Montant.ToString();
                             source.Add(p);
                         }
@@ -783,7 +794,7 @@ namespace WpfApp2
                                 p.Prenom = pret.Employé.Prenom;
                                 p.N_Pv = pret.Num_pv.ToString();
                                 p.description = pret.Type_Pret.Description;
-                                p.Date_paiement = pret.Date_actuelle.ToString();
+                                p.Date_paiement = pret.Date_actuelle.ToShortDateString();
                                 p.Montant_Prét = pret.Montant.ToString();
                                 source.Add(p);
                             }
@@ -806,7 +817,7 @@ namespace WpfApp2
                             p.Prenom = fils.Employé.Prenom;
                             p.N_Pv = fils.Num_pv.ToString();
                             p.description = fils.Type_Pret.Description;
-                            p.Date_paiement = fils.Date_actuelle.ToString();
+                            p.Date_paiement = fils.Date_actuelle.ToShortDateString();
                             p.Montant_Prét = fils.Montant.ToString();
                             source.Add(p);
                         }
@@ -819,7 +830,7 @@ namespace WpfApp2
                                 p.Prenom = fils.Employé.Prenom;
                                 p.N_Pv = fils.Num_pv.ToString();
                                 p.description = fils.Type_Pret.Description;
-                                p.Date_paiement = fils.Date_actuelle.ToString();
+                                p.Date_paiement = fils.Date_actuelle.ToShortDateString();
                                 p.Montant_Prét = fils.Montant.ToString();
                                 source.Add(p);
                             }
@@ -853,7 +864,7 @@ namespace WpfApp2
                             p.Prenom = pret.Employé.Prenom;
                             p.N_Pv = pret.Num_pv.ToString();
                             p.description = pret.Type_Pret.Description;
-                            p.Date_paiement = pret.Date_actuelle.ToString();
+                            p.Date_paiement = pret.Date_actuelle.ToShortDateString();
                             p.Montant_Prét = pret.Montant.ToString();
                             source.Add(p);
                         }
@@ -866,7 +877,7 @@ namespace WpfApp2
                                 p.Prenom = pret.Employé.Prenom;
                                 p.N_Pv = pret.Num_pv.ToString();
                                 p.description = pret.Type_Pret.Description;
-                                p.Date_paiement = pret.Date_actuelle.ToString();
+                                p.Date_paiement = pret.Date_actuelle.ToShortDateString();
                                 p.Montant_Prét = pret.Montant.ToString();
                                 source.Add(p);
                             }
@@ -889,7 +900,7 @@ namespace WpfApp2
                             p.Prenom = fils.Employé.Prenom;
                             p.N_Pv = fils.Num_pv.ToString();
                             p.description = fils.Type_Pret.Description;
-                            p.Date_paiement = fils.Date_actuelle.ToString();
+                            p.Date_paiement = fils.Date_actuelle.ToShortDateString();
                             p.Montant_Prét = fils.Montant.ToString();
                             source.Add(p);
                         }
@@ -902,7 +913,7 @@ namespace WpfApp2
                                 p.Prenom = fils.Employé.Prenom;
                                 p.N_Pv = fils.Num_pv.ToString();
                                 p.description = fils.Type_Pret.Description;
-                                p.Date_paiement = fils.Date_actuelle.ToString();
+                                p.Date_paiement = fils.Date_actuelle.ToShortDateString();
                                 p.Montant_Prét = fils.Montant.ToString();
                                 source.Add(p);
                             }
@@ -929,6 +940,11 @@ namespace WpfApp2
                 responsable.export_prêts_non_remboursable();
             if (toogle_mode_archive.IsChecked.Value)
                 responsable.export_Archive();
+        }
+
+        private void aide_click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://easycos2019.000webhostapp.com/");
         }
     }
 }

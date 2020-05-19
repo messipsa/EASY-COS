@@ -18,6 +18,9 @@ namespace WpfApp2
     /// <summary>
     /// Logique d'interaction pour Accueil.xaml
     /// </summary>
+    
+    //Class pour affichage de la video de description de l'application dans l'acceuil
+
     public partial class Accueil : UserControl
     {
         public Accueil()

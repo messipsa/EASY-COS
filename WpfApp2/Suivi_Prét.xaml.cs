@@ -14,12 +14,14 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace WpfApp2
 {
     /// <summary>
     /// Logique d'interaction pour Suivi_Prét.xaml
     /// </summary>
+
     public partial class Suivi_Prét : UserControl
     {
         private static string nom_emp_;
@@ -40,6 +42,9 @@ namespace WpfApp2
         private static string email_;
         private static string etat_service_;
 
+
+        //Class principale de l'interface de suivi des prets
+
         public Suivi_Prét()
         {
             InitializeComponent();
@@ -50,6 +55,8 @@ namespace WpfApp2
             methode_prelevement.Items.Add("Retardement.");
             methode_prelevement.Items.Add("Paiement Libre");
         }
+
+        //class interne pour permettre l'affectation des données
 
         public class employee
         {
@@ -62,6 +69,9 @@ namespace WpfApp2
             public String Montant_Prét { get; set; }
 
         }
+
+
+        //methodes de manupulation de l'interface
 
         private void Ajouter_Click(object sender, RoutedEventArgs e)
         {
@@ -153,17 +163,30 @@ namespace WpfApp2
             Remarque.BeginAnimation(OpacityProperty, a);
             int k = 0;
             int cpt = 0;
-            if(liste_employes.SelectedIndex == -1)
+            int i = 0;
+            int j = 0;
+
+            foreach (KeyValuePair<int, Type_pret> value in responsable.liste_types)
             {
-                MessageBox.Show("Choisissez un employé", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-                cpt++;
+                if (value.Value.Description.Equals(Prêt_Type_ajout.Text))
+                    i = value.Key;
             }
+
+            foreach (KeyValuePair<int, Employé> value in responsable.liste_employes)
+            {
+                if (liste_employes.Text.Split(')')[0].Equals(value.Key.ToString()))
+                {
+                    j = value.Key;
+                }
+            }
+
             if (Prêt_Type_ajout.SelectedIndex == -1)
             {
                 MessageBox.Show("Choisissez un type de prêt", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 cpt++;
             }
-            if (!int.TryParse(Montant_Prêt_ajout.Text, out k))
+            double d = 0;
+            if (!double.TryParse(Montant_Prêt_ajout.Text, out d))
             {
                 MessageBox.Show("Entrez un montant valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 cpt++;
@@ -192,21 +215,39 @@ namespace WpfApp2
             {
                 MessageBox.Show("Entrez la date du PV", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 cpt++;
-            }            
-            int i = 0;
-            int j = 0;
-
-            foreach (KeyValuePair<int, Type_pret> value in responsable.liste_types)
-            {
-                if (value.Value.Description.Equals(Prêt_Type_ajout.Text))
-                    i = value.Key;
             }
-
-            foreach (KeyValuePair<int, Employé> value in responsable.liste_employes)
+            if (cpt == 0)
             {
-                if (liste_employes.Text.Split(')')[0].Equals(value.Key.ToString()))
+                if (DateTime.Compare(Date_pv_ajout.SelectedDate.Value.Date, Date_Demande_ajout.SelectedDate.Value.Date) < 0)
                 {
-                    j = value.Key;
+                    cpt++;
+                    MessageBox.Show("La date de demande doit etre inférieure à la date de PV", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                if (DateTime.Compare(Date_prem_paiement.SelectedDate.Value.Date, Date_Demande_ajout.SelectedDate.Value.Date) < 0)
+                {
+                    cpt++;
+                    MessageBox.Show("La date de demande doit etre inférieure à la date de premier paiement", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                if (DateTime.Compare(Date_prem_paiement.SelectedDate.Value.Date, Date_pv_ajout.SelectedDate.Value.Date) < 0)
+                {
+                    cpt++;
+                    MessageBox.Show("La date de PV doit etre inférieure à la date de premier paiement", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                if (d <= 0)
+                {
+                    cpt++;
+                    MessageBox.Show("Le montant doit etre positif", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                if (k <= 0)
+                {
+                    cpt++;
+                    MessageBox.Show("La durée de remboursement doit etre positive", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                int pvv = int.Parse(Numero_Pv_ajout.Text);
+                if (pvv <= 0)
+                {
+                    cpt++;
+                    MessageBox.Show("Le numéro de PV doit etre positif", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             if (cpt == 0)
@@ -258,10 +299,10 @@ namespace WpfApp2
             prenom_info.Text = pret.Employé.Prenom;
             nom_detail.Text = pret.Employé.Nom;
             prenom_detail.Text = pret.Employé.Prenom;
-            date_nais_info.Text = pret.Employé.Date_naissance.ToString();
+            date_nais_info.Text = pret.Employé.Date_naissance.ToShortDateString();
             num_sec_info.Text = pret.Employé.sec_soc;
             matricule_info.Text = pret.Employé.Matricule;
-            date_recru_info.Text = pret.Employé.Date_prem.ToString();
+            date_recru_info.Text = pret.Employé.Date_prem.ToShortDateString();
             etat_soc_info.Text = pret.Employé.etats;
             service_info.Text = pret.Employé.Service;
             num_tel_info.Text = pret.Employé.tel;
@@ -270,9 +311,9 @@ namespace WpfApp2
             grade_info.Text = pret.Employé.Grade;
             description_info.Text = pret.Type_Pret.Description;
             num_pv_info.Text = pret.Num_pv.ToString();
-            date_pv_info.Text = pret.Date_pv.ToString();
-            date_prem_paiement_info.Text = pret.Date_premier_paiment.ToString();
-            date_demande_info.Text = pret.Date_demande.ToString();
+            date_pv_info.Text = pret.Date_pv.ToShortDateString();
+            date_prem_paiement_info.Text = pret.Date_premier_paiment.ToShortDateString();
+            date_demande_info.Text = pret.Date_demande.ToShortDateString();
             montant_info.Text = pret.Montant.ToString();
             montant_lettre_info.Text = pret.Montant_lettre;
             motif_info.Text = pret.Motif;
@@ -280,7 +321,10 @@ namespace WpfApp2
             {
                 montant_remboursé.Text = pret.Somme_remboursée.ToString();
                 monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
-                date_prochain_info.Text = pret.Date_actuelle.ToString();
+                if(pret.Montant != pret.Somme_remboursée)
+                    date_prochain_info.Text = pret.Date_actuelle.ToShortDateString();
+                else
+                    date_prochain_info.Text = " / ";
             }
             else
             {
@@ -291,7 +335,10 @@ namespace WpfApp2
                 }
                 montant_remboursé.Text = p.Somme_remboursée.ToString();
                 monatant_restant.Text = (p.Montant - p.Somme_remboursée).ToString();
-                date_prochain_info.Text = p.Date_actuelle.ToString();
+                if (p.Montant != p.Somme_remboursée)
+                    date_prochain_info.Text = p.Date_actuelle.ToShortDateString();
+                else
+                    date_prochain_info.Text = " / ";
             }
             Annee_suivi.Text = "          " + pret.Date_demande.Year.ToString();
             switch (pret.Date_demande.Month)
@@ -309,22 +356,24 @@ namespace WpfApp2
                 case 11: { novembre.Text += "- L'employé a fait la demande du prêt\n"; break; }
                 case 12: { decembre.Text += "- L'employé a fait la demande du prêt\n"; break; }
             }
-            switch (pret.Date_pv.Month)
+            if (pret.Date_demande.Year.Equals(pret.Date_pv.Year))
             {
-                case 1: { janvier.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 2: { fevrier.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 3: { mars.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 4: { avril.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 5: { mai.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 6: { juin.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 7: { juillet.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 8: { aout.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 9: { septembre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 10: { octobre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 11: { novembre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
-                case 12: { decembre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                switch (pret.Date_pv.Month)
+                {
+                    case 1: { janvier.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 2: { fevrier.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 3: { mars.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 4: { avril.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 5: { mai.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 6: { juin.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 7: { juillet.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 8: { aout.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 9: { septembre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 10: { octobre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 11: { novembre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                    case 12: { decembre.Text += "- Réunion du bureau du COS et sortie du PV \n"; break; }
+                }
             }
-
             if (pret.Debordement == -1)
             {
                 year_pret = pret.Date_demande.Year;
@@ -364,7 +413,7 @@ namespace WpfApp2
                         }
                         else
                         {
-                            if ((liste.Value == 0) && (pret.Somme_remboursée < pret.Montant))
+                            if ((liste.Value == 0))
                             {
                                 switch (liste.Key.Month)
                                 {
@@ -496,7 +545,7 @@ namespace WpfApp2
                         }
                         else
                         {
-                            if ((liste.Value == 0) && (pret.Somme_remboursée < pret.Montant))
+                            if ((liste.Value == 0))
                             {
                                 switch (liste.Key.Month)
                                 {
@@ -541,17 +590,17 @@ namespace WpfApp2
                                         switch (liste.Key.Month)
                                         {
                                             case 1: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 2: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 3: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 4: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 5: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 6: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 7: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 8: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 9: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 10: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 11: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
-                                            case 12: { janvier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 2: { fevrier.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 3: { mars.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 4: { avril.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 5: { mai.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 6: { juin.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 7: { juillet.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 8: { aout.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 9: { septembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 10: { octobre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 11: { novembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
+                                            case 12: { decembre.Text += "- Paiement d'un montant correspondant a \n" + liste.Value.ToString() + " (DA).\n"; break; }
                                         }
                                     }
                                 }
@@ -673,7 +722,7 @@ namespace WpfApp2
                             }
                             else
                             {
-                                if ((liste.Value == 0) && (pret.Somme_remboursée < pret.Montant))
+                                if ((liste.Value == 0))
                                 {
                                     switch (liste.Key.Month)
                                     {
@@ -849,7 +898,7 @@ namespace WpfApp2
                             }
                             else
                             {
-                                if ((liste.Value == 0) && (pret.Somme_remboursée < pret.Montant))
+                                if ((liste.Value == 0))
                                 {
                                     switch (liste.Key.Month)
                                     {
@@ -1026,7 +1075,7 @@ namespace WpfApp2
                             }
                             else
                             {
-                                if ((liste.Value == 0) && (pret.Somme_remboursée < pret.Montant))
+                                if ((liste.Value == 0))
                                 {
                                     switch (liste.Key.Month)
                                     {
@@ -1201,7 +1250,7 @@ namespace WpfApp2
                             }
                             else
                             {
-                                if ((liste.Value == 0) && (pret.Somme_remboursée < pret.Montant))
+                                if ((liste.Value == 0))
                                 {
                                     switch (liste.Key.Month)
                                     {
@@ -1305,9 +1354,9 @@ namespace WpfApp2
                     Employe.Prenom = liste.Value.Employé.Prenom;
                     Employe.N_Pv = liste.Value.Num_pv.ToString();
                     Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                     //Employe.Motif = liste.Value.Motif;
-                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                     //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                     Employe.Montant_Prét = liste.Value.Montant.ToString();
                     source.Add(Employe);
@@ -1350,9 +1399,9 @@ namespace WpfApp2
                     Employe.Prenom = liste.Value.Employé.Prenom;
                     Employe.N_Pv = liste.Value.Num_pv.ToString();
                     Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                     //Employe.Motif = liste.Value.Motif;
-                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                     //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                     Employe.Montant_Prét = liste.Value.Montant.ToString();
                     source.Add(Employe);
@@ -1413,6 +1462,7 @@ namespace WpfApp2
 
         private void confirmer_Prélèvement_click(object sender, RoutedEventArgs e)
         {
+            int cpt = 0;
             employee st = Donnée_Suivi_Prêt.SelectedItem as employee;
             pret_remboursable pret = null;
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
@@ -1431,7 +1481,7 @@ namespace WpfApp2
                 int mois = pret.Date_actuelle.Month - 1;
                 montant_remboursé.Text = pret.Somme_remboursée.ToString();
                 monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
-                date_prochain_info.Text = pret.Date_actuelle.ToString();
+                date_prochain_info.Text = pret.Date_actuelle.ToShortDateString();
                 switch (mois)
                 {
                     case 1: { janvier.Text += "- Paiement standard : \n  " + pret.Montant / pret.Durée + " (DA).\n"; break; }
@@ -1456,39 +1506,48 @@ namespace WpfApp2
             {
                 if (methode_prelevement.Text.Equals("Paiement sur plusieurs mois."))
                 {
-                    montant_prelevé = pret.Montant - pret.Somme_remboursée;
-                    responsable.paiement_plusieurs_mois(pret.Cle, Int32.Parse(nb_mois_saisi.Text));
-                    int mois = pret.Date_actuelle.Month;
-                    responsable.paiement_plusieurs_mois(pret.Cle, Int32.Parse(nb_mois_saisi.Text));
-                    double d = 0;
-                    foreach (double a in pret.Etat.Values)
+                    int c = 0;
+                    if (!int.TryParse(nb_mois_saisi.Text, out c) || c <= 0)
                     {
-                        if (a != -1)
+                        MessageBox.Show("entrez un nombre de mois valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                        cpt++;
+                    }
+                    else
+                    {
+                        montant_prelevé = pret.Montant - pret.Somme_remboursée;
+                        responsable.paiement_plusieurs_mois(pret.Cle, Int32.Parse(nb_mois_saisi.Text));
+                        int mois = pret.Date_actuelle.Month;
+                        responsable.paiement_plusieurs_mois(pret.Cle, Int32.Parse(nb_mois_saisi.Text));
+                        double d = 0;
+                        foreach (double a in pret.Etat.Values)
                         {
-                            d = a;
-                        }
+                            if (a != -1)
+                            {
+                                d = a;
+                            }
 
+                        }
+                        montant_remboursé.Text = pret.Somme_remboursée.ToString();
+                        monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
+                        date_prochain_info.Text = pret.Date_actuelle.ToShortDateString();
+                        switch (mois)
+                        {
+                            case 1: { janvier.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 2: { fevrier.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 3: { mars.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 4: { avril.Text += "- Paiement d'un montant correspondant :\n  " + d.ToString() + " (DA).\n"; break; }
+                            case 5: { mai.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 6: { juin.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 7: { juillet.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 8: { aout.Text += "- Paiement d'un montant correspondant a mois :\n  " + d.ToString() + " (DA).\n"; break; }
+                            case 9: { septembre.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 10: { octobre.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
+                            case 11: { novembre.Text += "- Paiement d'un montant correspondant : \n " + d.ToString() + " (DA).\n"; break; }
+                            case 12: { decembre.Text += "- Paiement d'un montant correspondant : \n " + d.ToString() + " (DA).\n"; break; }
+                        }
+                        montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
+                        Détails_Click(sender, e);
                     }
-                    montant_remboursé.Text = pret.Somme_remboursée.ToString();
-                    monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
-                    date_prochain_info.Text = pret.Date_actuelle.ToString();
-                    switch (mois)
-                    {
-                        case 1: { janvier.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 2: { fevrier.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 3: { mars.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 4: { avril.Text += "- Paiement d'un montant correspondant :\n  " + d.ToString() + " (DA).\n"; break; }
-                        case 5: { mai.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 6: { juin.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 7: { juillet.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 8: { aout.Text += "- Paiement d'un montant correspondant a mois :\n  " + d.ToString() + " (DA).\n"; break; }
-                        case 9: { septembre.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 10: { octobre.Text += "- Paiement d'un montant correspondant : \n  " + d.ToString() + " (DA).\n"; break; }
-                        case 11: { novembre.Text += "- Paiement d'un montant correspondant : \n " + d.ToString() + " (DA).\n"; break; }
-                        case 12: { decembre.Text += "- Paiement d'un montant correspondant : \n " + d.ToString() + " (DA).\n"; break; }
-                    }
-                    montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
-                    Détails_Click(sender, e);
                 }
                 else
                 {
@@ -1501,7 +1560,7 @@ namespace WpfApp2
                         int mois = pret.Date_actuelle.Month - 1;
                         montant_remboursé.Text = pret.Somme_remboursée.ToString();
                         monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
-                        date_prochain_info.Text = pret.Date_actuelle.ToString();
+                        date_prochain_info.Text = pret.Date_actuelle.ToShortDateString();
                         switch (mois)
                         {
                             case 1: { janvier.Text += "- Paiement anticipé : \n  " + d.ToString() + " (DA).\n"; break; }
@@ -1528,7 +1587,8 @@ namespace WpfApp2
                             int mois = pret.Date_actuelle.Month - 1;
                             montant_remboursé.Text = pret.Somme_remboursée.ToString();
                             monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
-                            date_prochain_info.Text = pret.Date_actuelle.ToString();
+                            date_prochain_info.Text = pret.Date_actuelle.ToShortDateString();
+
                             switch (mois)
                             {
                                 case 1: { janvier.Text += "- Paiment différé : \n  0 (DA).\n"; break; }
@@ -1576,30 +1636,39 @@ namespace WpfApp2
                             {
                                 if (methode_prelevement.Text.Equals("Paiement Libre"))
                                 {
+                                    double d=0;
                                     montant_prelevé = pret.Montant - pret.Somme_remboursée;
-                                    double montant = Double.Parse(montant_prelevement.Text);
-                                    responsable.paiement_spécial(pret.Cle, montant);
-                                    int mois = pret.Date_actuelle.Month - 1;
-                                    montant_remboursé.Text = pret.Somme_remboursée.ToString();
-                                    monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
-                                    date_prochain_info.Text = pret.Date_actuelle.ToString();
-                                    switch (mois)
+                                    if (!Double.TryParse(montant_prelevement.Text, out d) || d <= 0)
                                     {
-                                        case 1: { janvier.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 2: { fevrier.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 3: { mars.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 4: { avril.Text += "- Paiement d'un montant correspondant :\n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 5: { mai.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 6: { juin.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 7: { juillet.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 8: { aout.Text += "- Paiement d'un montant correspondant a mois :\n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 9: { septembre.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 10: { octobre.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
-                                        case 11: { novembre.Text += "- Paiement d'un montant correspondant : \n " + montant.ToString() + " (DA).\n"; break; }
-                                        case 12: { decembre.Text += "- Paiement d'un montant correspondant : \n " + montant.ToString() + " (DA).\n"; break; }
+                                        cpt++;
+                                        MessageBox.Show("entrez un montant valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                                     }
-                                    montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
-                                    Détails_Click(sender, e);
+                                    else 
+                                    { 
+                                        double montant = Double.Parse(montant_prelevement.Text);
+                                        responsable.paiement_spécial(pret.Cle, montant);
+                                        int mois = pret.Date_actuelle.Month - 1;
+                                        montant_remboursé.Text = pret.Somme_remboursée.ToString();
+                                        monatant_restant.Text = (pret.Montant - pret.Somme_remboursée).ToString();
+                                        date_prochain_info.Text = pret.Date_actuelle.ToShortDateString();
+                                        switch (mois)
+                                        {
+                                            case 1: { janvier.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 2: { fevrier.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 3: { mars.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 4: { avril.Text += "- Paiement d'un montant correspondant :\n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 5: { mai.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 6: { juin.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 7: { juillet.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 8: { aout.Text += "- Paiement d'un montant correspondant a mois :\n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 9: { septembre.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 10: { octobre.Text += "- Paiement d'un montant correspondant : \n  " + montant.ToString() + " (DA).\n"; break; }
+                                            case 11: { novembre.Text += "- Paiement d'un montant correspondant : \n " + montant.ToString() + " (DA).\n"; break; }
+                                            case 12: { decembre.Text += "- Paiement d'un montant correspondant : \n " + montant.ToString() + " (DA).\n"; break; }
+                                        }
+                                        montant_prelevé = montant_prelevé - (pret.Montant - pret.Somme_remboursée);
+                                        Détails_Click(sender, e);
+                                    }
                                 }
                             }
                         }
@@ -1610,113 +1679,109 @@ namespace WpfApp2
 
                 //Détails_Click(sender, e);
             }
-
-            if (Window2.envoi_notif)
-            {
-                if (Window2.mode_envoi)
+            if(cpt == 0) 
+            { 
+                if (Window2.envoi_notif)
                 {
-                    if (!pret.Employé.Email.Equals(""))
-                        responsable.Envoi_mail(pret, montant_prelevé);
+                    if (Window2.mode_envoi)
+                    {
+                        if (!pret.Employé.Email.Equals(""))
+                            responsable.Envoi_mail(pret, montant_prelevé);
+                        else
+                        {
+                            WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample(pret, montant_prelevé, "Veuillez entrer le mail de l'employé :", "mail@esi.dz");
+                            input.ShowActivated = true;
+                            input.Show();
+                        }
+                    }
                     else
                     {
-                        WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample(pret, montant_prelevé, "Veuillez entrer le mail de l'employé :", "mail@esi.dz");
-                        input.ShowActivated = true;
-                        input.Show();
+                        MessageBoxResult result = MessageBox.Show("Voulez vous envoyer une notification E-mail ?", "Notification E-mail", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+                        switch (result)
+                        {
+                            case MessageBoxResult.Yes:
+                                if (!pret.Employé.Email.Equals(""))
+                                    responsable.Envoi_mail(pret, montant_prelevé);
+                                else
+                                {
+                                    WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample(pret, montant_prelevé, "Veuillez entrer le mail de l'employé :", "mail@esi.dz");
+                                    input.ShowActivated = true;
+                                    input.Show();
+                                }
+                                break;
+                            case MessageBoxResult.No:
+                                MessageBox.Show("La notification sera pas envoyé", "Notification E-mail", MessageBoxButton.OK, MessageBoxImage.Information);
+                                break;
+                        }
                     }
                 }
-                else
-                {
-                    MessageBoxResult result = MessageBox.Show("Voulez vous envoyer une notification E-mail ?", "Notification E-mail", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-                    switch (result)
-                    {
-                        case MessageBoxResult.Yes:
-                            if (!pret.Employé.Email.Equals(""))
-                                responsable.Envoi_mail(pret, montant_prelevé);
-                            else
-                            {
-                                WpfTutorialSamples.Dialogs.InputDialogSample input = new WpfTutorialSamples.Dialogs.InputDialogSample(pret, montant_prelevé, "Veuillez entrer le mail de l'employé :", "mail@esi.dz");
-                                input.ShowActivated = true;
-                                input.Show();
-                            }
-                            break;
-                        case MessageBoxResult.No:
-                            MessageBox.Show("La notification sera pas envoyé", "Notification E-mail", MessageBoxButton.OK, MessageBoxImage.Information);
-                            break;
-                    }
-                }
-            }
 
-            suivi_calendar.Visibility = Visibility.Visible; suivi_calendar.IsEnabled = true;
-            confirmer_prelevement.Visibility = Visibility.Hidden; confirmer_prelevement.IsEnabled = false;
-            Prélèvement.Visibility = Visibility.Visible; Prélèvement.IsEnabled = true;
-            retourner_detail_bouton.Visibility = Visibility.Visible; retourner_detail_bouton.IsEnabled = true;
-            retourner_suivi_bouton.Visibility = Visibility.Hidden; retourner_suivi_bouton.IsEnabled = false;
-            titre_prelevement.Visibility = Visibility.Hidden;
-            methode_prelevement.Visibility = Visibility.Hidden;
-            montant_titre.Visibility = Visibility.Hidden;
-            montant_prelevement.Visibility = Visibility.Hidden;
-            da_titre.Visibility = Visibility.Hidden;
-            nb_mois.Visibility = Visibility.Hidden;
-            affiche_montant.Visibility = Visibility.Hidden;
-            m.Visibility = Visibility.Hidden;
-            nb_mois_saisi.Visibility = Visibility.Hidden;
+                suivi_calendar.Visibility = Visibility.Visible; suivi_calendar.IsEnabled = true;
+                confirmer_prelevement.Visibility = Visibility.Hidden; confirmer_prelevement.IsEnabled = false;
+                Prélèvement.Visibility = Visibility.Visible; Prélèvement.IsEnabled = true;
+                retourner_detail_bouton.Visibility = Visibility.Visible; retourner_detail_bouton.IsEnabled = true;
+                retourner_suivi_bouton.Visibility = Visibility.Hidden; retourner_suivi_bouton.IsEnabled = false;
+                titre_prelevement.Visibility = Visibility.Hidden;
+                methode_prelevement.Visibility = Visibility.Hidden;
+                montant_titre.Visibility = Visibility.Hidden;
+                montant_prelevement.Visibility = Visibility.Hidden;
+                da_titre.Visibility = Visibility.Hidden;
+                nb_mois.Visibility = Visibility.Hidden;
+                affiche_montant.Visibility = Visibility.Hidden;
+                m.Visibility = Visibility.Hidden;
+                nb_mois_saisi.Visibility = Visibility.Hidden;
+                methode_prelevement.Text = "";
+                montant_prelevement.Text = "";
+            }
         }
 
         private void montant_prelevement_selection_changed(object sender, SelectionChangedEventArgs e)
         {
             montant_prelevement.Text = "";
-            employee st = Donnée_Suivi_Prêt.SelectedItem as employee;
-            pret_remboursable pret = null;
-            foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
+            try
             {
-                if (DateTime.Parse(st.Date_demande).Equals(liste.Value.Date_demande) && DateTime.Parse(st.Date_de_Pv).Equals(liste.Value.Date_pv) && Double.Parse(st.Montant_Prét) == liste.Value.Montant && st.Nom.Equals(liste.Value.Employé.Nom) && st.Prenom.Equals(liste.Value.Employé.Prenom) && Int32.Parse(st.N_Pv) == liste.Value.Num_pv && st.Type_Prêt.Equals(liste.Value.Type_Pret.Description))
+                employee st = Donnée_Suivi_Prêt.SelectedItem as employee;
+                pret_remboursable pret = null;
+                foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_pret_remboursable)
                 {
-                    pret = liste.Value;
+                    if (DateTime.Parse(st.Date_demande).Equals(liste.Value.Date_demande) && DateTime.Parse(st.Date_de_Pv).Equals(liste.Value.Date_pv) && Double.Parse(st.Montant_Prét) == liste.Value.Montant && st.Nom.Equals(liste.Value.Employé.Nom) && st.Prenom.Equals(liste.Value.Employé.Prenom) && Int32.Parse(st.N_Pv) == liste.Value.Num_pv && st.Type_Prêt.Equals(liste.Value.Type_Pret.Description))
+                    {
+                        pret = liste.Value;
+                    }
                 }
-            }
-            if (methode_prelevement.SelectedItem.ToString().Equals("Paiement Standard."))
-            {
-                nb_mois.Visibility = Visibility.Hidden;
-                nb_mois_saisi.Visibility = Visibility.Hidden;
-                m.Visibility = Visibility.Hidden;
-                montant_prelevement.IsReadOnly = true;
-                Suivi_Prét.montant = "      " + (pret.Montant / pret.Durée).ToString();
-            }
-            else
-            {
-                if (methode_prelevement.SelectedItem.ToString().Equals("Paiement sur plusieurs mois."))
+                if (methode_prelevement.SelectedItem.ToString().Equals("Paiement Standard."))
                 {
-                    nb_mois.Visibility = Visibility.Visible;
-                    nb_mois_saisi.Visibility = Visibility.Visible;
-                    m.Visibility = Visibility.Visible;
-                    double nb_mois_ = Double.Parse(nb_mois_saisi.Text);
-                    double montant_multip = (pret.Montant / (double)pret.Durée) * nb_mois_;
+                    nb_mois.Visibility = Visibility.Hidden;
+                    nb_mois_saisi.Visibility = Visibility.Hidden;
+                    m.Visibility = Visibility.Hidden;
                     montant_prelevement.IsReadOnly = true;
-                    Suivi_Prét.montant = "      " + montant_multip.ToString();
+                    Suivi_Prét.montant = "      " + (pret.Montant / pret.Durée).ToString();
                 }
                 else
                 {
-                    if (methode_prelevement.SelectedItem.ToString().Equals("Paiement Anticipé (Total)."))
+                    if (methode_prelevement.SelectedItem.ToString().Equals("Paiement sur plusieurs mois."))
                     {
-                        nb_mois.Visibility = Visibility.Hidden;
-                        nb_mois_saisi.Visibility = Visibility.Hidden;
-                        m.Visibility = Visibility.Hidden;
+                        nb_mois.Visibility = Visibility.Visible;
+                        nb_mois_saisi.Visibility = Visibility.Visible;
+                        m.Visibility = Visibility.Visible;
+                        double nb_mois_ = Double.Parse(nb_mois_saisi.Text);
+                        double montant_multip = (pret.Montant / (double)pret.Durée) * nb_mois_;
                         montant_prelevement.IsReadOnly = true;
-                        Suivi_Prét.montant = "      " + (pret.Montant - pret.Somme_remboursée).ToString();
+                        Suivi_Prét.montant = "      " + montant_multip.ToString();
                     }
                     else
                     {
-                        if (methode_prelevement.SelectedItem.ToString().Equals("Retardement."))
+                        if (methode_prelevement.SelectedItem.ToString().Equals("Paiement Anticipé (Total)."))
                         {
                             nb_mois.Visibility = Visibility.Hidden;
                             nb_mois_saisi.Visibility = Visibility.Hidden;
                             m.Visibility = Visibility.Hidden;
                             montant_prelevement.IsReadOnly = true;
-                            Suivi_Prét.montant = "      0";
+                            Suivi_Prét.montant = "      " + (pret.Montant - pret.Somme_remboursée).ToString();
                         }
                         else
                         {
-                            if (methode_prelevement.SelectedItem.ToString().Equals("Effacement des Dettes"))
+                            if (methode_prelevement.SelectedItem.ToString().Equals("Retardement."))
                             {
                                 nb_mois.Visibility = Visibility.Hidden;
                                 nb_mois_saisi.Visibility = Visibility.Hidden;
@@ -1726,18 +1791,31 @@ namespace WpfApp2
                             }
                             else
                             {
-                                if (methode_prelevement.SelectedItem.ToString().Equals("Paiement Libre"))
+                                if (methode_prelevement.SelectedItem.ToString().Equals("Effacement des Dettes"))
                                 {
                                     nb_mois.Visibility = Visibility.Hidden;
                                     nb_mois_saisi.Visibility = Visibility.Hidden;
                                     m.Visibility = Visibility.Hidden;
-                                    montant_prelevement.IsReadOnly = false;
+                                    montant_prelevement.IsReadOnly = true;
+                                    Suivi_Prét.montant = "      0";
+                                }
+                                else
+                                {
+                                    if (methode_prelevement.SelectedItem.ToString().Equals("Paiement Libre"))
+                                    {
+                                        nb_mois.Visibility = Visibility.Hidden;
+                                        nb_mois_saisi.Visibility = Visibility.Hidden;
+                                        m.Visibility = Visibility.Hidden;
+                                        montant_prelevement.IsReadOnly = false;
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            catch(Exception o)
+            { }
         }
 
         private void affiche_montant_click(object sender, RoutedEventArgs e)
@@ -1890,12 +1968,15 @@ namespace WpfApp2
 
                 }
             }
-            //responsable.recherche_par_criteres_non_rem(!date_dem_inf.Equals(null),date_dem_inf.SelectedDate.Value, !date_de_sup.Equals(null),date_de_sup.SelectedDate.Value, !date_pv_inf.Equals(null), date_pv_inf.SelectedDate.Value, !date_pv_sup.Equals(null), date_pv_sup.SelectedDate.Value, !somme_min.Equals(null),int.Parse(somme_min.Text.ToString()), !somme_max.Equals(null), int.Parse(somme_max.Text.ToString()), !liste_employe_rech.Text.Equals(null), !liste_types.Text.Equals(null))     ;
+ 
             responsable.remplissage_liste_filtres_rem();
 
             responsable.filtrer_par_employés_rem(!liste_employe_rech.Text.Equals(""));
             responsable.filtrer_par_types_rem(!liste_types.Text.Equals(""));
 
+            double k = 0;
+            int cpt = 0;
+            double somme = 0;
             if (!(date_dem_inf.SelectedDate.Equals(null)))
                 responsable.filtrer_par_date_demande_inf_rem(!date_dem_inf.Equals(null), date_dem_inf.SelectedDate.Value.Date);
             if (!date_de_sup.SelectedDate.Equals(null))
@@ -1905,9 +1986,30 @@ namespace WpfApp2
             if (!date_pv_sup.SelectedDate.Equals(null))
                 responsable.filtrer_par_date_pv_max_rem(!date_pv_sup.Equals(null), date_pv_sup.SelectedDate.Value.Date);
             if (!somme_min.Text.Equals(""))
-                responsable.filtrer_par_somme_min_rem(!somme_min.Equals(null), int.Parse(somme_min.Text.ToString()));
+            {
+                if (!double.TryParse(somme_min.Text, out k))
+                {
+                    MessageBox.Show("entrez une somme minimale valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                else
+                {
+                    responsable.filtrer_par_somme_min_rem(!somme_min.Equals(null), double.Parse(somme_min.Text.ToString()));
+                }
+
+            }
             if (!somme_max.Text.Equals(""))
-                responsable.filtrer_par_somme_max_rem(!somme_max.Equals(null), int.Parse(somme_max.Text.ToString()));
+            {
+                if (!double.TryParse(somme_max.Text, out somme))
+                {
+                    MessageBox.Show("entrez une somme maximale valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                else
+                {
+                    responsable.filtrer_par_somme_max_rem(!somme_max.Equals(null), double.Parse(somme_max.Text.ToString()));
+                }
+            }
 
             List<employee> source = new List<employee>();
             foreach (KeyValuePair<int, pret_remboursable> liste in responsable.liste_filtres_rem)
@@ -1917,9 +2019,9 @@ namespace WpfApp2
                 Employe.Prenom = liste.Value.Employé.Prenom;
                 Employe.N_Pv = liste.Value.Num_pv.ToString();
                 Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                 //Employe.Motif = liste.Value.Motif;
-                Employe.Date_demande = liste.Value.Date_demande.ToString();
+                Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                 //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                 Employe.Montant_Prét = liste.Value.Montant.ToString();
                 source.Add(Employe);
@@ -2014,7 +2116,7 @@ namespace WpfApp2
                     Employe.Type_Prêt = liste.Value.Type_Pret.Description;
                     Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
                     //Employe.Motif = liste.Value.Motif;
-                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                     //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                     Employe.Montant_Prét = liste.Value.Montant.ToString();
                     source.Add(Employe);
@@ -2081,9 +2183,9 @@ namespace WpfApp2
                     Employe.Prenom = liste.Value.Employé.Prenom;
                     Employe.N_Pv = liste.Value.Num_pv.ToString();
                     Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                     //Employe.Motif = liste.Value.Motif;
-                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                     //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                     Employe.Montant_Prét = liste.Value.Montant.ToString();
                     source.Add(Employe);
@@ -2113,9 +2215,9 @@ namespace WpfApp2
                     Employe.Prenom = liste.Value.Employé.Prenom;
                     Employe.N_Pv = liste.Value.Num_pv.ToString();
                     Employe.Type_Prêt = liste.Value.Type_Pret.Description;
-                    Employe.Date_de_Pv = liste.Value.Date_pv.ToString();
+                    Employe.Date_de_Pv = liste.Value.Date_pv.ToShortDateString();
                     //Employe.Motif = liste.Value.Motif;
-                    Employe.Date_demande = liste.Value.Date_demande.ToString();
+                    Employe.Date_demande = liste.Value.Date_demande.ToShortDateString();
                     //Employe.Montant_Prét_lettre = liste.Value.Montant_lettre;
                     Employe.Montant_Prét = liste.Value.Montant.ToString();
                     source.Add(Employe);

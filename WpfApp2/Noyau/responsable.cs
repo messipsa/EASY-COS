@@ -18,29 +18,30 @@ namespace WpfApp2
 {
     public class responsable
     {
-        public static double tresor;
+        public static double tresor;//Le compte virtuel du COS
         public static int cle_liste_types = 1;              // des attributs statiques permettant de donner des
         public static int cle_liste_pret_remboursable = 1;           // cles uniques aux differents dictionnaires 
         public static int cle_liste_non_remboursable = 1;                 // utilisés en s'incrémentant à chaque ajout
         public static int cle_liste_employe = 1;                             // les clés se sont gérées par nous et pas selon l'introduction
         public static int cle_liste_archive = 1;                                     // de l'utilisateur.
-        public static Dictionary<int, Employé> liste_employes = new Dictionary<int, Employé>();//dic num°1
-        public static Dictionary<int, Type_pret> liste_types = new Dictionary<int, Type_pret>();//dic num°2
-        public static Dictionary<int, Archive> liste_archives = new Dictionary<int, Archive>();//dic num°3
-        public static Dictionary<int, pret_remboursable> liste_pret_remboursable = new Dictionary<int, pret_remboursable>();//dic num°4
-        public static Dictionary<int, pret_non_remboursable> liste_pret_non_remboursables = new Dictionary<int, pret_non_remboursable>();//dic num°5
+        public static Dictionary<int, Employé> liste_employes = new Dictionary<int, Employé>();//liste des employés de l'école
+        public static Dictionary<int, Type_pret> liste_types = new Dictionary<int, Type_pret>();//liste comportant tous les types prets existants
+        public static Dictionary<int, Archive> liste_archives = new Dictionary<int, Archive>();//liste des prets archivés
+        public static Dictionary<int, pret_remboursable> liste_pret_remboursable = new Dictionary<int, pret_remboursable>();//liste des prets remboursables accordés
+        public static Dictionary<int, pret_non_remboursable> liste_pret_non_remboursables = new Dictionary<int, pret_non_remboursable>();//liste des prets non remboursables décérnés
         public static Dictionary<int, pret_remboursable> liste_pret_remboursable_provisoire = new Dictionary<int, pret_remboursable>();
         public static Dictionary<int, Archive> liste_archives_provisoire = new Dictionary<int, Archive>();
 
         public static List<Modification> pile_modifications = new List<Modification>();
 
-        public static List<Prets> bilan = new List<Prets>();
-        public static Dictionary<int, Archive> liste_filtres = new Dictionary<int, Archive>();
-        public static Dictionary<int, pret_remboursable> liste_filtres_rem = new Dictionary<int, pret_remboursable>();
-        public static Dictionary<int, pret_non_remboursable> liste_filtres_non_rem = new Dictionary<int, pret_non_remboursable>();
+        public static List<Prets> bilan = new List<Prets>();//liste comportant tous les prets accordées dans une année donnée
+        public static Dictionary<int, Archive> liste_filtres = new Dictionary<int, Archive>(); //liste des archives apres filtrage
+        public static Dictionary<int, pret_remboursable> liste_filtres_rem = new Dictionary<int, pret_remboursable>();//liste des prets remboursables apres filtrage
+        public static Dictionary<int, pret_non_remboursable> liste_filtres_non_rem = new Dictionary<int, pret_non_remboursable>();//liste des prets non remboursables apres filtrage
         public static List<int> clés_employés = new List<int>();
         public static List<int> clés_types = new List<int>();
-
+        //------------------------------------------------------------------------------
+        //Liste pour faire des statistiques
         public static Dictionary<int, int> liste_stat_1 = new Dictionary<int, int>();
         public static Dictionary<int, double> list_sup = new Dictionary<int, double>();
         public static Dictionary<int, double> list_inf = new Dictionary<int, double>();
@@ -48,13 +49,13 @@ namespace WpfApp2
 
         public static List<String> services = new List<String>();
         public static List<String> choix_service = new List<string>();
-
+        //----------------------------------------------------------------------------------
         public static string User_mail = "im_aliousalah@esi.dz";
         public static string User_pwd = "";
         //lecture-----------------------------------------------------------
-        public static void initialiser_dictionnaire_employes()
+        public static void initialiser_dictionnaire_employes() //Initialisation de la liste des employés depuis la base de donnée
         {
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             string commande = "SELECT COUNT(*) FROM employes;";
@@ -82,10 +83,10 @@ namespace WpfApp2
             cnx.Close();
         }
 
-        public static void initialiser_dictionnaire_archive()
+        public static void initialiser_dictionnaire_archive()//Initialisation de la liste des archives depuis la base de donnée
         {
             int longueur_table = 0;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             cmd.CommandText = "SELECT COUNT(*) FROM archive;";
@@ -120,7 +121,7 @@ namespace WpfApp2
                     mois.Add(9, (double)rdr.GetDouble(18));
                     //
                     int cle_type_pret = (int)rdr.GetValue(2);
-                    SqlConnection cnx2 = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+                    SqlConnection cnx2 = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
                     cnx2.Open();
                     SqlCommand cmd2 = cnx2.CreateCommand();
                     cmd2.CommandText = "SELECT * FROM type_prets WHERE cle = " + cle_type_pret.ToString() + " ;";
@@ -146,7 +147,7 @@ namespace WpfApp2
                     Dictionary<int, double> mois = new Dictionary<int, double>();
                     for (int k = 0; k < 10; k++)
                         mois.Add(k, -1);
-                    SqlConnection cnx2 = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+                    SqlConnection cnx2 = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
                     cnx2.Open();
                     SqlCommand cmd2 = cnx2.CreateCommand();
                     cmd2.CommandText = "SELECT * FROM type_prets WHERE cle = " + cle_type_pret.ToString() + " ;";
@@ -166,10 +167,10 @@ namespace WpfApp2
             cnx.Close();
         }
 
-        public static void initialiser_dictionnaire_types_prets()
+        public static void initialiser_dictionnaire_types_prets()//Initialisation de la liste des types prets depuis la base de donnée
         {
             int longueur_table = 0;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             cmd.CommandText = "SELECT COUNT(*) FROM type_prets;";
@@ -192,10 +193,10 @@ namespace WpfApp2
             cnx.Close();
         }
 
-        public static void initialiser_dictionnaire_pret_remboursable()
+        public static void initialiser_dictionnaire_pret_remboursable()//Initialisation de la liste des prets remboursables depuis la base de donnée
         {
             int longueur_table = 0;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             cmd.CommandText = "SELECT COUNT(*) FROM prets_remboursable;";
@@ -244,10 +245,10 @@ namespace WpfApp2
             cnx.Close();
         }
 
-        public static void initialiser_dictionnaire_pret_non_remboursable()
+        public static void initialiser_dictionnaire_pret_non_remboursable()//Initialisation de la liste des prets non remboursables depuis la base de donnée
         {
             int longueur_table = 0;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             cmd.CommandText = "SELECT COUNT(*) FROM prets_non_remboursable;";
@@ -332,7 +333,7 @@ namespace WpfApp2
 
 
         //ajout-----------------------------------------------------------
-        public static void ajouter_employe(Employé b)
+        public static void ajouter_employe(Employé b) //ajout d'employés
         {
 
             if (!(liste_employes.ContainsValue(b)))
@@ -344,7 +345,7 @@ namespace WpfApp2
                 Console.WriteLine("pas d'ajout d'employe");
             }
         }
-        public static void ajouter_type_pret(Type_pret b)
+        public static void ajouter_type_pret(Type_pret b)//ajout de types prets
         {
             int cpt = 0;
             foreach (KeyValuePair<int, Type_pret> kvp in liste_types)
@@ -364,7 +365,7 @@ namespace WpfApp2
                 Console.WriteLine("pas d'ajout de type");
             }
         }
-        public static void ajouter_pret_remboursable(pret_remboursable b)
+        public static void ajouter_pret_remboursable(pret_remboursable b)//ajout de prets remboursables
         {
 
             if (!(liste_pret_remboursable.ContainsValue(b)))
@@ -376,7 +377,7 @@ namespace WpfApp2
                 Console.WriteLine("pas d'ajout de pret remboursable");
             }
         }
-        public static void ajouter_pret_non_remboursable(pret_non_remboursable b)
+        public static void ajouter_pret_non_remboursable(pret_non_remboursable b)//ajout de prets non remboursables
         {
 
             if (!(liste_pret_non_remboursables.ContainsValue(b)))
@@ -390,7 +391,7 @@ namespace WpfApp2
             }
         }
 
-        public static void ajouter_archive(Archive b)
+        public static void ajouter_archive(Archive b)//ajout d'archives
         {
 
             if (!(liste_archives.ContainsValue(b)))
@@ -403,7 +404,7 @@ namespace WpfApp2
             }
         }
 
-        public static void ajout_service()
+        public static void ajout_service()//ajout de services
         {
             foreach (Employé emp in responsable.liste_employes.Values)
             {
@@ -416,7 +417,7 @@ namespace WpfApp2
         }
 
         //manipulations des prets-----------------------------------------------------------
-        public static void suivi()
+        public static void suivi()//Suivi mensuel des prets
         {
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
             {
@@ -430,9 +431,9 @@ namespace WpfApp2
             {
                 responsable.liste_pret_remboursable_provisoire.Remove(element.Key);
             }
-        }       
+        }
 
-        public static void retardement_paiement(int cle)
+        public static void retardement_paiement(int cle)//Retardement du paiement pendant un mois
         {
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
             {
@@ -455,7 +456,7 @@ namespace WpfApp2
 
         //clés a affecter-----------------------------------------------------------
 
-        public static int cle_a_affecter_employe()
+        public static int cle_a_affecter_employe()//Clé unique pour les employés
         {
             int cpt = 1;
             foreach (KeyValuePair<int, Employé> kvp in liste_employes)
@@ -467,7 +468,7 @@ namespace WpfApp2
             }
             return cpt;
         }
-        public static int cle_a_affecter_archive()
+        public static int cle_a_affecter_archive()//Clé unique pour les archives
         {
             int cpt = 1;
             foreach (KeyValuePair<int, Archive> kvp in liste_archives)
@@ -480,7 +481,7 @@ namespace WpfApp2
             return cpt;
         }
 
-        public static int cle_a_affecter_pret_remboursable()
+        public static int cle_a_affecter_pret_remboursable()//Clé unique pour les prets remboursables
         {
             int cpt = 1;
             int cpt2 = 1;
@@ -504,7 +505,7 @@ namespace WpfApp2
             }
             return cpt2;
         }
-        public static int cle_a_affecter_pret_non_remboursable()
+        public static int cle_a_affecter_pret_non_remboursable()//Clé unique pour les prets non remboursables
         {
             int cpt = 1;
             foreach (KeyValuePair<int, pret_non_remboursable> kvp in liste_pret_non_remboursables)
@@ -516,7 +517,7 @@ namespace WpfApp2
             }
             return cpt;
         }
-        public static int cle_a_affecter_type_pret()
+        public static int cle_a_affecter_type_pret()//Clé unique pour les types prets
         {
             int cpt = 1;
             foreach (KeyValuePair<int, Type_pret> kvp in liste_types)
@@ -543,7 +544,7 @@ namespace WpfApp2
         }
 
         //methodes de creation-----------------------------------------------------------
-        public static void Creer_employe(string matricule, string nom, string prenom, string num_sec_social, DateTime date_naissance, string grade, DateTime date_prem, string etat, string ccp, string cle_ccp, string tel, string service, string mail, string etat_service)
+        public static void Creer_employe(string matricule, string nom, string prenom, string num_sec_social, DateTime date_naissance, string grade, DateTime date_prem, string etat, string ccp, string cle_ccp, string tel, string service, string mail, string etat_service)//Ajout  d'un nouvel employé
         {
             int cpt = 0;
             int cle = cle_a_affecter_employe();
@@ -568,7 +569,7 @@ namespace WpfApp2
 
 
 
-        public static void Creer_Type_pret(int typepret, int dispo, string descri, int remboursable)
+        public static void Creer_Type_pret(int typepret, int dispo, string descri, int remboursable)//Création d'un nouveau type pret
         {
             int cpt = 0;
             int cle = cle_a_affecter_type_pret();
@@ -593,7 +594,7 @@ namespace WpfApp2
 
 
 
-        public static void Creer_pret_non_remboursable(int employé, int type, string motif, int num_pv, DateTime date_pv, double montant, DateTime date_demande, string montant_lettre)
+        public static void Creer_pret_non_remboursable(int employé, int type, string motif, int num_pv, DateTime date_pv, double montant, DateTime date_demande, string montant_lettre)//Ajout  d'un nouveau pret non remboursable
         {
             int cle = cle_a_affecter_pret_non_remboursable();
             Employé emp = null;
@@ -636,7 +637,7 @@ namespace WpfApp2
 
 
 
-        public static void Creer_pret_remboursable(int employé, int type, string motif, int num_pv, DateTime date_pv, double montant, DateTime date_demande, string montant_lettre, DateTime date_premier_paiment, int durée)
+        public static void Creer_pret_remboursable(int employé, int type, string motif, int num_pv, DateTime date_pv, double montant, DateTime date_demande, string montant_lettre, DateTime date_premier_paiment, int durée)//Ajout  d'un nouveau pret remboursable
         {
             int cle = cle_a_affecter_pret_remboursable();
             Employé emp = null;
@@ -688,7 +689,7 @@ namespace WpfApp2
         public static bool Clé_Existante_Employé(int clé)
         {
             bool resultat = false;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM employes ;";
@@ -711,7 +712,7 @@ namespace WpfApp2
         public static bool Clé_Existante_Type_Pret(int clé)
         {
             bool resultat = false;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM type_prets ;";
@@ -734,7 +735,7 @@ namespace WpfApp2
         public static bool Clé_Existante_archive(int clé)
         {
             bool resultat = false;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM archive ;";
@@ -757,7 +758,7 @@ namespace WpfApp2
         public static bool Clé_Existante_pret_remboursable(int clé)
         {
             bool resultat = false;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM prets_remboursable ;";
@@ -780,7 +781,7 @@ namespace WpfApp2
         public static bool Clé_Existante_pret_non_remboursable(int clé)
         {
             bool resultat = false;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM prets_non_remboursable ;";
@@ -803,7 +804,7 @@ namespace WpfApp2
         public static int verif_sup_remboursable()
         {
             int clé_a_sup = 0;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM prets_remboursable ;";
@@ -827,7 +828,7 @@ namespace WpfApp2
         public static int verif_sup_non_remboursable()
         {
             int clé_a_sup = 0;
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");
             cnx.Open();
             SqlCommand cmd_cle = cnx.CreateCommand();
             cmd_cle.CommandText = "SELECT cle FROM prets_non_remboursable ;";
@@ -868,7 +869,7 @@ namespace WpfApp2
                 }
             }
 
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
 
@@ -880,8 +881,22 @@ namespace WpfApp2
                 {
                     cmd.CommandText = "SET IDENTITY_INSERT employes ON;";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT employes (cle,nom, prenom, num_securite_sociale, date_naissance, grade, date_prem, etat_sociale, ccp, cle_ccp, tel, matricule,service_travail,email,etat_fonction) VALUES(" + liste.Key + ",'" + liste.Value.Nom + "','" + liste.Value.Prenom + "','" + liste.Value.sec_soc + "','" + liste.Value.Date_naissance.ToShortDateString() + "','" + liste.Value.Grade + "','" + liste.Value.Date_prem.ToShortDateString() + "','" + liste.Value.etats + "','" + liste.Value.compte_ccp + "','" + liste.Value.Cle_ccp + "','" + liste.Value.tel + "','" + liste.Value.Matricule + "','" + liste.Value.Service + "','" + liste.Value.Email + "','" + liste.Value.Etat_service + "');";
+                    cmd.CommandText = "INSERT employes (cle,nom, prenom, num_securite_sociale, date_naissance, grade, date_prem, etat_sociale, ccp, cle_ccp, tel, matricule,service_travail,email,etat_fonction) VALUES(" + liste.Key + ",N'" + liste.Value.Nom + "',N'" + liste.Value.Prenom + "','" + liste.Value.sec_soc + "','" + liste.Value.Date_naissance.ToShortDateString() + "',N'" + liste.Value.Grade + "','" + liste.Value.Date_prem.ToShortDateString() + "',N'" + liste.Value.etats + "','" + liste.Value.compte_ccp + "','" + liste.Value.Cle_ccp + "','" + liste.Value.tel + "','" + liste.Value.Matricule + "',N'" + liste.Value.Service + "','" + liste.Value.Email + "',N'" + liste.Value.Etat_service + "');";
                     cmd.ExecuteNonQuery();
+                }
+                else//modification
+                {
+                    foreach (Modification element in responsable.pile_modifications)
+                    {
+                        if (element.Dic_modifié == 1)
+                        {
+                            if (element.Clé_element_modifié == liste.Key)
+                            {
+                                cmd.CommandText = " UPDATE employes SET email='" + liste.Value.Email + "' WHERE cle=" + element.Clé_element_modifié + ";";
+                                cmd.ExecuteNonQuery();
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -904,7 +919,7 @@ namespace WpfApp2
                 }
             }
 
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
 
@@ -916,7 +931,7 @@ namespace WpfApp2
                 {
                     cmd.CommandText = "SET IDENTITY_INSERT type_prets ON;";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT type_prets (cle,type_du_pret, description_pret, disponibilite, remboursable) VALUES(" + liste.Key + "," + liste.Value.Type_de_pret + ",'" + liste.Value.Description + "'," + liste.Value.Disponibilité + "," + liste.Value.Remboursable + "); ";
+                    cmd.CommandText = "INSERT type_prets (cle,type_du_pret, description_pret, disponibilite, remboursable) VALUES(" + liste.Key + "," + liste.Value.Type_de_pret + ",N'" + liste.Value.Description + "'," + liste.Value.Disponibilité + "," + liste.Value.Remboursable + "); ";
                     cmd.ExecuteNonQuery();
                 }
                 else//modification
@@ -947,15 +962,30 @@ namespace WpfApp2
                     var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
                     if (type == typeof(string))
                     {
-                        if(((string)prop.GetValue(archv)).Contains("'"))
+                        if (((string)prop.GetValue(archv)).Contains("'"))
                         {                            
-                            prop.SetValue(archv, ((string)prop.GetValue(archv)).Replace("'", "''"));                            
+                            prop.SetValue(archv, ((string)prop.GetValue(archv)).Replace("'", "''"));
                         }
                     }
                 }
             }
 
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            foreach (Archive archv in liste_archives.Values)
+            {
+                foreach (PropertyInfo prop in archv.Pret.GetType().GetProperties())
+                {
+                    var type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                    if (type == typeof(string))
+                    {
+                        if (((string)prop.GetValue(archv.Pret)).Contains("'"))
+                        {
+                            prop.SetValue(archv.Pret, ((string)prop.GetValue(archv.Pret)).Replace("'", "''"));
+                        }
+                    }
+                }
+            }
+
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
 
@@ -968,14 +998,14 @@ namespace WpfApp2
                     {
                         cmd.CommandText = "SET IDENTITY_INSERT archive ON;";
                         cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT archive(cle,idetifiant_employe, cle_type_pret, date_demande, date_premier_paiment, montant_pret, montant_pret_lettre, date_fin_remboursement, motif, mois_1, mois_2, mois_3, mois_4, mois_5, mois_6, mois_7, mois_8, mois_9, mois_10, observation, num_pv, debordement,date_pv,long_remboursement) VALUES(" + liste.Key + "," + liste.Value.Pret.Employé.Cle + "," + liste.Value.Pret.Type_Pret.Cle + ",'" + liste.Value.Pret.Date_demande.ToShortDateString() + "','" + ((pret_remboursable)liste.Value.Pret).Date_premier_paiment.ToShortDateString() + "'," + liste.Value.Pret.Montant + ",'" + liste.Value.Pret.Montant_lettre + "','" + liste.Value.Date_fin_remboursement.ToShortDateString() + "','" + liste.Value.Pret.Motif + "'," + ((pret_remboursable)liste.Value.Pret).Etat[0] + "," + ((pret_remboursable)liste.Value.Pret).Etat[1] + "," + ((pret_remboursable)liste.Value.Pret).Etat[2] + "," + ((pret_remboursable)liste.Value.Pret).Etat[3] + "," + ((pret_remboursable)liste.Value.Pret).Etat[4] + "," + ((pret_remboursable)liste.Value.Pret).Etat[5] + "," + ((pret_remboursable)liste.Value.Pret).Etat[6] + "," + ((pret_remboursable)liste.Value.Pret).Etat[7] + "," + ((pret_remboursable)liste.Value.Pret).Etat[8] + "," + ((pret_remboursable)liste.Value.Pret).Etat[9] + ",'" + liste.Value.Observations + "'," + liste.Value.Pret.Num_pv + "," + ((pret_remboursable)liste.Value.Pret).Debordement + ",'" + liste.Value.Pret.Date_pv.ToShortDateString() + "'," + liste.Value.Durée + ");";
+                        cmd.CommandText = "INSERT archive(cle,idetifiant_employe, cle_type_pret, date_demande, date_premier_paiment, montant_pret, montant_pret_lettre, date_fin_remboursement, motif, mois_1, mois_2, mois_3, mois_4, mois_5, mois_6, mois_7, mois_8, mois_9, mois_10, observation, num_pv, debordement,date_pv,long_remboursement) VALUES(" + liste.Key + "," + liste.Value.Pret.Employé.Cle + "," + liste.Value.Pret.Type_Pret.Cle + ",'" + liste.Value.Pret.Date_demande.ToShortDateString() + "','" + ((pret_remboursable)liste.Value.Pret).Date_premier_paiment.ToShortDateString() + "'," + liste.Value.Pret.Montant + ",'" + liste.Value.Pret.Montant_lettre + "','" + liste.Value.Date_fin_remboursement.ToShortDateString() + "',N'" + liste.Value.Pret.Motif + "'," + ((pret_remboursable)liste.Value.Pret).Etat[0] + "," + ((pret_remboursable)liste.Value.Pret).Etat[1] + "," + ((pret_remboursable)liste.Value.Pret).Etat[2] + "," + ((pret_remboursable)liste.Value.Pret).Etat[3] + "," + ((pret_remboursable)liste.Value.Pret).Etat[4] + "," + ((pret_remboursable)liste.Value.Pret).Etat[5] + "," + ((pret_remboursable)liste.Value.Pret).Etat[6] + "," + ((pret_remboursable)liste.Value.Pret).Etat[7] + "," + ((pret_remboursable)liste.Value.Pret).Etat[8] + "," + ((pret_remboursable)liste.Value.Pret).Etat[9] + ",N'" + liste.Value.Observations + "'," + liste.Value.Pret.Num_pv + "," + ((pret_remboursable)liste.Value.Pret).Debordement + ",'" + liste.Value.Pret.Date_pv.ToShortDateString() + "'," + liste.Value.Durée + ");";
                         cmd.ExecuteNonQuery();
                     }
                     else//ajout de pret non remboursable
                     {
                         cmd.CommandText = "SET IDENTITY_INSERT archive ON;";
                         cmd.ExecuteNonQuery();
-                        cmd.CommandText = "INSERT archive(cle,idetifiant_employe, cle_type_pret, date_demande, date_premier_paiment, montant_pret, montant_pret_lettre, date_fin_remboursement, motif, mois_1, mois_2, mois_3, mois_4, mois_5, mois_6, mois_7, mois_8, mois_9, mois_10, observation, num_pv, debordement,date_pv,long_remboursement) VALUES(" + liste.Key + "," + liste.Value.Pret.Employé.Cle + "," + liste.Value.Pret.Type_Pret.Cle + ",'" + liste.Value.Pret.Date_demande.ToShortDateString() + "',NULL," + liste.Value.Pret.Montant + ",'" + liste.Value.Pret.Montant_lettre + "',NULL,'" + liste.Value.Pret.Motif + "',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'" + liste.Value.Observations + "'," + liste.Value.Pret.Num_pv + ",NULL,'" + liste.Value.Pret.Date_pv.ToShortDateString() + "',-1);";
+                        cmd.CommandText = "INSERT archive(cle,idetifiant_employe, cle_type_pret, date_demande, date_premier_paiment, montant_pret, montant_pret_lettre, date_fin_remboursement, motif, mois_1, mois_2, mois_3, mois_4, mois_5, mois_6, mois_7, mois_8, mois_9, mois_10, observation, num_pv, debordement,date_pv,long_remboursement) VALUES(" + liste.Key + "," + liste.Value.Pret.Employé.Cle + "," + liste.Value.Pret.Type_Pret.Cle + ",'" + liste.Value.Pret.Date_demande.ToShortDateString() + "',NULL," + liste.Value.Pret.Montant + ",'" + liste.Value.Pret.Montant_lettre + "',NULL,N'" + liste.Value.Pret.Motif + "',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,N'" + liste.Value.Observations + "'," + liste.Value.Pret.Num_pv + ",NULL,'" + liste.Value.Pret.Date_pv.ToShortDateString() + "',-1);";
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -1000,7 +1030,7 @@ namespace WpfApp2
                 }
             }
 
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             int sup = 0;
@@ -1012,7 +1042,7 @@ namespace WpfApp2
                 {
                     cmd.CommandText = "SET IDENTITY_INSERT prets_remboursable ON;";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT prets_remboursable(cle,idetifiant_employe, type_pret, date_demande, num_pv, date_premier_paiment, montant_pret, montant_pret_lettre, motif, en_cours, mois_1, mois_2, mois_3, mois_4, mois_5, mois_6, mois_7, mois_8, mois_9, mois_10, debordement,date_pv,long_remboursement) VALUES(" + liste.Key + "," + liste.Value.Employé.Cle + "," + liste.Value.Type_Pret.Cle + ",'" + liste.Value.Date_demande.ToShortDateString() + "'," + liste.Value.Num_pv + ",'" + liste.Value.Date_premier_paiment.ToShortDateString() + "'," + liste.Value.Montant + ",'" + liste.Value.Montant_lettre + "','" + liste.Value.Motif + "'," + liste.Value.En_cours + "," + liste.Value.Etat[0] + "," + liste.Value.Etat[1] + "," + liste.Value.Etat[2] + "," + liste.Value.Etat[3] + "," + liste.Value.Etat[4] + "," + liste.Value.Etat[5] + "," + liste.Value.Etat[6] + "," + liste.Value.Etat[7] + "," + liste.Value.Etat[8] + "," + liste.Value.Etat[9] + "," + liste.Value.Debordement + ",'" + liste.Value.Date_pv.ToShortDateString() + "'," + liste.Value.Durée + ");";
+                    cmd.CommandText = "INSERT prets_remboursable(cle,idetifiant_employe, type_pret, date_demande, num_pv, date_premier_paiment, montant_pret, montant_pret_lettre, motif, en_cours, mois_1, mois_2, mois_3, mois_4, mois_5, mois_6, mois_7, mois_8, mois_9, mois_10, debordement,date_pv,long_remboursement) VALUES(" + liste.Key + "," + liste.Value.Employé.Cle + "," + liste.Value.Type_Pret.Cle + ",'" + liste.Value.Date_demande.ToShortDateString() + "'," + liste.Value.Num_pv + ",'" + liste.Value.Date_premier_paiment.ToShortDateString() + "'," + liste.Value.Montant + ",'" + liste.Value.Montant_lettre + "',N'" + liste.Value.Motif + "'," + liste.Value.En_cours + "," + liste.Value.Etat[0] + "," + liste.Value.Etat[1] + "," + liste.Value.Etat[2] + "," + liste.Value.Etat[3] + "," + liste.Value.Etat[4] + "," + liste.Value.Etat[5] + "," + liste.Value.Etat[6] + "," + liste.Value.Etat[7] + "," + liste.Value.Etat[8] + "," + liste.Value.Etat[9] + "," + liste.Value.Debordement + ",'" + liste.Value.Date_pv.ToShortDateString() + "'," + liste.Value.Durée + ");";
                     cmd.ExecuteNonQuery();
                 }
                 else//modification
@@ -1023,7 +1053,7 @@ namespace WpfApp2
                         {
                             if (element.Clé_element_modifié == liste.Key)
                             {
-                                cmd.CommandText = " UPDATE prets_remboursable SET idetifiant_employe=" + liste.Value.Employé.Cle + " ,type_pret=" + liste.Value.Type_Pret.Cle + " ,date_demande='" + liste.Value.Date_demande.ToShortDateString() + "' ,num_pv=" + liste.Value.Num_pv + " ,date_premier_paiment='" + liste.Value.Date_premier_paiment.ToShortDateString() + "' ,montant_pret=" + liste.Value.Montant + " ,montant_pret_lettre='" + liste.Value.Montant_lettre + "' ,motif='" + liste.Value.Motif + "' ,en_cours=" + liste.Value.En_cours + " ,mois_1=" + liste.Value.Etat[0] + " ,mois_2=" + liste.Value.Etat[1] + " ,mois_3=" + liste.Value.Etat[2] + " ,mois_4=" + liste.Value.Etat[3] + " ,mois_5=" + liste.Value.Etat[4] + " ,mois_6=" + liste.Value.Etat[5] + " ,mois_7=" + liste.Value.Etat[6] + " ,mois_8=" + liste.Value.Etat[7] + " ,mois_9=" + liste.Value.Etat[8] + " ,mois_10=" + liste.Value.Etat[9] + " ,debordement=" + liste.Value.Debordement + " ,date_pv='" + liste.Value.Date_pv.ToShortDateString() + "' ,long_remboursement=" + liste.Value.Durée + " WHERE cle=" + element.Clé_element_modifié + ";";
+                                cmd.CommandText = " UPDATE prets_remboursable SET idetifiant_employe=" + liste.Value.Employé.Cle + " ,type_pret=" + liste.Value.Type_Pret.Cle + " ,date_demande='" + liste.Value.Date_demande.ToShortDateString() + "' ,num_pv=" + liste.Value.Num_pv + " ,date_premier_paiment='" + liste.Value.Date_premier_paiment.ToShortDateString() + "' ,montant_pret=" + liste.Value.Montant + " ,montant_pret_lettre='" + liste.Value.Montant_lettre + "' ,motif=N'" + liste.Value.Motif + "' ,en_cours=" + liste.Value.En_cours + " ,mois_1=" + liste.Value.Etat[0] + " ,mois_2=" + liste.Value.Etat[1] + " ,mois_3=" + liste.Value.Etat[2] + " ,mois_4=" + liste.Value.Etat[3] + " ,mois_5=" + liste.Value.Etat[4] + " ,mois_6=" + liste.Value.Etat[5] + " ,mois_7=" + liste.Value.Etat[6] + " ,mois_8=" + liste.Value.Etat[7] + " ,mois_9=" + liste.Value.Etat[8] + " ,mois_10=" + liste.Value.Etat[9] + " ,debordement=" + liste.Value.Debordement + " ,date_pv='" + liste.Value.Date_pv.ToShortDateString() + "' ,long_remboursement=" + liste.Value.Durée + " WHERE cle=" + element.Clé_element_modifié + ";";
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -1056,7 +1086,7 @@ namespace WpfApp2
                     }
                 }
             }
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             int sup = 0;
@@ -1068,7 +1098,7 @@ namespace WpfApp2
                 {
                     cmd.CommandText = "SET IDENTITY_INSERT prets_non_remboursable ON;";
                     cmd.ExecuteNonQuery();
-                    cmd.CommandText = "INSERT prets_non_remboursable(cle,idetifiant_employe, type_pret, date_demande, num_pv, montant_don, montant_don_lettre, motif, date_pv) VALUES(" + liste.Key + "," + liste.Value.Employé.Cle + "," + liste.Value.Type_Pret.Cle + ",'" + liste.Value.Date_demande.ToShortDateString() + "'," + liste.Value.Num_pv + "," + liste.Value.Montant + ",'" + liste.Value.Montant_lettre + "','" + liste.Value.Motif + "','" + liste.Value.Date_pv.ToShortDateString() + "');";
+                    cmd.CommandText = "INSERT prets_non_remboursable(cle,idetifiant_employe, type_pret, date_demande, num_pv, montant_don, montant_don_lettre, motif, date_pv) VALUES(" + liste.Key + "," + liste.Value.Employé.Cle + "," + liste.Value.Type_Pret.Cle + ",'" + liste.Value.Date_demande.ToShortDateString() + "'," + liste.Value.Num_pv + "," + liste.Value.Montant + ",'" + liste.Value.Montant_lettre + "',N'" + liste.Value.Motif + "','" + liste.Value.Date_pv.ToShortDateString() + "');";
                     cmd.ExecuteNonQuery();
                 }
                 else//modification
@@ -1079,7 +1109,7 @@ namespace WpfApp2
                         {
                             if (element.Clé_element_modifié == liste.Key)
                             {
-                                cmd.CommandText = " UPDATE prets_non_remboursable SET idetifiant_employe=" + liste.Value.Employé.Cle + " ,type_pret=" + liste.Value.Type_Pret.Cle + " ,date_demande='" + liste.Value.Date_demande.ToShortDateString() + "' ,num_pv=" + liste.Value.Num_pv + " ,montant_don=" + liste.Value.Montant + " ,montant_don_lettre='" + liste.Value.Montant_lettre + "' ,motif='" + liste.Value.Motif + "' ,date_pv='" + liste.Value.Date_pv.ToShortDateString() + "' WHERE cle=" + element.Clé_element_modifié + ";";
+                                cmd.CommandText = " UPDATE prets_non_remboursable SET idetifiant_employe=" + liste.Value.Employé.Cle + " ,type_pret=" + liste.Value.Type_Pret.Cle + " ,date_demande='" + liste.Value.Date_demande.ToShortDateString() + "' ,num_pv=" + liste.Value.Num_pv + " ,montant_don=" + liste.Value.Montant + " ,montant_don_lettre='" + liste.Value.Montant_lettre + "' ,motif=N'" + liste.Value.Motif + "' ,date_pv='" + liste.Value.Date_pv.ToShortDateString() + "' WHERE cle=" + element.Clé_element_modifié + ";";
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -1140,7 +1170,6 @@ namespace WpfApp2
                 responsable.liste_pret_non_remboursables.Remove(pret_non_remb.Cle);
             }
         }
-
         public static void archiver_tout_pret_remboursable()
         {
             foreach (KeyValuePair<int, pret_remboursable> kvp in liste_pret_remboursable)
@@ -1185,11 +1214,10 @@ namespace WpfApp2
                 }
             }
         }
-
     */
 
         //methodes archivage-----------------------------------------------------------
-        public static void archiver_pret_non_remboursable()//archivage auto apres un mois
+        public static void archiver_pret_non_remboursable()//archivage auto des prets non remboursables apres une durée choisie par l'utilisateur
         {
             foreach (KeyValuePair<int, pret_non_remboursable> kvp in liste_pret_non_remboursables)
             {
@@ -1201,7 +1229,7 @@ namespace WpfApp2
             }
             responsable.liste_archives_provisoire.Clear();
         }
-        public static void archiver_manuel_pret_non_remboursable(int cle)//archivage auto apres un mois
+        public static void archiver_manuel_pret_non_remboursable(int cle)//archivage manuel des prets non remboursables
         {
             foreach (KeyValuePair<int, pret_non_remboursable> element in responsable.liste_pret_non_remboursables)
             {
@@ -1217,7 +1245,7 @@ namespace WpfApp2
             responsable.liste_archives_provisoire.Clear();
         }
 
-        public static void archiver_pret_remboursable()//archivage auto apres un mois
+        public static void archiver_pret_remboursable()//archivage auto des prets non remboursables apres une durée choisie par l'utilisateur
         {
             foreach (KeyValuePair<int, pret_remboursable> kvp in liste_pret_remboursable)
             {
@@ -1229,8 +1257,8 @@ namespace WpfApp2
             }
             responsable.liste_archives_provisoire.Clear();
         }
-        public static void archiver_manuel_pret_remboursable(int cle) //Archiver un pret selon le voeux de l'utisitateur et ce qui est bien pour un pret
-                                                                      // qui s'etend sur plusieurs lignes on px citer n'imprt quel ligne pour l'archiver
+        public static void archiver_manuel_pret_remboursable(int cle) //archivage automatique des prets remboursables apres une durée choisie par l'utilisateur
+
         {
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
             {
@@ -1249,7 +1277,7 @@ namespace WpfApp2
             responsable.liste_archives_provisoire.Clear();
         }
 
-        public static void paiement_standard(int cle)
+        public static void paiement_standard(int cle)//paiement mensuel d'un pret remboursable(paiement habituel)
         {
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
             {
@@ -1268,7 +1296,7 @@ namespace WpfApp2
             }
         }
 
-        public static void paiement_spécial(int cle, double cout)
+        public static void paiement_spécial(int cle, double cout)//paiement libre d'un pret remboursable selon les capacités de l'employé
         {
 
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
@@ -1290,7 +1318,7 @@ namespace WpfApp2
             }
         }
 
-        public static void paiement_plusieurs_mois(int cle, int nb_mois)
+        public static void paiement_plusieurs_mois(int cle, int nb_mois)//paiement de plusieurs mensualités à la foi d'un pret remboursable
         {
 
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
@@ -1312,7 +1340,7 @@ namespace WpfApp2
             }
         }
 
-        public static void effacement_dettes(int cle)
+        public static void effacement_dettes(int cle)//Effacement de dettes d'un pret remboursable pour des raisons bien définies
         {
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
             {
@@ -1332,7 +1360,7 @@ namespace WpfApp2
 
         }
 
-        public static void paiement_anticipé(int cle)
+        public static void paiement_anticipé(int cle)//paiement de la totalité de la somme restante à rembourser
         {
 
             foreach (KeyValuePair<int, pret_remboursable> element in responsable.liste_pret_remboursable)
@@ -1354,7 +1382,7 @@ namespace WpfApp2
             }
         }
 
-        public static void initialisation_archive_auto()
+        public static void initialisation_archive_auto()//Archivage automatique de touts les prets en tenant compte de la durée saisie par l'utilisateur
         {
             if (Window2.mode_archivage)
             {
@@ -1382,7 +1410,8 @@ namespace WpfApp2
             }
         }*/
 
-
+        //----------------------------------------------------------------------------------------------------------------------
+        //Recherche par critères 
         public static void remplissage_liste_filtres()
         {
             responsable.liste_filtres.Clear();
@@ -1771,23 +1800,13 @@ namespace WpfApp2
 
         }
 
-
-
-
         public static void nouveau_tresor(double montant_tresor)
         {
             sauvgarder_montant_tresor();
 
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/Montant_tresor.txt";
+                string path = @".\\Montant_tresor.txt";
                 using (StreamWriter sw = new StreamWriter(path, true))
                 {
                     sw.Write("\n¦" + montant_tresor.ToString() + "|" + DateTime.Now.ToShortDateString());
@@ -1805,14 +1824,7 @@ namespace WpfApp2
 
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/Montant_tresor.txt";
+                string path = @".\\Montant_tresor.txt";
                 using (StreamReader sr = new StreamReader(path))
                 {
                     sr.BaseStream.Position = 0;
@@ -1835,14 +1847,7 @@ namespace WpfApp2
 
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/Montant_tresor.txt";
+                string path = @".\\Montant_tresor.txt";
                 using (StreamReader sr = new StreamReader(path))
                 {
                     sr.BaseStream.Seek(0, SeekOrigin.End);
@@ -1882,14 +1887,7 @@ namespace WpfApp2
 
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/Montant_tresor.txt";
+                string path = @".\\Montant_tresor.txt";
                 using (StreamReader sr = new StreamReader(path))
                 {
                     string line = sr.ReadToEnd();
@@ -1915,14 +1913,7 @@ namespace WpfApp2
             {
                 try
                 {
-                    string path = System.IO.Directory.GetCurrentDirectory();
-                    string[] paths = path.Split('\\');
-                    path = "";
-                    for (int i = 0; i < paths.Length - 3; i++)
-                    {
-                        path += paths[i] + "/";
-                    }
-                    path += "/Montant_tresor.txt";
+                    string path = @".\\Montant_tresor.txt";
                     using (StreamWriter sw = new StreamWriter(path, true))
                     {
                         sw.Write("|" + tresor.ToString());
@@ -1954,14 +1945,7 @@ namespace WpfApp2
 
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/Montant_tresor.txt";
+                string path = @".\\Montant_tresor.txt";
                 using (StreamReader sr = new StreamReader(path))
                 {
                     string line = sr.ReadToEnd();
@@ -1999,11 +1983,9 @@ namespace WpfApp2
             }
         }
 
-        //all what hakim and I did (Excel plus filtre pr rembours et non rembours)
 
-
-        //-------------------------------hakim + amine ----------------------------------------
-
+        //-----------------------------------------------------------------------------------------------
+        //Recherche par critères prets non remboursables et remboursables
         public static void remplissage_liste_filtres_rem()
         {
             responsable.liste_filtres_rem.Clear();
@@ -2372,7 +2354,7 @@ namespace WpfApp2
             filtrer_par_somme_max_non_rem(somme2, somme_max);
         }
 
-
+        //Import et export ves Microsoft Excel
         public static void export_prêts_remboursable()
         {
             Excel.Application excel = new Excel.Application();
@@ -2393,7 +2375,7 @@ namespace WpfApp2
             sheet1.Cells[1, 11] = "Somme remboursée (DA)";
             sheet1.Cells[1, 12] = "Date de demande";
             sheet1.Cells[1, 13] = "Montant en lettre";
-            sheet1.Cells[1, 14] = "Date du premier paiment";            
+            sheet1.Cells[1, 14] = "Date du premier paiment";
             sheet1.Cells[1, 15] = "durée";
             sheet1.Cells[1, 16] = "mois 1";
             sheet1.Cells[1, 17] = "mois 2";
@@ -2439,7 +2421,7 @@ namespace WpfApp2
                     {
                         List<double> montant_fils = new List<double>();
                         montant_fils.Clear();
-                        repeat:;
+                    repeat:;
                         pret_remboursable fils = element.Value.getFils();
                         foreach (double d in fils.Etat.Values)
                         {
@@ -2533,288 +2515,10 @@ namespace WpfApp2
 
                 i++;
             }
-        }
+        }              
 
-        public static bool Verif_fichier_import_remboursable(Worksheet sheet)
-        {
-            bool validité = false;             
-            if (sheet.Cells[1,1].Value.ToString().Equals("Nom") && sheet.Cells[1, 2].Value.ToString().Equals("Prénom") && sheet.Cells[1, 3].Value.ToString().Equals("Numéro de sécurité sociale") && sheet.Cells[1,4].Value.ToString().Equals("Nature du prêt") && sheet.Cells[1, 5].Value.ToString().Equals("Motif") && sheet.Cells[1, 6].Value.ToString().Equals("Numéro du PV") && sheet.Cells[1, 7].Value.ToString().Equals("Date du PV(année-mois-jour)") && sheet.Cells[1, 8].Value.ToString().Equals("Montant(DA)") && sheet.Cells[1, 9].Value.ToString().Equals("Date de demande") && sheet.Cells[1, 10].Value.ToString().Equals("Montant en lettre") && sheet.Cells[1, 11].Value.ToString().Equals("Date du Premier Paiment") && sheet.Cells[1, 12].Value.ToString().Equals("Durée du rembourssement (en mois)") && sheet.Cells[1, 13].Value.ToString().Equals("Mois 1") && sheet.Cells[1, 14].Value.ToString().Equals("Mois 2") && sheet.Cells[1, 15].Value.ToString().Equals("Mois 3") && sheet.Cells[1, 16].Value.ToString().Equals("Mois 4") && sheet.Cells[1, 17].Value.ToString().Equals("Mois 5") && sheet.Cells[1, 18].Value.ToString().Equals("Mois 6") && sheet.Cells[1, 19].Value.ToString().Equals("Mois 7") && sheet.Cells[1, 20].Value.ToString().Equals("Mois 8") && sheet.Cells[1, 21].Value.ToString().Equals("Mois 9") && sheet.Cells[1, 22].Value.ToString().Equals("Mois 10") && sheet.Cells[1, 23].Value.ToString().Equals("Suite") && sheet.Cells[1, 24].Value.ToString().Equals("Etat(Paiement régulier / Paiement retardé)"))
-            {
-                validité = true;
-            }
-            return validité;
-        }
-        
-        public static void import_prêts_remboursable()
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.DefaultExt = ".xlsx";
-            ofd.Filter = "Excel Documents (*.xlsx)|*.xlsx";            
-            var sel = ofd.ShowDialog();
-            if (sel == true)
-            {
-                Dictionary<int,pret_remboursable> Liste_prets = new Dictionary<int, pret_remboursable>();
-                String a = ofd.FileName;                
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = false;
-                Excel.Workbook workBook = excelApp.Workbooks.Open(a);
-                Worksheet sheet = (Worksheet)workBook.Sheets[1];
-                bool ok = Verif_fichier_import_remboursable(sheet);
-                if (ok)
-                {                    
-                    try
-                    {
-                        int i = 2;
-                        int lastRow = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;                        
-                        while (i <= lastRow) // Parcours par lignes du fichier excel
-                        {
-                            Employé emp = null;
-                            bool check_emp = false;
-                            foreach (KeyValuePair<int, Employé> elemen in responsable.liste_employes)
-                            {
-                                if (elemen.Value.Nom.Equals(sheet.Cells[i,1].Value.ToString()) && elemen.Value.Prenom.Equals(sheet.Cells[i, 2].Value.ToString()) && elemen.Value.sec_soc.Equals(sheet.Cells[i, 3].Value.ToString()))
-                                {
-                                    emp = elemen.Value; //trouver l employé existant
-                                    check_emp = true;
-                                    Console.WriteLine(a);
-                                    Type_pret type = null;
-                                    bool check_type = false;
-                                    foreach (KeyValuePair<int, Type_pret> elem in responsable.liste_types)
-                                    {
-                                        if (elem.Value.Description.Equals(sheet.Cells[i, 4].Value.ToString()))
-                                        {
-                                            type = elem.Value;
-                                            check_type = true;
 
-                                            Dictionary<int, double> dicot = new Dictionary<int, double>();
-                                            int z = 0;
-                                            while (z < 10)
-                                            {
-                                                if (sheet.Cells[i, z + 13].Value.ToString().Equals("/"))
-                                                {
-                                                    dicot.Add(z, -1); //initialization de l attribut dico                                                
-                                                }
-                                                else
-                                                    dicot.Add(z, Double.Parse(sheet.Cells[i, z + 13].Value.ToString()));//initialization de l attribut dico
-                                                z++;
-                                            }
-                                            int en_cours;
-                                            if (sheet.Cells[i, 24].Value.ToString().Equals("Paiement régulier") || sheet.Cells[i, 24].Value.ToString().Equals("paiement régulier") || sheet.Cells[i, 24].Value.ToString().Equals("Régulier") || sheet.Cells[i, 24].Value.ToString().Equals("régulier"))
-                                                en_cours = 1;
-                                            else
-                                            {
-                                                if (sheet.Cells[i, 24].Value.ToString().Equals("Paiement retardé") || sheet.Cells[i, 24].Value.ToString().Equals("paiement retardé") || sheet.Cells[i, 24].Value.ToString().Equals("Retardé") || sheet.Cells[i, 24].Value.ToString().Equals("retardé"))
-                                                {
-                                                    en_cours = 0;
-                                                }
-                                                else
-                                                {
-                                                    MessageBox.Show("Veuillez vérifier le champs ''Etat''.");
-                                                    goto fin;
-                                                }
-
-                                            }
-                                            Console.WriteLine(sheet.Cells[i, 7].Value.ToString());
-                                            if(sheet.Cells[i, 23].Value.ToString().Equals("/"))
-                                            {
-                                                int cle = cle_a_affecter_pret_remboursable();
-                                                pret_remboursable pret = new pret_remboursable(cle, emp, type, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), Double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString(), DateTime.Parse(sheet.Cells[i, 11].Value.ToString()), Int32.Parse(sheet.Cells[i, 12].Value.ToString()), en_cours, dicot, -1);                                            
-                                                Liste_prets.Add(i,pret);
-                                            }
-                                            else
-                                            {
-                                                int cle = cle_a_affecter_pret_remboursable();
-                                            pret_remboursable pret = new pret_remboursable(cle, emp, type, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), Double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString(), DateTime.Parse(sheet.Cells[i, 11].Value.ToString()), Int32.Parse(sheet.Cells[i, 12].Value.ToString()), en_cours, dicot, Int32.Parse(sheet.Cells[i,23].Value.ToString()));
-                                            Liste_prets.Add(i-2, pret);
-                                            }
-                                        }
-                                    }
-                                    if (!check_type)
-                                    {
-                                        MessageBox.Show("Un ou plusieurs types de prets dans votre fichier ne font pas partie \nde la liste des types de prets de l'application.\nVeuillez consulter la section '' Types de pret existants '' \ndans l'onglet''Nouveau type''.");
-                                        goto fin;
-                                    }                                    
-                                }
-                            }
-                            if (!check_emp)
-                            {
-                                MessageBox.Show("Un ou plusieurs employés dans votre fichier ne font pas partie \n de la liste des employés de l'application.\n Veuillez consulter l'onglet ''Liste des Employés''.");
-                                goto fin;
-                            }                            
-                            i++;
-                        }                        
-                    }
-                    catch(Exception ex)
-                    {                        
-                        MessageBox.Show("Votre fichier contient des valeurs qui posent des problèmes durant la lecture.\nVeuillez le réviser SVP.");
-                        goto fin;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Le fichier que vous avez choisi peut etre non compatible avec \n le modèle que vous trouverez dans le manuel d'utilisation de l'application.\n Veuillez consulter ce dernier pour eviter cette erreur.");
-                }
-                foreach(KeyValuePair<int, pret_remboursable> element in Liste_prets)
-                {
-                    if(element.Value.Debordement == -1)
-                    {
-                        responsable.liste_pret_remboursable.Add(element.Value.Cle, element.Value);
-                        responsable.tresor -= element.Value.Montant;
-                        element.Value.Employé.ajouter_pret_remboursable_employe(element.Value);
-                    }
-                    else
-                    {
-                        int temp = element.Value.Debordement - 2;
-                        element.Value.Debordement = Liste_prets[temp].Cle;
-                        responsable.tresor -= element.Value.Montant;
-                        element.Value.Employé.ajouter_pret_remboursable_employe(element.Value);
-                        responsable.liste_pret_remboursable.Add(element.Value.Cle, element.Value);
-                        responsable.liste_pret_remboursable.Add(Liste_prets[element.Value.Debordement - 2].Cle, Liste_prets[element.Value.Debordement - 2]);
-                        Liste_prets.Remove(temp);
-                    }
-                }
-                fin:;
-                excelApp.Quit();
-            }
-        }
-
-        public static bool Verif_fichier_import_non_remboursable(Worksheet sheet)
-        {
-            bool validité = false;
-            if (sheet.Cells[1, 1].Value.ToString().Equals("Nom") && sheet.Cells[1, 2].Value.ToString().Equals("Prénom") && sheet.Cells[1, 3].Value.ToString().Equals("Numéro de sécurité sociale") && sheet.Cells[1, 4].Value.ToString().Equals("Nature du don") && sheet.Cells[1, 5].Value.ToString().Equals("Motif") && sheet.Cells[1, 6].Value.ToString().Equals("Numéro du PV") && sheet.Cells[1, 7].Value.ToString().Equals("Date du PV(année-mois-jour)") && sheet.Cells[1, 8].Value.ToString().Equals("Montant(DA)") && sheet.Cells[1, 9].Value.ToString().Equals("Date de demande") && sheet.Cells[1, 10].Value.ToString().Equals("Montant en lettre"))
-            {
-                validité = true;
-            }
-            return validité;
-        }
-        public static void import_prêts_non_remboursable()
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.DefaultExt = ".xlsx";
-            ofd.Filter = "Excel Documents (*.xlsx)|*.xlsx";
-            var sel = ofd.ShowDialog();
-            if (sel == true)
-            {
-
-                String a = ofd.FileName;
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = false;
-                Excel.Workbook workBook = excelApp.Workbooks.Open(a);
-                Worksheet sheet = (Worksheet)workBook.Sheets[1];
-                bool ok = Verif_fichier_import_remboursable(sheet);
-                if(ok)
-                {
-                    try
-                    {
-                        int i = 2;
-
-                        int lastRow = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
-                        while (i <= lastRow) // Parcours par lignes du fichier excel
-                        {
-                            Employé emp = null;
-                            bool check_emp = false;
-                            foreach (KeyValuePair<int, Employé> elemen in responsable.liste_employes)
-                            {
-                                if (((elemen.Value.Nom) == sheet.Cells[i, 1].Value.ToString()) && elemen.Value.Prenom.Equals(sheet.Cells[i, 2].Value.ToString()) && elemen.Value.sec_soc.Equals(sheet.Cells[i, 3].Value.ToString()))
-                                {
-                                    emp = elemen.Value; //trouver l employé existant
-                                    check_emp = true;
-                                    Type_pret type = null;
-                                    bool check_type = false;
-                                    foreach (KeyValuePair<int, Type_pret> elem in responsable.liste_types)
-                                    {
-                                        if (elem.Value.Description.Equals(sheet.Cells[i, 4].Value.ToString()))
-                                        {
-                                            type = elem.Value;
-                                            pret_non_remboursable pret = new pret_non_remboursable(responsable.cle_a_affecter_pret_non_remboursable(), emp, type, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), Double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString());
-                                            liste_pret_non_remboursables.Add(pret.Cle, pret);
-                                        }
-                                    }
-                                    if (!check_type)
-                                    {
-                                        MessageBox.Show("Un ou plusieurs types de prets dans votre fichier ne font pas partie \nde la liste des types de prets de l'application.\nVeuillez consulter la section '' Types de pret existants '' \ndans l'onglet''Nouveau type''.");
-                                        goto fin;
-                                    }
-                                }
-                            }
-                            if (!check_emp)
-                            {
-                                MessageBox.Show("Un ou plusieurs employés dans votre fichier ne font pas partie \n de la liste des employés de l'application.\n Veuillez consulter l'onglet ''Liste des Employés''.");
-                                goto fin;
-                            }
-                            i++;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Votre fichier contient des valeurs qui posent des problèmes durant la lecture.\nVeuillez le réviser SVP.");
-                        goto fin;
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Le fichier que vous avez choisi peut etre non compatible avec \n le modèle que vous trouverez dans le manuel d'utilisation de l'application.\n Veuillez consulter ce dernier pour eviter cette erreur.");
-                    goto fin;
-                }
-                fin:;
-                excelApp.Quit();
-            }
-        }
-
-        public static bool Verif_fichier_import_employe(Worksheet sheet)
-        {
-            bool validité = false;            
-            if(sheet.Cells[1,1].Value.ToString().Equals("Nom") && sheet.Cells[1, 2].Value.ToString().Equals("Prénom") && sheet.Cells[1, 3].Value.ToString().Equals("Matricule") && sheet.Cells[1, 4].Value.ToString().Equals("Numéro de sécurité sociale") && sheet.Cells[1, 5].Value.ToString().Equals("Date de naissance(année-mois-jour)") && sheet.Cells[1, 6].Value.ToString().Equals("Date de recrutement") && sheet.Cells[1, 7].Value.ToString().Equals("Statut sociale") && sheet.Cells[1, 8].Value.ToString().Equals("Grade") && sheet.Cells[1, 9].Value.ToString().Equals("Service") && sheet.Cells[1, 10].Value.ToString().Equals("CCP") && sheet.Cells[1, 11].Value.ToString().Equals("Clé CCP") && sheet.Cells[1, 12].Value.ToString().Equals("Téléphone") && sheet.Cells[1, 13].Value.ToString().Equals("Email") && sheet.Cells[1, 14].Value.ToString().Equals("Statut professionnel"))                    
-            {
-                validité = true;
-            }
-            return validité;
-        }
-
-        public static void import_employe()
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.DefaultExt = ".xlsx";
-            ofd.Filter = "Excel Documents (*.xlsx)|*.xlsx";
-            var sel = ofd.ShowDialog();
-            if (sel == true)
-            {
-
-                String a = ofd.FileName;
-                Excel.Application excelApp = new Excel.Application();
-                excelApp.Visible = false;
-                Excel.Workbook workBook = excelApp.Workbooks.Open(a);
-                Worksheet sheet = (Worksheet)workBook.Sheets[1];
-                bool ok = Verif_fichier_import_employe(sheet);
-                if (ok)
-                {
-                    /*try
-                    {*/
-                        int i = 2;
-
-                        int lastRow = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
-                        while (i <= lastRow) // Parcours par lignes du fichier excel
-                        {
-                            responsable.Creer_employe(sheet.Cells[i, 3].Value.ToString(), sheet.Cells[i, 1].Value.ToString(), sheet.Cells[i, 2].Value.ToString(), sheet.Cells[i, 4].Value.ToString(), DateTime.Parse(sheet.Cells[i, 5].Value.ToString()), sheet.Cells[i, 8].Value.ToString(), DateTime.Parse(sheet.Cells[i, 6].Value.ToString()), sheet.Cells[i, 7].Value.ToString(), sheet.Cells[i, 10].Value.ToString(), sheet.Cells[i, 11].Value.ToString(), sheet.Cells[i, 12].Value.ToString(), sheet.Cells[i, 9].Value.ToString(), sheet.Cells[i, 13].Value.ToString(), sheet.Cells[i, 14].Value.ToString());
-                        }
-                    }
-                    /*catch (Exception ex)
-                    {
-                        MessageBox.Show("Votre fichier contient des valeurs qui posent des problèmes durant la lecture.\nVeuillez le réviser SVP.");
-                        goto fin;
-                    }*/
-                //}
-                else
-                {
-                    MessageBox.Show("Le fichier que vous avez choisi peut etre non compatible avec \n le modèle que vous trouverez dans le manuel d'utilisation de l'application.\n Veuillez consulter ce dernier pour eviter cette erreur.");
-                    goto fin;
-                }
-                fin:;
-                excelApp.Quit();
-            }
-        }
-
-        public static void Envoi_mail(pret_remboursable pret, double montant)
+        public static void Envoi_mail(pret_remboursable pret, double montant)//Envoi de mail et notification à l'employé
         {
             if (montant != 0)
             {
@@ -2972,7 +2676,7 @@ namespace WpfApp2
             }
         }
         //------------------------------------------------------------------------------------------------------------------------
-        //cette methode existait je l'ai juste modifie
+
         public static void recherche_par_criteres_rem(bool date1, DateTime d_inf, bool date2, DateTime d_max, bool date3, DateTime pv_min, bool date4, DateTime pv_max, bool durée1, int durée_min, bool durée2, int durée_max, bool somme1, double somme_min, bool somme2, double somme_max, bool employé, bool type, bool e, string etat, bool a, DateTime drmin, bool b, DateTime drmax)
         {
             responsable.remplissage_liste_filtres_rem();
@@ -3038,7 +2742,7 @@ namespace WpfApp2
         }
 
         //------------------------------------------------------------------------------------------------------------------------
-        //cette methode existait je l'ai juste modifie
+
         public static void recherche_par_criteres_non_rem(bool date1, DateTime d_inf, bool date2, DateTime d_max, bool date3, DateTime pv_min, bool date4, DateTime pv_max, bool somme1, double somme_min, bool somme2, double somme_max, bool employé, bool type, bool e, string etat, bool a, DateTime drmin, bool b, DateTime drmax)
         {
             responsable.remplissage_liste_filtres_non_rem();
@@ -3055,7 +2759,7 @@ namespace WpfApp2
             filtrer_par_date_recru_max_rem_non_rem(b, drmax);
         }
 
-        // effacer tout ce qu'il y a dans les Dictionaries
+        //Effacement des données contenues des les différentes listes
 
         public static void effacer_données()
         {
@@ -3068,9 +2772,9 @@ namespace WpfApp2
             responsable.liste_pret_remboursable_provisoire.Clear();
         }
 
-        public static void remise_a_zero(int choix)
+        public static void remise_a_zero(int choix)//Restauration de l'application
         {
-            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale_v2; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
+            SqlConnection cnx = new SqlConnection("Data Source = .\\SQLEXPRESS; Initial Catalog = BDD_COS_finale; Integrated Security = True");//"Data Source = (localdb)\\localdb2; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False"
             cnx.Open();
             SqlCommand cmd = cnx.CreateCommand();
             if (choix == 1)
@@ -3121,7 +2825,7 @@ namespace WpfApp2
             }
         }
 
-        //Bilan
+        //Bilan Annuel
         public static void remplissage_bilan(int année)
         {
             responsable.bilan.Clear();
@@ -3210,5 +2914,308 @@ namespace WpfApp2
                 i++;
             }
         }
+
+        public static bool Verif_fichier_import_remboursable(Worksheet sheet)
+        {
+            bool validité = false;
+            if (sheet.Cells[1, 1].Value.ToString().Equals("Nom") && sheet.Cells[1, 2].Value.ToString().Equals("Prénom") && sheet.Cells[1, 3].Value.ToString().Equals("Numéro de sécurité sociale") && sheet.Cells[1, 4].Value.ToString().Equals("Nature du prêt") && sheet.Cells[1, 5].Value.ToString().Equals("Motif") && sheet.Cells[1, 6].Value.ToString().Equals("Numéro du PV") && sheet.Cells[1, 7].Value.ToString().Equals("Date du PV(année-mois-jour)") && sheet.Cells[1, 8].Value.ToString().Equals("Montant(DA)") && sheet.Cells[1, 9].Value.ToString().Equals("Date de demande") && sheet.Cells[1, 10].Value.ToString().Equals("Montant en lettre") && sheet.Cells[1, 11].Value.ToString().Equals("Date du Premier Paiement") && sheet.Cells[1, 12].Value.ToString().Equals("Durée du rembourssement (en mois)") && sheet.Cells[1, 13].Value.ToString().Equals("Etat(Paiement régulier / Paiement retardé)") && sheet.Cells[1, 14].Value.ToString().Equals("Mois 1") && sheet.Cells[1, 15].Value.ToString().Equals("Mois 2") && sheet.Cells[1, 16].Value.ToString().Equals("Mois 3") && sheet.Cells[1, 17].Value.ToString().Equals("Mois 4") && sheet.Cells[1, 18].Value.ToString().Equals("Mois 5") && sheet.Cells[1, 19].Value.ToString().Equals("Mois 6") && sheet.Cells[1, 20].Value.ToString().Equals("Mois 7") && sheet.Cells[1, 21].Value.ToString().Equals("Mois 8") && sheet.Cells[1, 22].Value.ToString().Equals("Mois 9") && sheet.Cells[1, 23].Value.ToString().Equals("Mois 10") && sheet.Cells[1, 24].Value.ToString().Equals("Mois 11") && sheet.Cells[1, 25].Value.ToString().Equals("Mois 12") && sheet.Cells[1, 26].Value.ToString().Equals("Mois 13") && sheet.Cells[1, 27].Value.ToString().Equals("Mois 14") && sheet.Cells[1, 28].Value.ToString().Equals("Mois 15") && sheet.Cells[1, 29].Value.ToString().Equals("Mois 16") && sheet.Cells[1, 30].Value.ToString().Equals("Mois 17") && sheet.Cells[1, 31].Value.ToString().Equals("Mois 18") && sheet.Cells[1, 32].Value.ToString().Equals("Mois 19") && sheet.Cells[1, 33].Value.ToString().Equals("Mois 20") && sheet.Cells[1, 34].Value.ToString().Equals("Suite des mois"))
+            {
+                validité = true;
+            }
+            return validité;
+        }
+
+        public static void import_prêts_remboursable()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = ".xlsx";
+            ofd.Filter = "Excel Documents (*.xlsx)|*.xlsx";
+            var sel = ofd.ShowDialog();
+            if (sel == true)
+            {
+                Dictionary<int, pret_remboursable> Liste_prets = new Dictionary<int, pret_remboursable>();
+                String a = ofd.FileName;
+                Excel.Application excelApp = new Excel.Application();
+                excelApp.Visible = false;
+                Excel.Workbook workBook = excelApp.Workbooks.Open(a);
+                Worksheet sheet = (Worksheet)workBook.Sheets[1];
+                bool ok = Verif_fichier_import_remboursable(sheet);
+                if (ok)
+                {
+                    try
+                    {
+                        int i = 2;
+                        int lastRow = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
+                        while (i <= lastRow)
+                        {
+                            Employé emp = null;
+                            bool check_emp = false;
+                            foreach (KeyValuePair<int, Employé> elemen in responsable.liste_employes)
+                            {
+                                if (elemen.Value.Nom.Equals(sheet.Cells[i, 1].Value.ToString()) && elemen.Value.Prenom.Equals(sheet.Cells[i, 2].Value.ToString()) && elemen.Value.sec_soc.Equals(sheet.Cells[i, 3].Value.ToString()))
+                                {
+                                    emp = elemen.Value;
+                                    check_emp = true;
+                                    Type_pret type = null;
+                                    bool check_type = false;
+                                    foreach (KeyValuePair<int, Type_pret> elem in responsable.liste_types)
+                                    {
+                                        if (elem.Value.Description.Equals(sheet.Cells[i, 4].Value.ToString()))
+                                        {
+                                            type = elem.Value;
+                                            check_type = true;
+
+                                            Dictionary<int, double> dicot = new Dictionary<int, double>();
+                                            int z = 0;
+                                            int nb_mois = 0;
+                                            while (sheet.Cells[i, z + 14].Value != null)
+                                            {
+                                                if (sheet.Cells[i, z + 14].Value.ToString().Equals("/"))
+                                                {
+                                                    dicot.Add(z, -1);
+                                                }
+                                                else
+                                                {
+                                                    dicot.Add(z, Double.Parse(sheet.Cells[i, z + 14].Value.ToString()));
+                                                    nb_mois++;
+                                                }
+                                                z++;
+                                            }
+                                            int cpt = 0;
+                                            foreach (double d in dicot.Values)
+                                            {
+                                                cpt++;
+                                            }
+                                            int en_cours;
+                                            if (sheet.Cells[i, 13].Value.ToString().Equals("Paiement régulier") || sheet.Cells[i, 13].Value.ToString().Equals("paiement régulier") || sheet.Cells[i, 13].Value.ToString().Equals("Régulier") || sheet.Cells[i, 13].Value.ToString().Equals("régulier"))
+                                                en_cours = 1;
+                                            else
+                                            {
+                                                if (sheet.Cells[i, 13].Value.ToString().Equals("Paiement retardé") || sheet.Cells[i, 13].Value.ToString().Equals("paiement retardé") || sheet.Cells[i, 13].Value.ToString().Equals("Retardé") || sheet.Cells[i, 13].Value.ToString().Equals("retardé"))
+                                                {
+                                                    en_cours = 0;
+                                                }
+                                                else
+                                                {
+                                                    MessageBox.Show("Veuillez vérifier le champs ''Etat''.");
+                                                    goto fin;
+                                                }
+
+                                            }
+
+
+                                            if (cpt <= 10)
+                                            {
+                                                pret_remboursable pret = new pret_remboursable(cle_a_affecter_pret_remboursable(), emp, type, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), Double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString(), DateTime.Parse(sheet.Cells[i, 11].Value.ToString()), Int32.Parse(sheet.Cells[i, 12].Value.ToString()), en_cours, dicot, -1);
+                                                responsable.liste_pret_remboursable.Add(pret.Cle, pret);
+                                                pret.Employé.ajouter_pret_remboursable_employe(pret);
+                                                responsable.tresor -= pret.Montant;
+                                            }
+                                            else
+                                            {
+                                                int nb_dico = cpt / 10 + 1;
+                                                int nb_pret = nb_dico;
+                                                List<pret_remboursable> liste = new List<pret_remboursable>();
+                                                liste.Clear();
+                                                int key = cle_a_affecter_pret_remboursable();
+                                                int uniq = 0;
+                                                int x = 0;
+                                                while (nb_dico != 0)
+                                                {
+                                                    Dictionary<int, double> dico = new Dictionary<int, double>() { { 0, -1 }, { 1, -1 }, { 2, -1 }, { 3, -1 }, { 4, -1 }, { 5, -1 }, { 6, -1 }, { 7, -1 }, { 8, -1 }, { 9, -1 } };
+                                                    for (int k = 0; k < 10; k++)
+                                                    {
+                                                        if (dicot[x] != -1)
+                                                            dico[k] = dicot[x];
+                                                        x++;
+                                                        if (x == cpt)
+                                                            break;
+                                                    }
+                                                    pret_remboursable pret = new pret_remboursable(key + uniq, emp, type, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), Double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString(), DateTime.Parse(sheet.Cells[i, 11].Value.ToString()), Int32.Parse(sheet.Cells[i, 12].Value.ToString()), en_cours, dico, -1);
+                                                    uniq++;
+                                                    liste.Add(pret);
+                                                    nb_dico--;
+                                                }
+                                                for (int j = 0; j < nb_pret - 1; j++)
+                                                {
+                                                    liste[j].Debordement = liste[j + 1].Cle;
+                                                }
+                                                foreach (pret_remboursable p in liste)
+                                                {
+                                                    responsable.liste_pret_remboursable.Add(p.Cle, p);
+                                                    p.Employé.ajouter_pret_remboursable_employe(p);
+                                                }
+                                                responsable.tresor -= liste[0].Montant;
+                                            }
+                                        }
+                                    }
+                                    if (!check_type)
+                                    {
+                                        MessageBox.Show("Un ou plusieurs types de prets dans votre fichier ne font pas partie \nde la liste des types de prets de l'application.\nVeuillez consulter la section '' Types de pret existants '' \ndans l'onglet''Nouveau type''.");
+                                        goto fin;
+                                    }
+                                }
+                            }
+                            if (!check_emp)
+                            {
+                                MessageBox.Show("Un ou plusieurs employés dans votre fichier ne font pas partie \n de la liste des employés de l'application.\n Veuillez consulter l'onglet ''Liste des Employés''.");
+                                goto fin;
+                            }
+                            i++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Votre fichier contient des valeurs qui posent des problèmes durant la lecture.\nVeuillez le réviser SVP.");
+                        goto fin;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Le fichier que vous avez choisi peut etre non compatible avec \n le modèle que vous trouverez dans le manuel d'utilisation de l'application.\n Veuillez consulter ce dernier pour eviter cette erreur.");
+                }
+
+            fin:;
+                excelApp.Quit();
+            }
+        }
+
+        public static bool Verif_fichier_import_non_remboursable(Worksheet sheet)
+        {
+            bool validité = false;
+            if (sheet.Cells[1, 1].Value.ToString().Equals("Nom") && sheet.Cells[1, 2].Value.ToString().Equals("Prénom") && sheet.Cells[1, 3].Value.ToString().Equals("Numéro de sécurité sociale") && sheet.Cells[1, 4].Value.ToString().Equals("Nature du don") && sheet.Cells[1, 5].Value.ToString().Equals("Motif") && sheet.Cells[1, 6].Value.ToString().Equals("Numéro du PV") && sheet.Cells[1, 7].Value.ToString().Equals("Date du PV(année-mois-jour)") && sheet.Cells[1, 8].Value.ToString().Equals("Montant(DA)") && sheet.Cells[1, 9].Value.ToString().Equals("Date de demande") && sheet.Cells[1, 10].Value.ToString().Equals("Montant en lettre"))
+            {
+                validité = true;
+            }
+            return validité;
+        }
+        public static void import_prêts_non_remboursable()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = ".xlsx";
+            ofd.Filter = "Excel Documents (*.xlsx)|*.xlsx";
+            var sel = ofd.ShowDialog();
+            if (sel == true)
+            {
+                String a = ofd.FileName;
+                Excel.Application excelApp = new Excel.Application();
+                excelApp.Visible = false;
+                Excel.Workbook workBook = excelApp.Workbooks.Open(a);
+                Worksheet sheet = (Worksheet)workBook.Sheets[1];
+                bool ok = Verif_fichier_import_non_remboursable(sheet);
+                if (ok)
+                {
+                    try
+                    {
+                        int i = 2;
+
+                        int lastRow = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
+                        while (i <= lastRow) // Parcours par lignes du fichier excel
+                        {
+                            Employé emp = null;
+                            bool check_emp = false;
+                            foreach (KeyValuePair<int, Employé> elemen in responsable.liste_employes)
+                            {
+                                if (((elemen.Value.Nom) == sheet.Cells[i, 1].Value.ToString()) && elemen.Value.Prenom.Equals(sheet.Cells[i, 2].Value.ToString()) && elemen.Value.sec_soc.Equals(sheet.Cells[i, 3].Value.ToString()))
+                                {
+                                    emp = elemen.Value; //trouver l employé existant
+                                    check_emp = true;
+                                    Type_pret type = null;
+                                    bool check_type = false;
+                                    foreach (KeyValuePair<int, Type_pret> elem in responsable.liste_types)
+                                    {
+                                        if (elem.Value.Description.Equals(sheet.Cells[i, 4].Value.ToString()))
+                                        {
+                                            type = elem.Value;
+                                            check_type = true;
+                                            responsable.Creer_pret_non_remboursable(emp.Cle, type.Cle, sheet.Cells[i, 5].Value.ToString(), Int32.Parse(sheet.Cells[i, 6].Value.ToString()), DateTime.Parse(sheet.Cells[i, 7].Value.ToString()), Double.Parse(sheet.Cells[i, 8].Value.ToString()), DateTime.Parse(sheet.Cells[i, 9].Value.ToString()), sheet.Cells[i, 10].Value.ToString());
+                                        }
+                                    }
+                                    if (!check_type)
+                                    {
+                                        MessageBox.Show("Un ou plusieurs types de prets dans votre fichier ne font pas partie \nde la liste des types de prets de l'application.\nVeuillez consulter la section '' Types de pret existants '' \ndans l'onglet''Nouveau type''.");
+                                        goto fin;
+                                    }
+                                }
+                            }
+                            if (!check_emp)
+                            {
+                                MessageBox.Show("Un ou plusieurs employés dans votre fichier ne font pas partie \n de la liste des employés de l'application.\n Veuillez consulter l'onglet ''Liste des Employés''.");
+                                goto fin;
+                            }
+                            i++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Votre fichier contient des valeurs qui posent des problèmes durant la lecture.\nVeuillez le réviser SVP.");
+                        goto fin;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Le fichier que vous avez choisi peut etre non compatible avec \n le modèle que vous trouverez dans le manuel d'utilisation de l'application.\n Veuillez consulter ce dernier pour eviter cette erreur.");
+                    goto fin;
+                }
+            fin:;
+                excelApp.Quit();
+            }
+        }
+
+        public static bool Verif_fichier_import_employe(Worksheet sheet)
+        {
+            bool validité = false;
+            if (sheet.Cells[1, 1].Value.ToString().Equals("Nom") && sheet.Cells[1, 2].Value.ToString().Equals("Prénom") && sheet.Cells[1, 3].Value.ToString().Equals("Matricule") && sheet.Cells[1, 4].Value.ToString().Equals("Numéro de sécurité sociale") && sheet.Cells[1, 5].Value.ToString().Equals("Date de naissance(année-mois-jour)") && sheet.Cells[1, 6].Value.ToString().Equals("Date de recrutement") && sheet.Cells[1, 7].Value.ToString().Equals("Statut sociale") && sheet.Cells[1, 8].Value.ToString().Equals("Grade") && sheet.Cells[1, 9].Value.ToString().Equals("Service") && sheet.Cells[1, 10].Value.ToString().Equals("CCP") && sheet.Cells[1, 11].Value.ToString().Equals("Clé CCP") && sheet.Cells[1, 12].Value.ToString().Equals("Téléphone") && sheet.Cells[1, 13].Value.ToString().Equals("Email") && sheet.Cells[1, 14].Value.ToString().Equals("Statut professionnel"))
+            {
+                validité = true;
+            }
+            return validité;
+        }
+
+        public static void import_employe()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = ".xlsx";
+            ofd.Filter = "Excel Documents (*.xlsx)|*.xlsx";
+            var sel = ofd.ShowDialog();
+            if (sel == true)
+            {
+
+                String a = ofd.FileName;
+                Excel.Application excelApp = new Excel.Application();
+                excelApp.Visible = false;
+                Excel.Workbook workBook = excelApp.Workbooks.Open(a);
+                Worksheet sheet = (Worksheet)workBook.Sheets[1];
+                bool ok = Verif_fichier_import_employe(sheet);
+                if (ok)
+                {
+                    try
+                    {
+                        int i = 2;
+
+                        int lastRow = sheet.Cells.SpecialCells(XlCellType.xlCellTypeLastCell, Type.Missing).Row;
+                        while (i <= lastRow) // Parcours par lignes du fichier excel
+                        {
+                            responsable.Creer_employe(sheet.Cells[i, 3].Value.ToString(), sheet.Cells[i, 1].Value.ToString(), sheet.Cells[i, 2].Value.ToString(), sheet.Cells[i, 4].Value.ToString(), DateTime.Parse(sheet.Cells[i, 5].Value.ToString()), sheet.Cells[i, 8].Value.ToString(), DateTime.Parse(sheet.Cells[i, 6].Value.ToString()), sheet.Cells[i, 7].Value.ToString(), sheet.Cells[i, 10].Value.ToString(), sheet.Cells[i, 11].Value.ToString(), sheet.Cells[i, 12].Value.ToString(), sheet.Cells[i, 9].Value.ToString(), sheet.Cells[i, 13].Value.ToString(), sheet.Cells[i, 14].Value.ToString());
+                            i++;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Votre fichier contient des valeurs qui posent des problèmes durant la lecture.\nVeuillez le réviser SVP.");
+                        goto fin;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Le fichier que vous avez choisi peut etre non compatible avec \n le modèle que vous trouverez dans le manuel d'utilisation de l'application.\n Veuillez consulter ce dernier pour eviter cette erreur.");
+                    goto fin;
+                }
+            fin:;
+                excelApp.Quit();
+            }
+        }
     }
 }
+
+

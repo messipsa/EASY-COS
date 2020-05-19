@@ -20,28 +20,6 @@
             <Button x:Name="actualiser_datagrid" VerticalAlignment="Top" HorizontalAlignment="Left" Width="auto" Background="Transparent" Foreground="Transparent" Margin="918,73,0,0" BorderBrush="{x:Null}" Click="actualiser_click"></Button>
             <Label  Content="Liste des Employés de l'école :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,25,0,0"/>
             <DataGrid Style="{StaticResource MaterialDesignDataGrid}" Background="White" CanUserResizeColumns="False" CanUserResizeRows="False" x:Name="liste_employés" CanUserAddRows="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="42,125,43,125" AutoGenerateColumns="False" >
-                <!--DataGrid.Style>
-                        <Style TargetType="DataGrid">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasItems, RelativeSource={RelativeSource Self}}" Value="false">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="DataGrid">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <DataGridColumnHeadersPresenter x:Name="PART_ColumnHeadersPresenter" Grid.Column="1" Visibility="{Binding HeadersVisibility, ConverterParameter={x:Static DataGridHeadersVisibility.Column}, Converter={x:Static DataGrid.HeadersVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                                                    <TextBlock  Text="Aucun prêt n'est en cours, appuyez sur Ajouter pour créer un nouveau suivi de prêt" TextAlignment="Center" VerticalAlignment="Center" FontSize="22" Grid.Row="1" />
-                                                </Grid>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </-->
                 <DataGrid.Resources>
 
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -90,15 +68,15 @@
                     <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="       Numéro de sécurité sociale   " Width="auto" Binding="{Binding Path=Num_sec_soc}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="   Date de naissance  " Width="auto" Binding="{Binding Path=Date_naissance}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Grade    " Width="auto" Binding="{Binding Path=Grade}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="          Grade          " Width="auto" Binding="{Binding Path=Grade}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Date de recrutement     " Width="auto" Binding="{Binding Path=Date_recrutement}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Etat sociale     " Width="auto" Binding="{Binding Path=Etat}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    CCP     " Width="auto" Binding="{Binding Path=CCP}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="      CCP       " Width="auto" Binding="{Binding Path=CCP}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Clé CCP     " Width="auto" Binding="{Binding Path=Cle_ccp}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Numéro de téléphone     " Width="auto" Binding="{Binding Path=Tel}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Service     " Width="auto" Binding="{Binding Path=Service}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="                                Service                             " Width="auto" Binding="{Binding Path=Service}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Email     " Width="auto" Binding="{Binding Path=Email}"></DataGridTextColumn>
-                    <DataGridTextColumn IsReadOnly="True" Header="    Activité     " Width="auto" Binding="{Binding Path=etat_service}"></DataGridTextColumn>
+                    <DataGridTextColumn IsReadOnly="True" Header="    Activité     " Width="auto" Binding="{Binding Path=Etat_service}"></DataGridTextColumn>
 
 
                     <DataGridTemplateColumn IsReadOnly="True" Header="       " Width="auto">
@@ -116,18 +94,19 @@
             </DataGrid>
         </Grid>
         <Grid x:Name="Grid_Ajout_employe" Background="White" Visibility="Hidden">
-            <Label  Content="Veuillez remplir le formulaire suivant :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,25,0,0"/>
-            <TextBox x:Name="nom_ajout" Height="40" materialdesign:HintAssist.Hint="Nom Empolye : " FontFamily="Verdana" Foreground="Black" Margin="215,115,570,495"/>
-            <TextBox x:Name="prenom_ajout" Height="40" materialdesign:HintAssist.Hint="Prénom Empolye : " FontFamily="Verdana" Foreground="Black" Margin="215,200,570,410"/>
-            <TextBox x:Name="matricule" Height="40" materialdesign:HintAssist.Hint="Matricule Empolye(sur 7 chiffres) : " FontFamily="Verdana" Foreground="Black" Margin="215,280,570,330"/>
-            <TextBox x:Name="num_sec_social" Height="40" materialdesign:HintAssist.Hint="Num_Sec_Social Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,360,570,250"/>
-            <TextBox x:Name="grade" Height="40" materialdesign:HintAssist.Hint="Grade Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,445,570,165"/>
-            <TextBox x:Name="etat" Height="40" materialdesign:HintAssist.Hint="Etat social Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,520,570,90"/>
-            <TextBox x:Name="ccp" Height="40" materialdesign:HintAssist.Hint="CCP Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,200,215,410"/>
-            <TextBox x:Name="cle_ccp" Height="40" materialdesign:HintAssist.Hint="Clé CCP Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,280,215,330"/>
-            <TextBox x:Name="telephone" Height="40" materialdesign:HintAssist.Hint="Num Telephone de l'Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,360,215,250"/>
-            <DatePicker x:Name="date_naiss" HorizontalAlignment="Left" Margin="570,445,0,0" materialdesign:HintAssist.Hint="Date de naissance de l'Employe : " VerticalAlignment="Top" Width="215" Height="40"/>
-            <DatePicker x:Name="date_prem" HorizontalAlignment="Left" Margin="570,520,0,0" materialdesign:HintAssist.Hint="Date de recrutement de l'Employe : " VerticalAlignment="Top" Width="215" Height="40"/>
+            <Label  Content="Veuillez remplir le formulaire suivant :" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="28,5,0,0"/>
+            <TextBox x:Name="nom_ajout" Height="40" materialdesign:HintAssist.Hint="Nom Empolye : " FontFamily="Verdana" Foreground="Black" Margin="215,70,570,495"/>
+            <TextBox x:Name="prenom_ajout" Height="40" materialdesign:HintAssist.Hint="Prénom Empolye : " FontFamily="Verdana" Foreground="Black" Margin="215,120,570,410"/>
+            <TextBox x:Name="matricule" Height="40" materialdesign:HintAssist.Hint="Matricule Empolye(sur 7 chiffres) : " FontFamily="Verdana" Foreground="Black" Margin="215,200,570,330"/>
+            <TextBox x:Name="num_sec_social" Height="40" materialdesign:HintAssist.Hint="Num_Sec_Social Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,270,570,250"/>
+            <TextBox x:Name="grade" Height="40" materialdesign:HintAssist.Hint="Grade Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,325,570,165"/>
+            <TextBox x:Name="etat" Height="40" materialdesign:HintAssist.Hint="Etat social Employe : " FontFamily="Verdana" Foreground="Black" Margin="215,400,570,90"/>
+            <TextBox x:Name="ccp" Height="40" materialdesign:HintAssist.Hint="CCP Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,120,215,410"/>
+            <TextBox x:Name="cle_ccp" Height="40" materialdesign:HintAssist.Hint="Clé CCP Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,200,215,330"/>
+            <TextBox x:Name="telephone" Height="40" materialdesign:HintAssist.Hint="Num Telephone de l'Employe : " FontFamily="Verdana" Foreground="Black" Margin="570,270,215,250"/>
+            <DatePicker x:Name="date_naiss" HorizontalAlignment="Left" Margin="570,390,0,0" materialdesign:HintAssist.Hint="Date de naissance de l'Employe : " VerticalAlignment="Top" Width="215" Height="40"/>
+
+            <DatePicker x:Name="date_prem" HorizontalAlignment="Left" Margin="570,460,0,0" materialdesign:HintAssist.Hint="Date de recrutement de l'Employe : " VerticalAlignment="Top" Width="215" Height="40"/>
             <Border CornerRadius="20" Width="100" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF1FAB89" Margin="890,0,0,28">
                 <Button x:Name="Confirmer_Ajout_emp"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Confirmer" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Confirmer_Ajout_emp_Click" ></Button>
             </Border>
@@ -135,7 +114,10 @@
                 <Button x:Name="Annuler_Ajout_emp"  VerticalAlignment="Bottom" Width="100" Background="Transparent" Content="Annuler" Foreground="White" FontWeight="Bold" Margin="0,0,0,0"  BorderBrush="{x:Null}" Click="Annuler_Ajout_emp_Click" />
             </Border>
             <Label x:Name="Remarquee" Visibility="Hidden" Width="600" Height="40" Content="Vous devez fournir toutes les informations demandées dans formulaire !! " Foreground="Red" FontSize="15" Margin="28,61,372,549"></Label>
-            <TextBox x:Name="Service" Height="40" materialdesign:HintAssist.Hint="Service : " FontFamily="Verdana" Foreground="Black" Margin="570,115,215,495"/>
+            <TextBox x:Name="mail" Height="40" materialdesign:HintAssist.Hint="e-mail : " FontFamily="Verdana" Foreground="Black" Margin="570,460,210,0" Width="200"/>
+            <TextBox x:Name="etat2" Height="40"  materialdesign:HintAssist.Hint="Etat actuel : " FontFamily="Verdana" Foreground="Black" Margin="5,460,360,0" Width="200"/>
+
+            <TextBox x:Name="Service" Height="40" materialdesign:HintAssist.Hint="Service : " FontFamily="Verdana" Foreground="Black" Margin="570,70,215,495"/>
         </Grid>
     </Grid>
 </UserControl>

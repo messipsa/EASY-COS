@@ -22,8 +22,6 @@ namespace WpfApp2
     public partial class UserControl1 : UserControl
     {
         int compt = 0;
-        NumberStyles styles = NumberStyles.AllowDecimalPoint;
-        IFormatProvider provider = CultureInfo.CreateSpecificCulture("en-GB");
         List<String> services = new List<String>();
         public UserControl1()
         {
@@ -208,7 +206,7 @@ namespace WpfApp2
                 somme1 = true;
                 try
                 {
-                    somme_min = double.Parse(som_min.Text, styles, provider);
+                    somme_min = double.Parse(som_min.Text);
                 }
                 catch (FormatException)
                 {
@@ -223,7 +221,7 @@ namespace WpfApp2
                 try
                 {
 
-                    somme_max = double.Parse(som_max.Text, styles, provider);
+                    somme_max = double.Parse(som_max.Text);
                 }
                 catch (FormatException)
                 {
@@ -234,12 +232,12 @@ namespace WpfApp2
             if (DateTime.Compare(d_inf, d_max) > 0 && !String.IsNullOrEmpty(min_pm.Text) && !String.IsNullOrEmpty(max_pm.Text))
             {
                 compt++;
-                MessageBox.Show("La date minimale de demande doit etre inférieure à la durée maximale de demande");
+                MessageBox.Show("La date minimale de demande doit etre inférieure à la date maximale de demande");
             }
             if (DateTime.Compare(pv_min, pv_max) > 0 && !String.IsNullOrEmpty(max_pv.Text) && !String.IsNullOrEmpty(min_pv.Text))
             {
                 compt++;
-                MessageBox.Show("La date minimale de PV doit etre inférieure à la durée maximale de PV");
+                MessageBox.Show("La date minimale de PV doit etre inférieure à la date maximale de PV");
             }
             if (durée_min > durée_max && !String.IsNullOrEmpty(dur_max.Text) && !String.IsNullOrEmpty(dur_min.Text))
             {

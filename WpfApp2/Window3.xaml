@@ -22,8 +22,8 @@
         <TextBox x:Name="dur_max" materialdesign:HintAssist.Hint="Duree de paiment maximale" HorizontalAlignment="Left" Height="30" Margin="520,176.96,0,0" Padding="0,0,0,2" TextWrapping="Wrap" VerticalAlignment="Top" Width="160" />
         <DatePicker x:Name="min_pv" materialdesign:HintAssist.Hint="Date min du pv"  HorizontalAlignment="Left" Height="27.96" Margin="759,175.96,0,0" VerticalAlignment="Top" Width="128.5"/>
         <DatePicker x:Name="max_pv" materialdesign:HintAssist.Hint="Date max du pv" HorizontalAlignment="Left" Height="29" Margin="30.5,275,0,0" VerticalAlignment="Top" Width="140.5"/>
-        <DatePicker x:Name="min_pm" materialdesign:HintAssist.Hint="Date min du premier paiement" HorizontalAlignment="Left" Height="29" Margin="287,275,0,0" VerticalAlignment="Top" Width="150"/>
-        <DatePicker x:Name="max_pm" materialdesign:HintAssist.Hint="Date max du premier paiement" HorizontalAlignment="Left" Height="29" Margin="520,275,0,0" VerticalAlignment="Top" Width="160"/>
+        <DatePicker x:Name="min_pm" materialdesign:HintAssist.Hint="Date min de demande" HorizontalAlignment="Left" Height="29" Margin="287,275,0,0" VerticalAlignment="Top" Width="150"/>
+        <DatePicker x:Name="max_pm" materialdesign:HintAssist.Hint="Date max de demande" HorizontalAlignment="Left" Height="29" Margin="520,275,0,0" VerticalAlignment="Top" Width="160"/>
         <Button Content="Recherche" Background="SeaGreen" BorderBrush="SeaGreen" HorizontalAlignment="Left" Height="39" Margin="730,497,0,0" VerticalAlignment="Top" Width="184.5" Click="recherche_Click"/>
         <ComboBox materialdesign:HintAssist.Hint="Etat Social" HorizontalAlignment="Left" Height="29" Margin="759,275,0,0" VerticalAlignment="Top" Width="128.5" x:Name="cmb3"/>
         <DatePicker materialdesign:HintAssist.Hint="Date recrutement minimale" HorizontalAlignment="Left" Height="29" Margin="30.5,386,0,0" VerticalAlignment="Top" Width="140.5" x:Name="drm"/>

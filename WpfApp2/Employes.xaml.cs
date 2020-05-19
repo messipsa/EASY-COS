@@ -34,11 +34,17 @@ namespace WpfApp2
         private static string service_;
         private static string email_;
         private static string etat_service_;
+
+        //Class principale de l'interface des employés
+
         public Employes()
         {
             InitializeComponent();
             actualiser();
         }
+
+
+        //class interne pour permettre l'affectation des données
 
         public class employe
         {
@@ -59,6 +65,9 @@ namespace WpfApp2
             public String Etat_service { get; set; }
         }
 
+
+        //methodes de manupulation de l'interface
+
         private void actualiser_click(object sender, RoutedEventArgs e)
         {
             liste_employés.ItemsSource = null;
@@ -72,7 +81,8 @@ namespace WpfApp2
                 emp.Nom = liste.Nom;
                 emp.Prenom = liste.Prenom;
                 emp.Num_sec_soc = liste.sec_soc;
-                emp.Date_naissance = liste.Date_naissance.ToString();
+                emp.Date_naissance = liste.Date_naissance.ToShortDateString();
+                emp.Date_recrutement = liste.Date_prem.ToShortDateString();
                 emp.Grade = liste.Grade;
                 emp.Etat = liste.etats;
                 emp.CCP = liste.compte_ccp;
@@ -98,7 +108,8 @@ namespace WpfApp2
                 emp.Nom = liste.Nom;
                 emp.Prenom = liste.Prenom;
                 emp.Num_sec_soc = liste.sec_soc;
-                emp.Date_naissance = liste.Date_naissance.ToString();
+                emp.Date_naissance = liste.Date_naissance.ToShortDateString();
+                emp.Date_recrutement = liste.Date_prem.ToShortDateString();
                 emp.Grade = liste.Grade;
                 emp.Etat = liste.etats;
                 emp.CCP = liste.compte_ccp;
@@ -124,6 +135,10 @@ namespace WpfApp2
             }
             else
             {
+                int cpt = 0;
+                int k = 0;
+                long l = 0;
+
                 nom_emp_ = nom_ajout.Text;
                 prenom_emp_ = prenom_ajout.Text;
                 matricule_emp_ = matricule.Text;
@@ -133,14 +148,85 @@ namespace WpfApp2
                 ccp_emp_ = ccp.Text;
                 cle_ccp_emp_ = cle_ccp.Text;
                 tel_emp_ = telephone.Text;
-                date_naiss_emp_ = date_naiss.SelectedDate.ToString();
-                date_recru_emp_ = date_prem.SelectedDate.ToString();
+                date_naiss_emp_ = date_naiss.SelectedDate.Value.ToShortDateString();
+                date_recru_emp_ = date_prem.SelectedDate.Value.ToShortDateString();
+                email_ = mail.Text;
+                etat_service_ = etat2.Text;
                 service_ = Service.Text;
-                responsable.Creer_employe(matricule.Text, nom_ajout.Text, prenom_ajout.Text, num_sec_social.Text, DateTime.Parse(date_naiss.SelectedDate.ToString()), grade.Text, DateTime.Parse(date_prem.SelectedDate.ToString()), etat.Text, ccp.Text, cle_ccp.Text, telephone.Text, service_, email_, etat_service_);
 
-                Grid_Ajout_employe.Visibility = Visibility.Hidden; Grid_Ajout_employe.IsEnabled = false;
-                liste_employés.Visibility = Visibility.Visible; liste_employés.IsEnabled = true;
-                actualiser();
+                if (!int.TryParse(cle_ccp.Text, out k))
+                {
+                    MessageBox.Show("entrez une clé ccp valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                if (!int.TryParse(telephone.Text, out k))
+                {
+                    MessageBox.Show("entrez un numéro de téléphone valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                if (!int.TryParse(ccp.Text, out k))
+                {
+                    MessageBox.Show("entrez un compte ccp valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                long l1 = 0;
+                if (!long.TryParse(matricule.Text, out l1))
+                {
+                    MessageBox.Show("entrez un matricule valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                if (!long.TryParse(num_sec_social.Text, out l))
+                {
+                    MessageBox.Show("entrez numéro de sécurité sociale valide", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    cpt++;
+                }
+                int compt = 0;
+                foreach (Employé emp in responsable.liste_employes.Values)
+                {
+
+                    if (compt == 0)
+                    {
+                        string ll = emp.sec_soc.Replace(" ", "");
+                        long lll = long.Parse(ll);
+                        if (l == lll)
+                        {
+                            MessageBox.Show("Le numéro de sécurité saisi appartient à un autre employé ", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                            compt++;
+                        }
+                    }
+                }
+                long compt2 = 0;
+                foreach (Employé emp in responsable.liste_employes.Values)
+                {
+
+                    if (compt2 == 0)
+                    {
+                        string ll = emp.Matricule.Replace(" ", "");
+                        long lll = long.Parse(ll);
+                        if (l1 == lll)
+                        {
+                            MessageBox.Show("Le matricule saisi appartient à un autre employé ", "erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                            compt2++;
+                        }
+                    }
+                }
+                if (DateTime.Compare(date_naiss.SelectedDate.Value, date_prem.SelectedDate.Value) > 0)
+                {
+
+
+                    MessageBox.Show("La date naissace doit etre inférieure à la date de recrutement", "erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    cpt++;
+
+                }
+                if (cpt == 0 && compt==0 && compt2==0)
+                {
+                    responsable.Creer_employe(matricule.Text, nom_ajout.Text, prenom_ajout.Text, num_sec_social.Text, DateTime.Parse(date_naiss.SelectedDate.ToString()), grade.Text, DateTime.Parse(date_prem.SelectedDate.ToString()), etat.Text, ccp.Text, cle_ccp.Text, telephone.Text, service_, email_, etat_service_);
+
+
+                    Grid_Ajout_employe.Visibility = Visibility.Hidden; Grid_Ajout_employe.IsEnabled = false;
+                    liste_employés.Visibility = Visibility.Visible; liste_employés.IsEnabled = true;
+                    actualiser();
+                }
             }
         }
         private void Annuler_Ajout_emp_Click(object sender, RoutedEventArgs e)

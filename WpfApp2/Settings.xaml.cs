@@ -32,43 +32,30 @@ namespace WpfApp2
         public static bool envoi_notif ;
         public static bool mode_envoi ;
 
+        //sauvgarde et chargement des parametres
         public static void save_option()
         {
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/option.sESI";
+                string path = @".\\option.sESI";
                 using (StreamWriter sw = new StreamWriter(path))
                 {
-                    sw.Write(mode_archivage.ToString() + '|' + durée_avant_archivage_m + '|' +durée_avant_archivage_d + '|' +envoi_notif.ToString() + '|' +mode_envoi.ToString() + '|' + user_name + '|' + user_Password );
+                    sw.Write(mode_archivage.ToString() + '|' + durée_avant_archivage_m + '|' + durée_avant_archivage_d + '|' + envoi_notif.ToString() + '|' + mode_envoi.ToString() + '|' + user_name + '|' + user_Password + '|' + responsable.User_mail + '|' + responsable.User_pwd);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("Le fichier n'a pas pu être lu.");
+                Console.WriteLine("Le fichier n'a pas pu être lu1.");
                 Console.WriteLine(e.Message);
             }
         }
 
         public static void charger_option()
         {
-            string[] op =new string[6];
+            string[] op = new string[6];
             try
             {
-                string path = System.IO.Directory.GetCurrentDirectory();
-                string[] paths = path.Split('\\');
-                path = "";
-                for (int i = 0; i < paths.Length - 3; i++)
-                {
-                    path += paths[i] + "/";
-                }
-                path += "/option.sESI";
+                string path = @".\\option.sESI";
                 using (StreamReader sr = new StreamReader(path))
                 {
                     sr.BaseStream.Position = 0;
@@ -81,15 +68,25 @@ namespace WpfApp2
                 Console.WriteLine("Le fichier n'a pas pu être lu.");
                 Console.WriteLine(e.Message);
             }
-
-            mode_archivage = bool.Parse(op[0]);
+            try
+            {
+                mode_archivage = bool.Parse(op[0]);
+            }
+            catch
+            {
+                Console.WriteLine(op[0]);
+            }
             durée_avant_archivage_m = op[1];
             durée_avant_archivage_d = op[2];
             envoi_notif = bool.Parse(op[3]);
             mode_envoi = bool.Parse(op[4]);
             user_name = op[5];
             user_Password = op[6];
-        }
+            responsable.User_mail = op[7];
+            responsable.User_pwd = op[8];
+        }        
+
+        //Class principale de l'interface de parametres
 
         public Window2(TextBox psuedo_show, PasswordBox pass, Image img)
         {
@@ -112,8 +109,13 @@ namespace WpfApp2
             mois_archv.Text = durée_avant_archivage_m;
             tooggle_envoi_notif.IsChecked = envoi_notif;
             toogle_mode_envoi.IsChecked = mode_envoi;
+
+            Label_aide.Foreground = Brushes.Blue;
         }
 
+
+
+        //methodes de manupulation de l'interface
 
         private void Confirmer_changement_Click(object sender, RoutedEventArgs e)
         {
@@ -123,11 +125,6 @@ namespace WpfApp2
                 mot_de_passe_actuel.Password = null;
                 mot_de_passe_nouveau.Password = null;
                 mot_de_passe_nouveau_confirmation = null;
-                mot_de_passe_actuel_Invalide.Visibility = Visibility.Hidden;
-                mot_de_passe_actuel_Valide.Visibility = Visibility.Hidden;
-                mot_de_passe_nouveau_confirmation_Invalide.Visibility = Visibility.Hidden;
-                mot_de_passe_nouveau_confirmation_Valide.Visibility = Visibility.Hidden;
-                mot_de_passe_modification.Visibility = Visibility.Collapsed;
             }
             else if (mot_de_passe_actuel_Invalide.Visibility == Visibility.Visible)
             {
@@ -164,10 +161,8 @@ namespace WpfApp2
         {
             Label_nom_utilisateur.Visibility = Visibility.Visible;
             Label_photo.Visibility = Visibility.Visible;
+            Label_mail.Visibility = Visibility.Visible;
 
-            mot_de_passe_actuel.Password = null;
-            mot_de_passe_nouveau.Password = null;
-            mot_de_passe_nouveau_confirmation.Password = null;
             mot_de_passe_actuel_Invalide.Visibility = Visibility.Hidden;
             mot_de_passe_actuel_Valide.Visibility = Visibility.Hidden;
             mot_de_passe_nouveau_confirmation_Invalide.Visibility = Visibility.Hidden;
@@ -192,16 +187,36 @@ namespace WpfApp2
 
         private void back_Menu_Click(object sender, RoutedEventArgs e)
         {
+            if(mois_archv.Text.Equals("") || jours_archv.Text.Equals(""))
+            {
+                MessageBox.Show("Durée avant archivage non asignée.\nUne valeur par defaut sera afffectée.", "Options durée", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            mode_archivage = toogle_mode_archive.IsChecked.Value;
-            durée_avant_archivage_d = jours_archv.Text;
-            durée_avant_archivage_m = mois_archv.Text;
-            envoi_notif = tooggle_envoi_notif.IsChecked.Value;
-            mode_envoi = toogle_mode_envoi.IsChecked.Value;
+                if(mois_archv.Text.Equals(""))
+                {
+                    mois_archv.Text = "0";
+                }
+                if (jours_archv.Text.Equals(""))
+                {
+                    jours_archv.Text = "30";
+                }
+            }
 
-            grid_settings.Visibility = Visibility.Hidden;
-            grid_settings.IsEnabled = false;
-            save_option();
+            if(!(int.TryParse(mois_archv.Text,out int j)) || !(int.TryParse(jours_archv.Text,out int i)))
+            {
+                MessageBox.Show("Introduisez une durée valide.", "Options durée", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            { 
+                mode_archivage = toogle_mode_archive.IsChecked.Value;
+                durée_avant_archivage_d = jours_archv.Text;
+                durée_avant_archivage_m = mois_archv.Text;
+                envoi_notif = tooggle_envoi_notif.IsChecked.Value;
+                mode_envoi = toogle_mode_envoi.IsChecked.Value;
+
+                grid_settings.Visibility = Visibility.Hidden;
+                grid_settings.IsEnabled = false;
+                save_option();
+            }
         }
 
         private void Confirmer_changement_Nom_utilisateur_Click(object sender, RoutedEventArgs e)
@@ -211,9 +226,6 @@ namespace WpfApp2
                 user_name = Nom_utilisateur_nouveau.Text;
                 mot_de_passe.Password = null;
                 Nom_utilisateur_nouveau.Text = null;
-                mot_de_passe_Valide.Visibility = Visibility.Hidden;
-                mot_de_passe_Invalide.Visibility = Visibility.Hidden;
-                Pseudo_modification.Visibility = Visibility.Collapsed;
             }
             else
             {
@@ -229,6 +241,7 @@ namespace WpfApp2
         {
             Label_pwd.Visibility = Visibility.Visible;
             Label_photo.Visibility = Visibility.Visible;
+            Label_mail.Visibility = Visibility.Visible;
 
             mot_de_passe.Password = null;
             Nom_utilisateur_nouveau.Text = null;
@@ -289,6 +302,7 @@ namespace WpfApp2
         {
             Label_pwd.Visibility = Visibility.Visible;
             Label_nom_utilisateur.Visibility = Visibility.Visible;
+            Label_mail.Visibility = Visibility.Visible;
 
             profil.Source = null;
             default_picture.Visibility = Visibility.Hidden;
@@ -376,6 +390,9 @@ namespace WpfApp2
             mot_de_passe_modification.Visibility = Visibility.Collapsed;
             Image_modification.Visibility = Visibility.Collapsed;
             default_picture.Visibility = Visibility.Collapsed;
+
+            mdp_modification.Visibility = Visibility.Collapsed;
+            Label_mail.Visibility = Visibility.Collapsed;
         }
 
         private void Label_photo_Click(object sender, RoutedEventArgs e)
@@ -387,6 +404,9 @@ namespace WpfApp2
             mot_de_passe_modification.Visibility = Visibility.Collapsed;
             Image_modification.Visibility = Visibility.Visible;
             default_picture.Visibility = Visibility.Visible;
+
+            mdp_modification.Visibility = Visibility.Collapsed;
+            Label_mail.Visibility = Visibility.Collapsed;
         }
 
         private void Label_pwd_Click(object sender, RoutedEventArgs e)
@@ -398,6 +418,46 @@ namespace WpfApp2
             Pseudo_modification.Visibility = Visibility.Collapsed;
             Image_modification.Visibility = Visibility.Collapsed;
             default_picture.Visibility = Visibility.Collapsed;
+
+            mdp_modification.Visibility = Visibility.Collapsed;
+            Label_mail.Visibility = Visibility.Collapsed;
+        }
+
+        private void Label_mail_Click(object sender, RoutedEventArgs e)
+        {
+            Label_pwd.Visibility = Visibility.Collapsed;
+            Label_photo.Visibility = Visibility.Collapsed;
+            Label_nom_utilisateur.Visibility = Visibility.Collapsed;
+
+            Pseudo_modification.Visibility = Visibility.Collapsed;
+            mot_de_passe_modification.Visibility = Visibility.Collapsed;
+            Image_modification.Visibility = Visibility.Collapsed;
+            default_picture.Visibility = Visibility.Collapsed;
+
+            mdp_modification.Visibility = Visibility.Visible;
+        }
+
+        private void Confirmer_changement_mail_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Mail.Text.Equals("") && !mdp_mail.Password.Equals(""))
+            { 
+                responsable.User_mail = Mail.Text;
+                responsable.User_pwd = mdp_mail.Password;
+            }
+            else 
+            {
+                MessageBox.Show("Introduisez un mail ou mot de passe valide.", "Attention", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
+
+        private void Annuler_changement_mail_Click(object sender, RoutedEventArgs e)
+        {
+            Label_pwd.Visibility = Visibility.Visible;
+            Label_photo.Visibility = Visibility.Visible;
+            Label_mail.Visibility = Visibility.Visible;
+            Label_nom_utilisateur.Visibility = Visibility.Visible;
+
+            mdp_modification.Visibility = Visibility.Collapsed;
         }
     }
 }

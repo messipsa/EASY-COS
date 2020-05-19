@@ -53,7 +53,6 @@
                     <DataGridTextColumn IsReadOnly="True" Header="      Prénom    " Width="auto" Binding="{Binding  Path=Prenom}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="       Description du Prêt   " Width="auto" Binding="{Binding Path=Type_Prêt}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="   N­° Pv   " Width="auto" Binding="{Binding Path=N_Pv}"></DataGridTextColumn>
-                    <!--DataGridTextColumn IsReadOnly="True" Header="    Date du Pv    " Width="auto" Binding="{Binding Path=Date_de_Pv}"></-->
                     <DataGridTextColumn IsReadOnly="True" Header="    Date De Demande    " Width="auto" Binding="{Binding Path=Date_demande}"></DataGridTextColumn>
                     <DataGridTextColumn IsReadOnly="True" Header="    Montant Prêt     " Width="auto" Binding="{Binding Path=Montant_Prét}"></DataGridTextColumn>
 
